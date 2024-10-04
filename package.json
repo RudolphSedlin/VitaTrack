@@ -1,0 +1,16 @@
+{
+  "name": "express-database-server",
+  "version": "1.0.0",
+  "description": "This server will hosted the remote database of userinfo and meals.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rudolph Sedlin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0",
+    "mongo": "^0.1.0",
+    "mongodb": "^6.9.0"
+  }
+}
