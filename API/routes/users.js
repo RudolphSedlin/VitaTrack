@@ -14,8 +14,15 @@ router.route("/").get(async (req, res) => {
       dateOfBirth: req.session.user.dateOfBirth,
     });
 */
-    return res.status(200);
+    return res.status(200).json({
+      firstName: req.session.user.firstName,
+      lastName: req.session.user.lastName,
+      userName: req.session.user.userName,
+      email: req.session.user.email,
+      dateOfBirth: req.session.user.dateOfBirth,
+    })
     }
+
     else{
       return res.status(400).redirect("/");
     }

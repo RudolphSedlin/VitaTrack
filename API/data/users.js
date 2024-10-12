@@ -1,33 +1,41 @@
 import validation from "../validation.js";
 import { ObjectId } from "mongodb";
-import { tasks, users } from "../config/mongoCollections.js";
+import { meals, users } from "../config/mongoCollections.js";
 import bcrypt from "bcrypt";
 
 // Function for creating a user in the user data base
 const create = async (
   firstName,
   lastName,
-  email,
-  userName,
+  phoneNumber,
+  state,
+  passWord, // MANDATORY NO MATTER WHAT
+
+  address,
+  gender,
   dateOfBirth,
-  passWord
+  doctorName,
+  conditions,
+  consentLetter, // Also stored for RPM customers.
+
+  email, // Completely optional.
 ) => {
-  //Validation Handling
+
+  //Validation Handling For Mandatory---------------------------------------------------------------------------------
   //* Validate Null
   validation.checkNull(firstName);
   validation.checkNull(lastName);
-  validation.checkNull(email);
-  validation.checkNull(userName);
-  validation.checkNull(dateOfBirth);
+  validation.checkNull(phoneNumber);
+  validation.checkNull(state);
   validation.checkNull(passWord);
 
   // * Validate String params
   firstName = validation.checkString(firstName, "First Name");
   lastName = validation.checkString(lastName, "Last Name");
-  email = validation.checkString(email, "Email");
-  userName = validation.checkString(userName, "User Name");
-  dateOfBirth = validation.checkString(dateOfBirth, "Date of Birth");
+  phoneNumber = validation.checkString(phoneNumber, "Phone Number");
+  state = validation.checkString(state, "State");
   passWord = validation.checkString(passWord, "Password");
+
 
   //* Name length check
   if (firstName.length < 2 || firstName.length > 25)
@@ -35,34 +43,61 @@ const create = async (
   if (lastName.length < 2 || lastName.length > 25)
     throw "Error: Last name is too short or too long";
 
-  // * Validate Email
-  validation.validateEmail(email);
-
-  // * Birthday Validation
-  validation.validateDate(dateOfBirth);
-  validation.validateBirthday(dateOfBirth);
-
-  // * Password validation and hashing
   validation.validatePassword(passWord);
 
   const saltRounds = 16;
   const hash = await bcrypt.hash(passWord, saltRounds);
 
+  //Validation Handling For RPM/Optional----------------------------------------------------------------------------------------
+  if (address)
+    address = validation.checkString(address, "Address");
+
+  if (gender)
+    gender = validation.checkString(gender, "Gender");
+
+  if (dateOfBirth) {
+    dateOfBirth = validation.checkString(dateOfBirth, "Date of Birth");
+    validation.validateDate(dateOfBirth);
+    validation.validateBirthday(dateOfBirth);
+  }
+
+  if (doctorName)
+    doctorName = validation.checkString(doctorName, "Name of Doctor");
+
+  if (conditions)
+    conditions = validation.checkStringArray(conditions, "Conditions");
+
+  if (consentLetter)
+    consentLetter = validation.checkStringArray(consentLetter, "Letter of Consent");
+
+  if (email) {
+    email = validation.checkString(email, "Email");
+    validation.validateEmail(email);
+  }
+
   //Create user object to put into collection
   let newUser = {
     firstName: firstName,
     lastName: lastName,
-    email: email,
-    userName: userName,
-    dateOfBirth: dateOfBirth,
+    phoneNumber: phoneNumber,
+    state: state,
     hashedPass: hash,
-    tasks: [],
+    meals: [],
+
+    address: address,
+    gender: gender,
+    dateOfBirth: dateOfBirth,
+    doctorName: doctorName,
+    conditions: conditions,
+    consentLetter: consentLetter,
+
+    email: email,
   };
 
   const userCollection = await users();
 
-  let user = await userCollection.findOne({ email: email });
-  if (user !== null) throw "User with email " + email + " already exists.";
+  let user = await userCollection.findOne({ phoneNumber: phoneNumber });
+  if (user !== null) throw `User with number ${phoneNumber} already exists.`;
 
   const newInsertInformation = await userCollection.insertOne(newUser);
   if (!newInsertInformation.insertedId) throw "Insert failed";
@@ -79,6 +114,7 @@ const getUserByID = async (id) => {
   return user;
 };
 
+/*
 // Function for deleting user in database given the id
 const remove = async (id) => {
   id = validation.checkId(id);
@@ -91,10 +127,10 @@ const remove = async (id) => {
     throw `Could not delete user with id of ${id}`;
   }
 
-  const taskCollection = await tasks();
+  const mealCollection = await meals();
   // Remove user id from the contributors array and unauthorized
   // If the user was in there.
-  const updatedTaskInfo = await taskCollection.updateMany(
+  const updatedMealInfo = await mealCollection.updateMany(
     { _id: new ObjectId(id) },
     {
       $pull: {
@@ -103,7 +139,7 @@ const remove = async (id) => {
       },
     }
   );
-  await taskCollection.updateOne(
+  await mealCollection.updateOne(
     { _id: id },
     { $inc: { numContributors: -1 } }
   );
@@ -147,139 +183,94 @@ const updateUser = async (id, firstName, lastName, userName) => {
   return await getUserByID(id);
 };
 
-// Function for adding tasks to user
-const addTaskToUser = async (userId, taskId) => {
+// Function for adding meals to user
+const addMealToUser = async (userId, mealId) => {
   userId = validation.checkId(userId);
-  taskId = validation.checkId(taskId);
+  mealId = validation.checkId(mealId);
 
   const userCollection = await users();
-  const taskCollection = await tasks();
+  const mealCollection = await meals();
 
-  // First check if user is already in the contributor or unauthorized list in taskCollection
-  let task = await taskCollection.findOne({ _id: new ObjectId(taskId) });
-  if (!task) throw `Error: Couldn't find task`;
-  if (task.contributors.includes(userId))
-    throw "Error: User is already a Contributor";
-  // IF user in blackList
-  if (task.unauthorized.includes(userId))
-    throw "Error: User is blacklisted from this task";
+  // First check if user is already in the contributor or unauthorized list in mealCollection
+  let meal = await mealCollection.findOne({ _id: new ObjectId(mealId) });
+  if (!meal) throw `Error: Couldn't find meal`;
 
-  // Check if it is a private task, if so check if creatorId is the userId
-  if (!task.publicPost) {
-    if (task.creatorId != userId)
-      throw "You are not authorized to access this task";
-  }
+  // Check if it is a private meal, if so check if creatorId is the userId
+  if (meal.creatorId != userId)
+    throw "You are not authorized to access this meal";
 
-  // Then check if the task is full
-  if (task.maxContributors == task.numContributors)
-    throw "Error: This task is already filled up";
-
-  // Add user id to task.contributors
-  let updatedContNum = task.numContributors + 1;
-  task.contributors.push(userId);
-  let updateInfo = await taskCollection.updateOne(
+  // Add user id to meal.contributors
+  let updatedContNum = meal.numContributors + 1;
+  meal.contributors.push(userId);
+  let updateInfo = await mealCollection.updateOne(
     {
-      _id: new ObjectId(taskId),
+      _id: new ObjectId(mealId),
     },
     {
       $set: {
         numContributors: updatedContNum,
-        contributors: task.contributors,
+        contributors: meal.contributors,
       },
     }
   );
   if (!updateInfo) throw "Error: Insert failed";
 
-  //After user is added to task, the task id is put into user's tasks Array
+  //After user is added to meal, the meal id is put into user's meals Array
   let pushed = await userCollection.updateOne(
     { _id: new ObjectId(userId) },
-    { $push: { tasks: taskId } }
+    { $push: { meals: mealId } }
   );
-  if (!pushed) throw "Error: Couldn't update user tasklist";
+  if (!pushed) throw "Error: Couldn't update user meallist";
 };
 
-const removeTaskFromUser = async (userId, taskId) => {
+const removeMealFromUser = async (userId, mealId) => {
   //Check Null
   validation.checkNull(userId);
-  validation.checkNull(taskId);
+  validation.checkNull(mealId);
 
   //Check Id
   userId = validation.checkId(userId);
-  taskId = validation.checkId(taskId);
+  mealId = validation.checkId(mealId);
 
   //Get collections
   const userCollection = await users();
-  const taskCollection = await tasks();
+  const mealCollection = await meals();
 
-  // From the user collection, delete the task from tasks list
+  // From the user collection, delete the meal from meals list
   let updatedUser = await userCollection.updateOne(
     { _id: new ObjectId(userId) },
-    { $pull: { tasks: taskId } }
+    { $pull: { meals: mealId } }
   );
   if (!updatedUser) throw "Error: User update failed";
 
-  // From the task collection, delete userId from contributors and decrement contributor count
-  let updatedTask = await taskCollection.updateOne(
-    { _id: new ObjectId(taskId) },
+  // From the meal collection, delete userId from contributors and decrement contributor count
+  let updatedMeal = await mealCollection.updateOne(
+    { _id: new ObjectId(mealId) },
     { $pull: { contributors: userId }, $inc: { numContributors: -1 } }
   );
-  if (!updatedTask) throw "Error: Task update failed";
+  if (!updatedMeal) throw "Error: Meal update failed";
 };
+*/
 
-// Function for getting all tasks for a user
-const getTasks = async (userId) => {
+// Function for getting all meals for a user
+const getMeals = async (userId) => {
   validation.checkNull(userId);
   userId = validation.checkId(userId);
 
-  //Find user then get the tasks that they have
+  //Find user then get the meals that they have
   let user = await getUserByID(userId);
-  let userTasks = user.tasks.map(function (id) {
+  let userMeals = user.meals.map(function (id) {
     return new ObjectId(id);
   });
-  const taskCollection = await tasks();
-  let foundTasks = await taskCollection
-    .find({ _id: { $in: userTasks } })
+  const mealCollection = await meals();
+  let foundMeals = await mealCollection
+    .find({ _id: { $in: userMeals } })
     .toArray();
-  return foundTasks;
-};
-
-// Function for getting all public tasks for a user
-const getPublicTasks = async (userId) => {
-  validation.checkNull(userId);
-  userId = validation.checkId(userId);
-
-  //Find user then get the tasks that they have
-  let user = await getUserByID(userId);
-  let userTasks = user.tasks.map(function (id) {
-    return new ObjectId(id);
-  });
-  const taskCollection = await tasks();
-  let foundTasks = await taskCollection
-    .find({ _id: { $in: userTasks }, publicPost: true })
-    .toArray();
-  return foundTasks;
-};
-
-// Function for getting all private tasks for a user
-const getPrivateTasks = async (userId) => {
-  validation.checkNull(userId);
-  userId = validation.checkId(userId);
-
-  //Find user then get the tasks that they have
-  let user = await getUserByID(userId);
-  let userTasks = user.tasks.map(function (id) {
-    return new ObjectId(id);
-  });
-
-  const taskCollection = await tasks();
-  let foundTasks = await taskCollection
-    .find({ _id: { $in: userTasks }, publicPost: false })
-    .toArray();
-  return foundTasks;
+  return foundMeals;
 };
 
 // Function to return user login information.
-const loginUser = async (email, password) => {
+const loginUser = async (phoneNumber, password) => {
   let userCollection;
   try {
     userCollection = await users();
@@ -287,34 +278,41 @@ const loginUser = async (email, password) => {
     return "Database error.";
   }
 
-  validation.validateEmail(email);
+  phoneNumber = validation.checkString(phoneNumber, "Phone Number");
   validation.validatePassword(password);
 
-  let user = await userCollection.findOne({ email: email });
-  if (user == null) throw "Incorrect User Name or Password";
+  let user = await userCollection.findOne({phoneNumber: phoneNumber});
+  if (user == null) throw "Incorrect Phone Number or Password";
 
   let authenticated = await bcrypt.compare(password, user.hashedPass);
-  if (!authenticated) throw "Incorrect User Name or Password";
+  if (!authenticated) throw "Incorrect Phone Number or Password";
 
   return {
     _id: user._id,
     firstName: user.firstName,
     lastName: user.lastName,
-    email: user.email,
-    userName: user.userName,
+    phoneNumber: user.phoneNumber,
+    state: user.state,
+    meals: user.meals,
+
+    address: user.address,
+    gender: user.gender,
     dateOfBirth: user.dateOfBirth,
+    doctorName: user.doctorName,
+    conditions: user.conditions,
+    consentLetter: user.consentLetter,
+
+    email: user.email,
   };
 };
 
 export default {
   create,
   getUserByID,
-  remove,
-  updateUser,
-  addTaskToUser,
-  removeTaskFromUser,
-  getTasks,
-  getPublicTasks,
-  getPrivateTasks,
+  //remove,
+  //updateUser,
+  //addMealToUser,
+  //removeMealsFromUser,
+  getMeals,
   loginUser,
 };

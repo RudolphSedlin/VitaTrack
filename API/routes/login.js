@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-//import { userData } from "../data/index.js";
+import { userData } from "../data/index.js";
 import validation from "../validation.js";
 
 router
@@ -16,17 +16,17 @@ router
       let body = req.body;
       body = validation.sanitize(body);
 
-      let email = body.emailAddressInput;
-      let password = body.passwordInput;
+      let phoneNumber = body.phoneNumber;
+      let password = body.password;
 
-      validation.checkNull(email);
+      validation.checkNull(phoneNumber);
       validation.checkNull(password);
 
-      validation.validateEmail(email);
+      validation.checkString(phoneNumber, "Phone Number");
       validation.validatePassword(password);
 
 
-      let status = await userData.loginUser(email, password);
+      let status = await userData.loginUser(phoneNumber, password);
 
       if (status == "Database error.")
         return res.status(500).json({ error: "Internal server error" });
@@ -35,13 +35,11 @@ router
         req.session.user = status;
         return res.status(200).redirect("users");
       }
-
-      return res.status(200);
     } catch (error) {
-      /*return res
+      return res
         .status(400)
-        .render("login", { title: "Login Page", error: error });
-    */}
+        .json({error: error});
+    }
   });
 
 export default router;

@@ -11,6 +11,7 @@
   "author": "Rudolph Sedlin",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "express": "^4.21.0",
     "mongo": "^0.1.0",
     "mongodb": "^6.9.0",
