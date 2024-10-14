@@ -15,9 +15,9 @@ router
     let data = req.body;
     data = validation.sanitize(data);
     try {
-      let firstName = data.firstName;
-      let lastName = data.lastName;
-      let phoneNumber = data.phoneNumber;
+      let firstname = data.firstname;
+      let lastname = data.lastname;
+      let phonenumber = data.phonenumber;
       let state = data.state;
       let password = data.password;
       let confirmPassword = data.confirmPassword;
@@ -25,7 +25,7 @@ router
       let address = data.address;
       let gender = data.gender;
       let dateOfBirth = data.dateOfBirth;
-      let doctorName = data.doctorName;
+      let doctorname = data.doctorname;
       let conditions = data.conditions;
       let consentLetter = data.consentLetter;
 
@@ -33,25 +33,25 @@ router
 
       // Error Checking
       //* Null validations
-      validation.checkNull(firstName);
-      validation.checkNull(lastName);
-      validation.checkNull(phoneNumber)
+      validation.checkNull(firstname);
+      validation.checkNull(lastname);
+      validation.checkNull(phonenumber)
       validation.checkNull(state);
       validation.checkNull(password);
       validation.checkNull(confirmPassword);
 
       // *Validate String params
-      firstName = validation.checkString(firstName, "First Name");
-      lastName = validation.checkString(lastName, "Last Name");
-      phoneNumber = validation.checkString(phoneNumber, "Phone Number");
-      dateOfBirth = validation.checkString(dateOfBirth, "Date of Birth");
+      firstname = validation.checkString(firstname, "First name");
+      lastname = validation.checkString(lastname, "Last name");
+      phonenumber = validation.checkString(phonenumber, "Phone number");
+      state = validation.checkString(state, "State");
       password = validation.checkString(password, "Password");
       confirmPassword = validation.checkString(confirmPassword, "Password Confirmation");
 
-      //* Name length check
-      if (firstName.length < 2 || firstName.length > 25)
+      //* name length check
+      if (firstname.length < 2 || firstname.length > 25)
         throw "Error: First name is too short or too long";
-      if (lastName.length < 2 || firstName.length > 25)
+      if (lastname.length < 2 || firstname.length > 25)
         throw "Error: Last name is too short or too long";
 
       validation.validatePassword(password);
@@ -71,8 +71,8 @@ router
         validation.validateBirthday(dateOfBirth);
       }
 
-      if (doctorName)
-        doctorName = validation.checkString(doctorName, "Name of doctor");
+      if (doctorname)
+        doctorname = validation.checkString(doctorname, "name of doctor");
 
       if (conditions)
         conditions = validation.checkStringArray(conditions, "Conditions");
@@ -86,16 +86,16 @@ router
       }
 
       let status = await userData.create(
-        firstName,
-        lastName,
-        phoneNumber,
+        firstname,
+        lastname,
+        phonenumber,
         state,
         password,
 
         address,
         gender,
         dateOfBirth,
-        doctorName,
+        doctorname,
         conditions,
         consentLetter,
 

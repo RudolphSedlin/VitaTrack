@@ -3,7 +3,6 @@ import users from "./users.js";
 import login from "./login.js";
 import logout from "./logout.js";
 import register from "./register.js";
-//import schedule from "./schedule.js";
 
 const constructorMethod = (app) => {
   app.use("/meals", meals);
@@ -11,7 +10,6 @@ const constructorMethod = (app) => {
   app.use("/login", login);
   app.use("/logout", logout);
   app.use("/register", register);
-  //app.use("/schedule", schedule);
 
   app.use("*", (req, res) => {
     if (req.session.user) {
