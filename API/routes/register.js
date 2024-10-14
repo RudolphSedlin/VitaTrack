@@ -44,7 +44,6 @@ router
       firstName = validation.checkString(firstName, "First Name");
       lastName = validation.checkString(lastName, "Last Name");
       phoneNumber = validation.checkString(phoneNumber, "Phone Number");
-      userName = validation.checkString(userName, "User Name");
       dateOfBirth = validation.checkString(dateOfBirth, "Date of Birth");
       password = validation.checkString(password, "Password");
       confirmPassword = validation.checkString(confirmPassword, "Password Confirmation");
@@ -109,6 +108,7 @@ router
         res.cookie("AuthState", "Logged in!");
         req.session.user = status;
         return res.status(200).redirect("users");
+    }
     }
     catch (error) {
       return res

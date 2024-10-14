@@ -17,9 +17,18 @@ router.route("/").get(async (req, res) => {
     return res.status(200).json({
       firstName: req.session.user.firstName,
       lastName: req.session.user.lastName,
-      userName: req.session.user.userName,
-      email: req.session.user.email,
+      phoneNumber: req.session.user.phoneNumber,
+      state: req.session.user.state,
+      meals: req.session.user.meals,
+
+      address: req.session.user.address,
+      gender: req.session.user.gender,
       dateOfBirth: req.session.user.dateOfBirth,
+      doctorName: req.session.user.doctorName,
+      conditions: req.session.user.conditions,
+      consentLetter: req.session.user.consentLetter,
+
+      email: req.session.user.email,
     })
     }
 
