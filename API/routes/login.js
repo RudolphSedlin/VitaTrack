@@ -5,28 +5,21 @@ import validation from "../validation.js";
 
 router
   .route("/")
-  .get(async (req, res) => {
-    //code here for GET
-    //return res.status(200).render("login", { title: "Login Page" });
-    return res.status(200);
-  })
   .post(async (req, res) => {
-    //code here for POST
     try {
       let body = req.body;
       body = validation.sanitize(body);
 
-      let phoneNumber = body.phoneNumber;
+      let phonenumber = body.phonenumber;
       let password = body.password;
 
-      validation.checkNull(phoneNumber);
+      validation.checkNull(phonenumber);
       validation.checkNull(password);
 
-      validation.checkString(phoneNumber, "Phone Number");
+      validation.checkString(phonenumber, "Phone number");
       validation.validatePassword(password);
 
-
-      let status = await userData.loginUser(phoneNumber, password);
+      let status = await userData.loginUser(phonenumber, password);
 
       if (status == "Database error.")
         return res.status(500).json({ error: "Internal server error" });

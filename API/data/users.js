@@ -5,11 +5,11 @@ import bcrypt from "bcrypt";
 
 // Function for creating a user in the user data base
 const create = async (
-  firstName,
-  lastName,
-  phoneNumber,
+  firstname,
+  lastname,
+  phonenumber,
   state,
-  passWord, // MANDATORY NO MATTER WHAT
+  password, // MANDATORY NO MATTER WHAT
 
   address,
   gender,
@@ -23,30 +23,30 @@ const create = async (
 
   //Validation Handling For Mandatory---------------------------------------------------------------------------------
   //* Validate Null
-  validation.checkNull(firstName);
-  validation.checkNull(lastName);
-  validation.checkNull(phoneNumber);
+  validation.checkNull(firstname);
+  validation.checkNull(lastname);
+  validation.checkNull(phonenumber);
   validation.checkNull(state);
-  validation.checkNull(passWord);
+  validation.checkNull(password);
 
   // * Validate String params
-  firstName = validation.checkString(firstName, "First Name");
-  lastName = validation.checkString(lastName, "Last Name");
-  phoneNumber = validation.checkString(phoneNumber, "Phone Number");
+  firstname = validation.checkString(firstname, "First Name");
+  lastname = validation.checkString(lastname, "Last Name");
+  phonenumber = validation.checkString(phonenumber, "Phone number");
   state = validation.checkString(state, "State");
-  passWord = validation.checkString(passWord, "Password");
+  password = validation.checkString(password, "Password");
 
 
   //* Name length check
-  if (firstName.length < 2 || firstName.length > 25)
+  if (firstname.length < 2 || firstname.length > 25)
     throw "Error: First name is too short or too long";
-  if (lastName.length < 2 || lastName.length > 25)
+  if (lastname.length < 2 || lastname.length > 25)
     throw "Error: Last name is too short or too long";
 
-  validation.validatePassword(passWord);
+  validation.validatePassword(password);
 
   const saltRounds = 16;
-  const hash = await bcrypt.hash(passWord, saltRounds);
+  const hash = await bcrypt.hash(password, saltRounds);
 
   //Validation Handling For RPM/Optional----------------------------------------------------------------------------------------
   if (address)
@@ -77,9 +77,9 @@ const create = async (
 
   //Create user object to put into collection
   let newUser = {
-    firstName: firstName,
-    lastName: lastName,
-    phoneNumber: phoneNumber,
+    firstname: firstname,
+    lastname: lastname,
+    phonenumber: phonenumber,
     state: state,
     hashedPass: hash,
     meals: [],
@@ -96,8 +96,8 @@ const create = async (
 
   const userCollection = await users();
 
-  let user = await userCollection.findOne({ phoneNumber: phoneNumber });
-  if (user !== null) throw `User with number ${phoneNumber} already exists.`;
+  let user = await userCollection.findOne({ phonenumber: phonenumber });
+  if (user !== null) throw `User with number ${phonenumber} already exists.`;
 
   const newInsertInformation = await userCollection.insertOne(newUser);
   if (!newInsertInformation.insertedId) throw "Insert failed";
@@ -149,25 +149,25 @@ const remove = async (id) => {
 
 // Function for updating a user with new descriptions
 //! IN THE CLIENTSIDE FORM YOU MUST MAKE IT SO THAT THE FORM LOADS IN WITH THE EXISTING USER DATA
-const updateUser = async (id, firstName, lastName, userName) => {
+const updateUser = async (id, firstname, lastname, userName) => {
   //* Null Validation
   validation.checkNull(id);
-  validation.checkNull(firstName);
-  validation.checkNull(lastName);
+  validation.checkNull(firstname);
+  validation.checkNull(lastname);
   validation.checkNull(userName);
 
   //* id check
   id = validation.checkId(id);
 
   //* String input check
-  firstName = validation.checkString(firstName);
-  lastName = validation.checkString(lastName);
+  firstname = validation.checkString(firstname);
+  lastname = validation.checkString(lastname);
   userName = validation.checkString(userName);
 
   //* Name length check
-  if (firstName.length < 2 || firstName.length > 25)
+  if (firstname.length < 2 || firstname.length > 25)
     throw "Error: First name is too short or too long";
-  if (lastName.length < 2 || firstName.length > 25)
+  if (lastname.length < 2 || firstname.length > 25)
     throw "Error: Last name is too short or too long";
 
   const userCollection = await users();
@@ -176,7 +176,7 @@ const updateUser = async (id, firstName, lastName, userName) => {
 
   let updateUser = userCollection.updateOne(
     { _id: new ObjectId(id) },
-    { $set: { firstName: firstName, lastName: lastName, userName: userName } }
+    { $set: { firstname: firstname, lastname: lastname, userName: userName } }
   );
 
   if (!updateUser) throw "Error: User could not be updated";
@@ -270,7 +270,7 @@ const getMeals = async (userId) => {
 };
 
 // Function to return user login information.
-const loginUser = async (phoneNumber, password) => {
+const loginUser = async (phonenumber, password) => {
   let userCollection;
   try {
     userCollection = await users();
@@ -278,20 +278,20 @@ const loginUser = async (phoneNumber, password) => {
     return "Database error.";
   }
 
-  phoneNumber = validation.checkString(phoneNumber, "Phone Number");
+  phonenumber = validation.checkString(phonenumber, "Phone number");
   validation.validatePassword(password);
 
-  let user = await userCollection.findOne({phoneNumber: phoneNumber});
-  if (user == null) throw "Incorrect Phone Number or Password";
+  let user = await userCollection.findOne({phonenumber: phonenumber});
+  if (user == null) throw "Incorrect Phone number or Password";
 
   let authenticated = await bcrypt.compare(password, user.hashedPass);
-  if (!authenticated) throw "Incorrect Phone Number or Password";
+  if (!authenticated) throw "Incorrect Phone number or Password";
 
   return {
     _id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    phoneNumber: user.phoneNumber,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    phonenumber: user.phonenumber,
     state: user.state,
     meals: user.meals,
 

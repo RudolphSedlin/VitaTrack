@@ -8,13 +8,11 @@ const create = async (
   name,
   description,
   creatorId,
-  date
 ) => {
   //Validate Null
   validation.checkNull(name);
   validation.checkNull(description);
   validation.checkNull(creatorId);
-  validation.checkNull(date);
 
   //Input validation for types
   name = validation.checkString(name, "Meal Name");
@@ -25,14 +23,10 @@ const create = async (
     throw "Error: Description is too short or too long";
 
   creatorId = validation.checkId(creatorId, "Creator ID");
-  creator = validation.checkString(creator, "Creator Name"); //? Forgot if we have to turn this into a string...
 
+  let date = new Date().toUTCString();
 
-  dateDue = validation.checkString(date, "Date");
-  validation.validateDate(date);
-
-
-  //Create user obj to put into collection
+  //Create meal obj to put into collection
   let newMeal = {
     name: name,
     description: description,
@@ -51,6 +45,7 @@ const create = async (
     { _id: new ObjectId(creatorId) },
     { $push: { meals: newInsertInformation.insertedId.toString() } }
   );
+
   return await getMealByID(newInsertInformation.insertedId.toString());
 };
 

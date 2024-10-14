@@ -4,13 +4,19 @@ import { userData, mealData } from "../data/index.js";
 import validation from "../validation.js";
 
 router
-.route("/create")
+.route("/")
+
 .get(async (req, res) => {
-    return res.status(400).redirect("/");
+    if (!req.session.user) return res.status(400).json({error: "Not authenticated."});
+
+    return res.status(200).json({
+        mealList: await userData.getMeals(req.session.user._id),
+    });
 })
+
 .post(async (req, res) => {
     if (!req.session.user)
-        return res.status(200);
+        return res.status(400).json({error: "Not authenticated."});
 
     let data = req.body;
     data = validation.sanitize(data);
@@ -18,38 +24,30 @@ router
         let name = data.name;
         let description = data.description;
         let creatorId = req.session.user._id.toString();
-        let date = data.date;
 
         //* Validate Null
         validation.checkNull(name);
         validation.checkNull(description);
         validation.checkId(creatorId);
-        validation.checkNull(date);
 
         //* Validate String
         name = validation.checkString(name);
         description = validation.checkString(description);
         creatorId = validation.checkId(creatorId);
-        date = validation.checkString(date);
 
         if (name.length < 2 || name.length > 50)
             throw "Error: Meal Name is too short or too long";
         if (description.length < 15 || description.length > 250)
             throw "Error: Description is too short or too long";
         creatorId = validation.checkId(creatorId, "Creator ID");
-        date = validation.checkString(date, "Date Due");
-
-        //Date validation
-        validation.validateDate(date);
 
         const create = await mealData.create(
             name,
             description,
             creatorId,
-            date,
         );
 
-        return res.status(200).redirect("/meals/all");
+        return res.status(200).json(create);
     }
 
     catch (error) {
@@ -59,12 +57,21 @@ router
     }
 });
 
-router.route("/all").get(async (req, res) => {
-    if (!req.session.user) return res.status(400).redirect("/");
+router
+.route("/:id")
+.get(async (req, res) => {
+    if (req.session.user) {
+        try {
+            req.params.id = validation.checkString(req.params.id, "Id");
+            return res.status(200).json(await mealData.getMealByID(req.params.id));
+        } catch (e) {
+            return res
+            .status(404)
+            .redirect("/meals");
+        }
+    }
 
-    return res.status(200).json({
-        mealList: await userData.getMeals(req.session.user._id),
-    });
+    return res.status(400).json({error: "Not authenticated."});
 });
 
 export default router;
