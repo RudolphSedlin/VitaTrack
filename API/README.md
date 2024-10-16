@@ -1,6 +1,6 @@
-**Running the API:**
+# Running the API:
 
-*npm install*
+***npm install***
 
 Start MongoDB service however you are supposed to on your system.
 
@@ -9,11 +9,11 @@ npm start
 
 --------------------------------------------------------------------------------------
 
-***ENDPOINTS:***
+# ENDPOINTS:
 
 
 
-**POST /register:**
+## POST /register:
 
 req.body should be a JS object with the following fields and string values:
 
@@ -51,7 +51,7 @@ Authentication lasts for 1 hour before needing to be redone. May change duration
 
 ---------------------------------------------------------------------------------------
 
-**POST /login:**
+## POST /login:
 
 Same as register, with the following fields:
 
@@ -65,7 +65,7 @@ Authentication lasts for 1 hour before needing to be redone. May change duration
 
 -------------------------------------------------------------------------------------
 
-**GET /users:**
+## GET /users:
 
 Must be authenticated first, see above.
 
@@ -73,7 +73,7 @@ Server returns a JSON of the user if successful, and an {error: ERROR} JSON othe
 
 ------------------------------------------------------------------------------------
 
-**GET /meals:**
+## GET /meals:
 
 Must be authenticated first, see above.
 
@@ -81,7 +81,7 @@ Returns an expanded list of all user meals as JSON.
 
 ----------------------------------------------------------------------------------------
 
-**POST /meals:**
+## POST /meals:
 
 Must be authenticated first, see above.
 
@@ -95,7 +95,7 @@ Returns a JSON of the created meal.
 
 ------------------------------------------------------------------------------------------
 
-**GET /meals/:id:**
+## GET /meals/:id:
 
 Must be authenticated first, see above.
 
@@ -103,7 +103,7 @@ Returns an expanded JSON of the specified meal.
 
 -------------------------------------------------------------------------------------------
 
-**GET /logout:**
+## GET /logout:
 
 Must be authenticated first, see above.
 
