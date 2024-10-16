@@ -1,8 +1,13 @@
-import { Text, View, StyleSheet, Pressable, useColorScheme } from "react-native";
-import TensorCamera from "../components/TensorCamera";
-import { Colors } from "../constants/Colors";
+import { View, StyleSheet, useColorScheme } from "react-native";
+import { Colors } from "@/constants/Colors";
 import { Link, useNavigation } from "expo-router";
 import { useEffect } from "react";
+import NavButton from "@/components/NavButton";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCircleUser } from "@fortawesome/free-regular-svg-icons" 
+
+library.add(faCircleUser)
 
 export default function Index() {
   const colorScheme = useColorScheme();
@@ -13,51 +18,28 @@ export default function Index() {
   }, [navigation]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Link style={colorScheme == "dark" ? styles.darkButton : styles.lightButton} href="/camerascreen">
-        <Text style={colorScheme == "dark" ? styles.darkText : styles.lightText}>Take New Photo</Text>
-      </Link>
+    <View style={styles.container}>
+      <View style={styles.content}>
+
+      </View>
+      <View style={styles.footer}>
+        <NavButton screen={"/camerascreen"} text="Take Photo" icon={["far", "circle-user"]} fullWidth={true} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  lightButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: Colors.light.icon,
+  container: {
+    flex: 1,
+    padding: 12
   },
-  darkButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: Colors.dark.icon,
+  content: {
+    flex: 1
   },
-  lightText: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-    color: Colors.light.buttonText,
-  },
-  darkText: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-    color: Colors.dark.buttonText,
-  },
+  footer: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 100
+  }
 })

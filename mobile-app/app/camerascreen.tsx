@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 export default function CameraScreen() {
   const navigation = useNavigation();
-  
+
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
@@ -18,7 +18,6 @@ export default function CameraScreen() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
       <TensorCamera />
     </View>
   );

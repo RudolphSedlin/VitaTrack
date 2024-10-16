@@ -47,6 +47,7 @@ export default function TensorCamera() {
 }
 
 const { width } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -57,8 +58,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   camera: {
-    width: width * 0.75,
-    height: width * 0.75,
+    width: width,
+    height: height,
     borderRadius: 10,
     overflow: "hidden",
   },

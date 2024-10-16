@@ -1,36 +1,52 @@
-import { Text, View, StyleSheet, useColorScheme } from "react-native";
+import { Text, View, StyleSheet, useColorScheme, Dimensions } from "react-native";
 import { Colors } from "../constants/Colors";
 import { Href, Link } from "expo-router";
 import { useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { red } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 
 type NavButtonProps = {
   screen: Href; 
   text: string;
+  icon: IconProp;
+  fullWidth: boolean;
 }
 
 export default function NavButton(props: NavButtonProps) {
   const colorScheme = useColorScheme();
 
   return (
-    <Link style={colorScheme == "dark" ? styles.darkButton : styles.lightButton} href={props.screen}>
-      <Text style={colorScheme == "dark" ? styles.darkText : styles.lightText}>{props.text}</Text>
+    <Link href={props.screen}>
+      <View style={colorScheme == "dark" ? styles.darkButton : styles.lightButton}>
+        <View style={{
+          flexDirection: "row",
+          width: Dimensions.get("window").width,
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+          <FontAwesomeIcon style={colorScheme == "dark" ? styles.darkText : styles.lightText} icon={props.icon} />
+          <Text style={colorScheme == "dark" ? styles.darkText : styles.lightText}> {props.text}</Text>
+        </View>
+      </View>
     </Link>
   );
 }
 
 const styles = StyleSheet.create({
   lightButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
     backgroundColor: Colors.light.tabIconSelected,
+    justifyContent: "center",
+    alignItems: "center",
   },
   darkButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
@@ -42,13 +58,13 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: Colors.light.text,
+    color: Colors.light.buttonText,
   },
   darkText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: Colors.dark.text,
+    color: Colors.dark.buttonText,
   },
 })
