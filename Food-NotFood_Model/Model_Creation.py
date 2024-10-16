@@ -12,13 +12,21 @@ import os
 img_height, img_width = 224, 224
 batch_size = 32
 
-print(os.getcwd())
+
+"""
+If you only want to use a single folder, you can specify the variable: validation_split = 0.2
+inside of the ImageDataGenerator, then use the exact same directory for validation and training.
+0.2 stands for 20% of the data is made into validation data
+"""
 # Use ImageDataGenerator to read images from directories
 train_datagen = ImageDataGenerator(rescale=1./255)
 validation_datagen = ImageDataGenerator(rescale=1./255)
 
+
+
 TRAINING_DATA_DIRECTORY = 'training'
 VALIDATION_DATA_DIRECTORY = 'validation'
+
 train_generator = train_datagen.flow_from_directory(
     TRAINING_DATA_DIRECTORY,
     target_size=(img_height, img_width),
@@ -32,7 +40,7 @@ validation_generator = validation_datagen.flow_from_directory(
     target_size=(img_height, img_width),
     batch_size=batch_size,
     class_mode='binary',
-    #subset='validation'
+    #subset='validation'#Only use this when you specify validation_split in the ImageDataGenerator above
 )
 
 # Load MobileNetV2 model without the top layer for custom training
@@ -51,6 +59,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 epochs = 10
 
+#Train the model over __ epochs
 history = model.fit(
     train_generator,
     steps_per_epoch=train_generator.samples // batch_size,
@@ -59,9 +68,10 @@ history = model.fit(
     epochs=epochs
 )
 
+#Calculate accuracy
 loss, accuracy = model.evaluate(validation_generator)
 print(f"Validation Accuracy: {accuracy * 100:.2f}%")
 
-
-model.save('model_2.h5')
+#Save model for use elsewhere
+model.save('model_3.keras')
 
