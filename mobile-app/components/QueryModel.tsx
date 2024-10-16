@@ -4,7 +4,7 @@ import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import * as tf from "@tensorflow/tfjs";
 import { bundleResourceIO, decodeJpeg } from "@tensorflow/tfjs-react-native";
 import * as FileSystem from "expo-file-system";
-import * as mobilenet from "@tensorflow-models/mobilenet";
+//import * as mobilenet from "@tensorflow-models/mobilenet";
 import { cameraWithTensors } from "./TensorCamera.tsx";
 
 // const modelJSON = require("./path/to/jsonfile/model.json");
@@ -34,7 +34,7 @@ function QueryModel() {
       //   });
 
       // TEST: For use until we get a working model
-      const model = await mobilenet.load();
+      //const model = await mobilenet.load();
 
       if (model) {
         setModel(model);
