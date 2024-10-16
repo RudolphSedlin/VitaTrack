@@ -13,14 +13,14 @@ const create = async (
 
   address,
   gender,
-  height,
-  weight,
   dateOfBirth,
   doctorName,
   conditions,
   consentLetter, // Also stored for RPM customers.
 
   email, // Completely optional.
+  height,
+  weight,
 ) => {
 
   //Validation Handling For Mandatory---------------------------------------------------------------------------------
@@ -57,12 +57,6 @@ const create = async (
   if (gender)
     gender = validation.checkString(gender, "Gender");
 
-  if (weight)
-    weight = validation.validateWeight(weight, "Weight");
-
-  if (height)
-    height = validation.validateHeight(height, "Height");
-
   if (dateOfBirth) {
     dateOfBirth = validation.checkString(dateOfBirth, "Date of Birth");
     validation.validateDate(dateOfBirth);
@@ -83,6 +77,12 @@ const create = async (
     validation.validateEmail(email);
   }
 
+  if (weight)
+    weight = validation.validateWeight(weight, "Weight");
+
+  if (height)
+    height = validation.validateHeight(height, "Height");
+
   //Create user object to put into collection
   let newUser = {
     firstname: firstname,
@@ -94,14 +94,14 @@ const create = async (
 
     address: address,
     gender: gender,
-    height: height,
-    weight: weight,
     dateOfBirth: dateOfBirth,
     doctorName: doctorName,
     conditions: conditions,
     consentLetter: consentLetter,
 
     email: email,
+    height: height,
+    weight: weight,
   };
 
   const userCollection = await users();
@@ -307,14 +307,14 @@ const loginUser = async (phonenumber, password) => {
 
     address: user.address,
     gender: user.gender,
-    height: user.height,
-    weight: user.weight,
     dateOfBirth: user.dateOfBirth,
     doctorName: user.doctorName,
     conditions: user.conditions,
     consentLetter: user.consentLetter,
 
     email: user.email,
+    height: user.height,
+    weight: user.weight,
   };
 };
 
