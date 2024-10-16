@@ -7,7 +7,7 @@ Start MongoDB service however you are supposed to on your system.
 Typically, this means querying your package manager for an implementation and calling the system service manager.
 npm start
 
-
+--------------------------------------------------------------------------------------
 
 ***ENDPOINTS:***
 
@@ -49,7 +49,7 @@ Authenticates and redirects to /users if successful.
 
 Authentication lasts for 1 hour before needing to be redone. May change duration later.
 
-
+---------------------------------------------------------------------------------------
 
 **POST /login:**
 
@@ -63,7 +63,7 @@ Authenticates and redirects to /users if successful.
 
 Authentication lasts for 1 hour before needing to be redone. May change duration later.
 
-
+-------------------------------------------------------------------------------------
 
 **GET /users:**
 
@@ -71,7 +71,7 @@ Must be authenticated first, see above.
 
 Server returns a JSON of the user if successful, and an {error: ERROR} JSON otherwise.
 
-
+------------------------------------------------------------------------------------
 
 **GET /meals:**
 
@@ -79,7 +79,7 @@ Must be authenticated first, see above.
 
 Returns an expanded list of all user meals as JSON.
 
-
+----------------------------------------------------------------------------------------
 
 **POST /meals:**
 
@@ -93,7 +93,7 @@ Also as above, please submit a JSON in req.body as such
 
 Returns a JSON of the created meal.
 
-
+------------------------------------------------------------------------------------------
 
 **GET /meals/:id:**
 
@@ -101,7 +101,7 @@ Must be authenticated first, see above.
 
 Returns an expanded JSON of the specified meal.
 
-
+-------------------------------------------------------------------------------------------
 
 **GET /logout:**
 
