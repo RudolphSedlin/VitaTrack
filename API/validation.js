@@ -330,6 +330,24 @@ function validatePassword(password) {
   if (!hasUpperCase) throw "Password is missing an uppercase letter.";
 }
 
+function validateWeight(weight) {
+  if (isNaN(weight)) {
+    throw "Weight must be a number.";
+  }
+  if (weight <= 0) {
+    throw "Weight must be a positive number."
+  }
+}
+
+function validateHeight(height) {
+  if (isNaN(height)) {
+    throw "Height must be a number.";
+  }
+  if (height < 30 || height > 100) {
+    throw "Height is to short or tall"
+  }
+}
+
 export default {
   sanitize,
   checkId,
@@ -343,4 +361,6 @@ export default {
   validateTime,
   compareTimes,
   validatePassword,
+  validateWeight,
+  validateHeight
 };

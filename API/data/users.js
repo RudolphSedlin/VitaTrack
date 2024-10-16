@@ -13,6 +13,8 @@ const create = async (
 
   address,
   gender,
+  height,
+  weight,
   dateOfBirth,
   doctorName,
   conditions,
@@ -55,6 +57,12 @@ const create = async (
   if (gender)
     gender = validation.checkString(gender, "Gender");
 
+  if (weight)
+    weight = validation.validateWeight(weight, "Weight");
+
+  if (height)
+    height = validation.validateHeight(height, "Height");
+
   if (dateOfBirth) {
     dateOfBirth = validation.checkString(dateOfBirth, "Date of Birth");
     validation.validateDate(dateOfBirth);
@@ -86,6 +94,8 @@ const create = async (
 
     address: address,
     gender: gender,
+    height: height,
+    weight: weight,
     dateOfBirth: dateOfBirth,
     doctorName: doctorName,
     conditions: conditions,
@@ -297,6 +307,8 @@ const loginUser = async (phonenumber, password) => {
 
     address: user.address,
     gender: user.gender,
+    height: user.height,
+    weight: user.weight,
     dateOfBirth: user.dateOfBirth,
     doctorName: user.doctorName,
     conditions: user.conditions,
