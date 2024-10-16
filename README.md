@@ -1,6 +1,6 @@
-Running the API:
+**Running the API:**
 
-npm install
+*npm install*
 
 Start MongoDB service however you are supposed to on your system.
 
@@ -9,41 +9,41 @@ npm start
 
 
 
-ENDPOINTS:
+***ENDPOINTS:***
 
 
 
-POST /register:
+**POST /register:**
 
 req.body should be a JS object with the following fields and string values:
 
   // Mandatory fields
   
-  firstname,
+  *firstname,*
   
-  lastname,
+  *lastname,*
   
-  phonenumber,
+  *phonenumber,*
   
-  state,
+  *state,*
   
-  password,
+  *password,*
 
   // Optional fields primarily for RPM customers.
   
-  address,
+  *address,*
   
-  gender,
+  *gender,*
   
-  dateOfBirth, // Should be formatted YYYY-MM-DD. I may remove this limitation later.
+  *dateOfBirth,* // Should be formatted YYYY-MM-DD. I may remove this limitation later.
   
-  doctorName,
+  *doctorName,*
   
-  conditions,
+  *conditions,*
   
-  consentLetter,
+  *consentLetter,*
 
-  email, // Completely optional. Validated on the server.
+  *email,* // Completely optional. Validated on the server.
 
 Authenticates and redirects to /users if successful.
 
@@ -51,13 +51,13 @@ Authentication lasts for 1 hour before needing to be redone. May change duration
 
 
 
-POST /login:
+**POST /login:**
 
 Same as register, with the following fields:
 
-  phonenumer,
+  *phonenumer,*
   
-  password,
+  *password,*
 
 Authenticates and redirects to /users if successful.
 
@@ -65,7 +65,7 @@ Authentication lasts for 1 hour before needing to be redone. May change duration
 
 
 
-GET /users:
+**GET /users:**
 
 Must be authenticated first, see above.
 
@@ -73,7 +73,7 @@ Server returns a JSON of the user if successful, and an {error: ERROR} JSON othe
 
 
 
-GET /meals:
+**GET /meals:**
 
 Must be authenticated first, see above.
 
@@ -81,21 +81,21 @@ Returns an expanded list of all user meals as JSON.
 
 
 
-POST /meals:
+**POST /meals:**
 
 Must be authenticated first, see above.
 
 Also as above, please submit a JSON in req.body as such
 
-  name,
+  *name,*
   
-  description,
+  *description,*
 
 Returns a JSON of the created meal.
 
 
 
-GET /meals/:id:
+**GET /meals/:id:**
 
 Must be authenticated first, see above.
 
@@ -103,7 +103,7 @@ Returns an expanded JSON of the specified meal.
 
 
 
-GET /logout:
+**GET /logout:**
 
 Must be authenticated first, see above.
 
