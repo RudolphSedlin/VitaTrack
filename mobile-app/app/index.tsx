@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: Colors.light.background,
+    backgroundColor: Colors.light.icon,
   },
   darkButton: {
     alignItems: 'center',
@@ -44,20 +44,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: Colors.dark.background,
+    backgroundColor: Colors.dark.icon,
   },
   lightText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: Colors.light.text,
+    color: Colors.light.buttonText,
   },
   darkText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: Colors.dark.text,
+    color: Colors.dark.buttonText,
   },
 })
