@@ -30,6 +30,8 @@ router
       let consentLetter = data.consentLetter;
 
       let email = data.email;
+      let height = data.height;
+      let weight = data.weight;
 
       // Error Checking
       //* Null validations
@@ -85,6 +87,12 @@ router
         validation.validateEmail(email);
       }
 
+      if (height)
+        height = validation.validateHeight(height, "Height");
+
+      if (weight)
+        weight = validation.validateWeight(weight, "Weight");
+
       let status = await userData.create(
         firstname,
         lastname,
@@ -99,7 +107,9 @@ router
         conditions,
         consentLetter,
 
-        email
+        email,
+        height,
+        weight
       );
 
       if (status == "Database error.")

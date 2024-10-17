@@ -19,6 +19,8 @@ router.route("/").get(async (req, res) => {
       consentLetter: req.session.user.consentLetter,
 
       email: req.session.user.email,
+      height: req.session.user.height,
+      weight: req.session.user.weight,
     })
     }
 

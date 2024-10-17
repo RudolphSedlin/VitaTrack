@@ -70,18 +70,18 @@ const create = async (
     conditions = validation.checkStringArray(conditions, "Conditions");
 
   if (consentLetter)
-    consentLetter = validation.checkStringArray(consentLetter, "Letter of Consent");
+    consentLetter = validation.checkString(consentLetter, "Letter of Consent");
 
   if (email) {
     email = validation.checkString(email, "Email");
     validation.validateEmail(email);
   }
 
-  if (weight)
-    weight = validation.validateWeight(weight, "Weight");
-
   if (height)
     height = validation.validateHeight(height, "Height");
+
+  if (weight)
+    weight = validation.validateWeight(weight, "Weight");
 
   //Create user object to put into collection
   let newUser = {
