@@ -6,8 +6,10 @@ import NavButton from "@/components/NavButton";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons" 
+import { faCamera } from "@fortawesome/free-solid-svg-icons" 
 
 library.add(faCircleUser)
+library.add(faCamera)
 
 export default function Index() {
   const colorScheme = useColorScheme();
