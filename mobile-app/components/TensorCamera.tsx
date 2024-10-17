@@ -47,7 +47,6 @@ export default function TensorCamera({ setPrediction }) {
         // Convert the loaded image to a Tensor
         const imageFeatures = tf.tidy(() => {
           const imageAsTensor = tf.browser.fromPixels(img);
-          imageAsTensor.print(); // Print the tensor to the console (for debugging)
           return imageAsTensor;
         });
         resolve(imageFeatures); // Resolve the promise with the tensor
@@ -81,7 +80,6 @@ export default function TensorCamera({ setPrediction }) {
 
       // Use the prediction (e.g., update UI)
       setPrediction(prediction);
-      console.log(prediction);
 
       // Dispose of tensor to free memory
       tensor.dispose();

@@ -9,6 +9,7 @@ function QueryModel() {
 
   // Function to handle new predictions
   const handlePrediction = (predictions) => {
+    console.log(predictions);
     if (predictions && predictions.length > 0) {
       const highestProbabilityItem = predictions.reduce((prev, current) => {
         return prev.probability > current.probability ? prev : current;

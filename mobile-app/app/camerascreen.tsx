@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import TensorCamera from "../components/TensorCamera";
+import QueryModel from "../components/QueryModel";
 import { useNavigation } from "expo-router";
 import { useEffect } from "react";
 
@@ -18,7 +18,7 @@ export default function CameraScreen() {
         alignItems: "center",
       }}
     >
-      <TensorCamera />
+      <QueryModel />
     </View>
   );
 }
