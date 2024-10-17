@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
+import { useNavigation } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
   Button,
@@ -37,6 +38,8 @@ export default function TensorCamera(props: TensorCameraProps) {
   const [model, setModel] = useState<mobilenet.MobileNet | null>(null);
   const cameraRef = useRef<CameraView>(null); // Camera reference
   const isRunning = useRef(false); // Controls loop status
+
+  const navigation = useNavigation();
 
   const setPrediction = props.setPrediction;
 
@@ -199,7 +202,7 @@ export default function TensorCamera(props: TensorCameraProps) {
             backgroundColor: '#fff',
             alignItems: "center",
             justifyContent: "center",
-          }}>
+          }} onPress={navigation.goBack}>
             <FontAwesomeIcon color="red" size={30} icon={["fas", "xmark"]}/>
           </TouchableOpacity>
       </View>
