@@ -11,12 +11,11 @@ import {
 } from "react-native";
 import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as tf from "@tensorflow/tfjs";
-import * as jpeg from "jpeg-js";
-import { Base64 } from "js-base64";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCircleUser, faLightbulb as faRegularBulb } from "@fortawesome/free-regular-svg-icons" 
 import { faCamera, faXmark, faLightbulb } from "@fortawesome/free-solid-svg-icons" 
+import { Tensor3D } from "@tensorflow/tfjs";
 
 library.add(faCircleUser)
 library.add(faCamera)
@@ -24,13 +23,22 @@ library.add(faXmark)
 library.add(faLightbulb)
 library.add(faRegularBulb)
 
-export default function TensorCamera({ setPrediction }) {
+type TensorCameraProps = {
+  setPrediction: (preds: {
+    className: string;
+    probability: number;
+  }[] | undefined)=>void
+}
+
+export default function TensorCamera(props: TensorCameraProps) {
   const [lightState, setLightState] = useState(false);
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
-  const [model, setModel] = useState(null);
-  const cameraRef = useRef(null); // Camera reference
+  const [model, setModel] = useState<mobilenet.MobileNet | null>(null);
+  const cameraRef = useRef<CameraView>(null); // Camera reference
   const isRunning = useRef(false); // Controls loop status
+
+  const setPrediction = props.setPrediction;
 
   // Load TensorFlow.js model
   useEffect(() => {
@@ -42,11 +50,7 @@ export default function TensorCamera({ setPrediction }) {
     })();
   }, []);
 
-  function toggleCameraFacing() {
-    setFacing((current) => (current === "back" ? "front" : "back"));
-  }
-
-  const imageToTensor = (imageData) => {
+  const imageToTensor = (imageData: string): Promise<tf.Tensor3D> => {
     return new Promise((resolve, reject) => {
       // Create a new Image object
       const img = new Image();
@@ -72,7 +76,7 @@ export default function TensorCamera({ setPrediction }) {
     });
   };
 
-  const runModelPrediction = async (imageTensor) => {
+  const runModelPrediction = async (imageTensor: Tensor3D) => {
     if (model) {
       const prediction = model.classify(imageTensor);
       return prediction;
@@ -86,15 +90,17 @@ export default function TensorCamera({ setPrediction }) {
         base64: true,
         quality: 0.5, // Adjust to balance quality and performance
       });
+      
+      if (picture && picture.base64) {
+        const tensor = await imageToTensor(picture.base64);
+        const prediction = await runModelPrediction(tensor);
 
-      const tensor = await imageToTensor(picture.base64);
-      const prediction = await runModelPrediction(tensor);
+        // Use the prediction (e.g., update UI)
+        setPrediction(prediction);
 
-      // Use the prediction (e.g., update UI)
-      setPrediction(prediction);
-
-      // Dispose of tensor to free memory
-      tensor.dispose();
+        // Dispose of tensor to free memory
+        tensor.dispose();
+      }
     }
   };
 
@@ -144,7 +150,7 @@ export default function TensorCamera({ setPrediction }) {
 
   return (
     <View>
-      <CameraView enableTorch={lightState} testID="camera-view" style={styles.camera} facing={facing}>
+      <CameraView enableTorch={lightState} testID="camera-view" style={styles.camera} facing={facing} ref={cameraRef}>
       <View style={{
           position: 'absolute',
           bottom: 0,
