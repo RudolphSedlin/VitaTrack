@@ -28,7 +28,7 @@ type TensorCameraProps = {
   setPrediction: (preds: {
     className: string;
     probability: number;
-  }[] | undefined)=>void
+  }[] | undefined)=>void;
 }
 
 export default function TensorCamera(props: TensorCameraProps) {
@@ -36,6 +36,7 @@ export default function TensorCamera(props: TensorCameraProps) {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [model, setModel] = useState<mobilenet.MobileNet | null>(null);
+  const [loopRunning, setLoopRunning] = useState(false);
   const cameraRef = useRef<CameraView>(null); // Camera reference
   const isRunning = useRef(false); // Controls loop status
 
@@ -127,6 +128,15 @@ export default function TensorCamera(props: TensorCameraProps) {
     isRunning.current = false;
   };
 
+  function toggleFrameLoop() {
+    if (loopRunning) {
+      stopFrameLoop();
+    } else {
+      startFrameLoop();
+    }
+    setLoopRunning(!loopRunning)
+  }
+
   // Camera permission handling
   if (!permission) {
     return <View />;
@@ -190,7 +200,7 @@ export default function TensorCamera(props: TensorCameraProps) {
             backgroundColor: '#fff',
             alignItems: "center",
             justifyContent: "center",
-          }}>
+          }} onPress={toggleFrameLoop}>
             <FontAwesomeIcon size={40} icon={["fas", "camera"]}/>
           </TouchableOpacity>
 

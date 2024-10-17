@@ -30,7 +30,7 @@ function QueryModel() {
     <View style={styles.container}>
       <Text style={styles.title}>Tensor Model Prediction</Text>
       {/* TensorCamera component with setPrediction passed as a prop */}
-      <TensorCamera setPrediction={handlePrediction} />
+      <TensorCamera setPrediction={handlePrediction}/>
     </View>
   );
 }
