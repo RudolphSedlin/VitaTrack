@@ -2,42 +2,28 @@
 
 import express from "express";
 import session from "express-session";
-//import middleware from "./middleware.js";
 const app = express();
-import cookieParser from "cookie-parser";
 import configRoutes from "./routes/index.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import crypto from "crypto";
 
 app.use(express.json());
-app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
     name: "AuthState",
-    secret: "This is a secret.. shhh don't tell anyone",
+    secret: crypto.randomBytes(32).toString('hex'),
     saveUninitialized: false,
     resave: false,
     rolling: true,
-    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+    cookie: {
+      maxAge: 7 * 24 * 60 * 60 * 1000
+      // To whom it may concern, DO NOT ADD secure:true. By default HTTPS is secure anyways, and HTTP breaks with it on.
+    },
   })
 );
-
-const rewriteUnsupportedBrowserMethods = (req, res, next) => {
-  // If the user posts to the server with a property called _method, rewrite the request's method
-  // To be that method; so if they post _method=PUT you can now allow browsers to POST to a route that gets
-  // rewritten in this middleware to a PUT route
-  if (req.body && req.body._method) {
-    req.method = req.body._method;
-    delete req.body._method;
-  }
-
-  // let the next middleware run:
-  next();
-};
-
-app.use(rewriteUnsupportedBrowserMethods);
 
 app.use(async (req, res, next) => {
   let currTime = new Date().toUTCString();
@@ -50,32 +36,6 @@ app.use(async (req, res, next) => {
 
   console.log(`[${currTime}]: ${reqMethod} ${reqRoute} (${auth})`);
   next();
-});
-
-app.get("/", async (req, res, next) => {
-  try {
-    if (!req.session.user) res.redirect("login");
-    else {
-      res.redirect("users");
-    }
-    next();
-  } catch (error) {}
-});
-
-app.get("/login", (req, res, next) => {
-  if (req.session.user) {
-    return res.redirect("/users");
-  } else {
-    next();
-  }
-});
-
-app.get("/register", (req, res, next) => {
-  if (req.session.user) {
-    return res.redirect("/users");
-  } else {
-    next();
-  }
 });
 
 configRoutes(app);

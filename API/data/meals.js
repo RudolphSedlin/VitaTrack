@@ -24,14 +24,14 @@ const create = async (
 
   creatorId = validation.checkId(creatorId, "Creator ID");
 
-  let date = new Date().toUTCString();
+  let dateCreated = new Date().toUTCString();
 
   //Create meal obj to put into collection
   let newMeal = {
     name: name,
     description: description,
     creatorId: creatorId,
-    date: date,
+    dateCreated: dateCreated,
   };
 
   //* Add the meal to the meal collection

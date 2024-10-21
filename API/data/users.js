@@ -5,9 +5,9 @@ import bcrypt from "bcrypt";
 
 // Function for creating a user in the user data base
 const create = async (
-  firstname,
-  lastname,
-  phonenumber,
+  firstName,
+  lastName,
+  phoneNumber,
   state,
   password, // MANDATORY NO MATTER WHAT
 
@@ -25,24 +25,24 @@ const create = async (
 
   //Validation Handling For Mandatory---------------------------------------------------------------------------------
   //* Validate Null
-  validation.checkNull(firstname);
-  validation.checkNull(lastname);
-  validation.checkNull(phonenumber);
+  validation.checkNull(firstName);
+  validation.checkNull(lastName);
+  validation.checkNull(phoneNumber);
   validation.checkNull(state);
   validation.checkNull(password);
 
   // * Validate String params
-  firstname = validation.checkString(firstname, "First Name");
-  lastname = validation.checkString(lastname, "Last Name");
-  phonenumber = validation.checkString(phonenumber, "Phone number");
+  firstName = validation.checkString(firstName, "First Name");
+  lastName = validation.checkString(lastName, "Last Name");
+  phoneNumber = validation.checkString(phoneNumber, "Phone number");
   state = validation.checkString(state, "State");
   password = validation.checkString(password, "Password");
 
 
   //* Name length check
-  if (firstname.length < 2 || firstname.length > 25)
+  if (firstName.length < 2 || firstName.length > 25)
     throw "Error: First name is too short or too long";
-  if (lastname.length < 2 || lastname.length > 25)
+  if (lastName.length < 2 || lastName.length > 25)
     throw "Error: Last name is too short or too long";
 
   validation.validatePassword(password);
@@ -85,9 +85,9 @@ const create = async (
 
   //Create user object to put into collection
   let newUser = {
-    firstname: firstname,
-    lastname: lastname,
-    phonenumber: phonenumber,
+    firstName: firstName,
+    lastName: lastName,
+    phoneNumber: phoneNumber,
     state: state,
     hashedPass: hash,
     meals: [],
@@ -106,12 +106,13 @@ const create = async (
 
   const userCollection = await users();
 
-  let user = await userCollection.findOne({ phonenumber: phonenumber });
-  if (user !== null) throw `User with number ${phonenumber} already exists.`;
+  let user = await userCollection.findOne({ phoneNumber: phoneNumber });
+  if (user !== null) throw `User with number ${phoneNumber} already exists.`;
 
   const newInsertInformation = await userCollection.insertOne(newUser);
   if (!newInsertInformation.insertedId) throw "Insert failed";
-  return await getUserByID(newInsertInformation.insertedId.toString());
+  let {hashedPass, ...allElse} = await getUserByID(newInsertInformation.insertedId.toString());
+  return allElse;
 };
 
 const getUserByID = async (id) => {
@@ -159,25 +160,25 @@ const remove = async (id) => {
 
 // Function for updating a user with new descriptions
 //! IN THE CLIENTSIDE FORM YOU MUST MAKE IT SO THAT THE FORM LOADS IN WITH THE EXISTING USER DATA
-const updateUser = async (id, firstname, lastname, userName) => {
+const updateUser = async (id, firstName, lastName, userName) => {
   //* Null Validation
   validation.checkNull(id);
-  validation.checkNull(firstname);
-  validation.checkNull(lastname);
+  validation.checkNull(firstName);
+  validation.checkNull(lastName);
   validation.checkNull(userName);
 
   //* id check
   id = validation.checkId(id);
 
   //* String input check
-  firstname = validation.checkString(firstname);
-  lastname = validation.checkString(lastname);
+  firstName = validation.checkString(firstName);
+  lastName = validation.checkString(lastName);
   userName = validation.checkString(userName);
 
   //* Name length check
-  if (firstname.length < 2 || firstname.length > 25)
+  if (firstName.length < 2 || firstName.length > 25)
     throw "Error: First name is too short or too long";
-  if (lastname.length < 2 || firstname.length > 25)
+  if (lastName.length < 2 || firstName.length > 25)
     throw "Error: Last name is too short or too long";
 
   const userCollection = await users();
@@ -186,7 +187,7 @@ const updateUser = async (id, firstname, lastname, userName) => {
 
   let updateUser = userCollection.updateOne(
     { _id: new ObjectId(id) },
-    { $set: { firstname: firstname, lastname: lastname, userName: userName } }
+    { $set: { firstName: firstName, lastName: lastName, userName: userName } }
   );
 
   if (!updateUser) throw "Error: User could not be updated";
@@ -280,7 +281,7 @@ const getMeals = async (userId) => {
 };
 
 // Function to return user login information.
-const loginUser = async (phonenumber, password) => {
+const loginUser = async (phoneNumber, password) => {
   let userCollection;
   try {
     userCollection = await users();
@@ -288,34 +289,16 @@ const loginUser = async (phonenumber, password) => {
     return "Database error.";
   }
 
-  phonenumber = validation.checkString(phonenumber, "Phone number");
+  phoneNumber = validation.checkString(phoneNumber, "Phone number");
   validation.validatePassword(password);
 
-  let user = await userCollection.findOne({phonenumber: phonenumber});
-  if (user == null) throw "Incorrect Phone number or Password";
+  let {hashedPass, ...allElse} = await userCollection.findOne({phoneNumber: phoneNumber});
+  if (hashedPass == null) throw "Incorrect Phone number or Password";
 
-  let authenticated = await bcrypt.compare(password, user.hashedPass);
+  let authenticated = await bcrypt.compare(password, hashedPass);
   if (!authenticated) throw "Incorrect Phone number or Password";
 
-  return {
-    _id: user._id,
-    firstname: user.firstname,
-    lastname: user.lastname,
-    phonenumber: user.phonenumber,
-    state: user.state,
-    meals: user.meals,
-
-    address: user.address,
-    gender: user.gender,
-    dateOfBirth: user.dateOfBirth,
-    doctorName: user.doctorName,
-    conditions: user.conditions,
-    consentLetter: user.consentLetter,
-
-    email: user.email,
-    height: user.height,
-    weight: user.weight,
-  };
+  return allElse;
 };
 
 export default {

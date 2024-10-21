@@ -3,9 +3,9 @@ import {expect, jest, test} from '@jest/globals';
 
 test("Registration and Login Test", async () => {
     const Franklin = {
-        firstname: "Test",
-        lastname: "User",
-        phonenumber: "1-800-999-9997",
+        firstName: "Test",
+        lastName: "User",
+        phoneNumber: "1-800-999-9997",
         state: "NY",
 
         address: "Mount Marcy",
