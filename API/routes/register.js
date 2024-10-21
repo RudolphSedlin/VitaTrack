@@ -88,10 +88,10 @@ router
       }
 
       if (height)
-        height = validation.validateHeight(height, "Height");
+        validation.validateHeight(height, "Height");
 
       if (weight)
-        weight = validation.validateWeight(weight, "Weight");
+        validation.validateWeight(weight, "Weight");
 
       let status = await userData.create(
         firstname,

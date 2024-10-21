@@ -78,10 +78,10 @@ const create = async (
   }
 
   if (height)
-    height = validation.validateHeight(height, "Height");
+    validation.validateHeight(height, "Height");
 
   if (weight)
-    weight = validation.validateWeight(weight, "Weight");
+    validation.validateWeight(weight, "Weight");
 
   //Create user object to put into collection
   let newUser = {
