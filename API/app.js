@@ -19,6 +19,7 @@ app.use(
     secret: "This is a secret.. shhh don't tell anyone",
     saveUninitialized: false,
     resave: false,
+    rolling: true,
     cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
   })
 );
