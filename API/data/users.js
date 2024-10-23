@@ -2,6 +2,7 @@ import validation from "../validation.js";
 import { ObjectId } from "mongodb";
 import { meals, users } from "../config/mongoCollections.js";
 import bcrypt from "bcrypt";
+import { mealData } from "./index.js";
 
 // Function for creating a user in the user data base
 const create = async (
@@ -111,8 +112,7 @@ const create = async (
 
   const newInsertInformation = await userCollection.insertOne(newUser);
   if (!newInsertInformation.insertedId) throw "Insert failed";
-  let {hashedPass, ...allElse} = await getUserByID(newInsertInformation.insertedId.toString());
-  return allElse;
+  return await getUserByID(newInsertInformation.insertedId.toString());
 };
 
 const getUserByID = async (id) => {
@@ -122,10 +122,10 @@ const getUserByID = async (id) => {
     _id: new ObjectId(id),
   });
   if (!user) throw "Error: User not found";
-  return user;
+  const {hashedPass, ...allElse} = user;
+  return allElse;
 };
 
-/*
 // Function for deleting user in database given the id
 const remove = async (id) => {
   id = validation.checkId(id);
@@ -134,66 +134,70 @@ const remove = async (id) => {
     _id: new ObjectId(id),
   });
 
-  if (!userDeletionInfo) {
+  if (!userDeletionInfo)
     throw `Could not delete user with id of ${id}`;
-  }
 
   const mealCollection = await meals();
-  // Remove user id from the contributors array and unauthorized
-  // If the user was in there.
-  const updatedMealInfo = await mealCollection.updateMany(
-    { _id: new ObjectId(id) },
-    {
-      $pull: {
-        contributors: { $in: [new ObjectId(id)] },
-        unauthorized: new ObjectId(id),
-      },
-    }
-  );
-  await mealCollection.updateOne(
-    { _id: id },
-    { $inc: { numContributors: -1 } }
+  // Remove user meals.
+  const updatedMealInfo = await mealCollection.deleteMany(
+    {creatorId: id}
   );
 
   return `User: ${id} has been deleted`;
 };
 
-// Function for updating a user with new descriptions
-//! IN THE CLIENTSIDE FORM YOU MUST MAKE IT SO THAT THE FORM LOADS IN WITH THE EXISTING USER DATA
-const updateUser = async (id, firstName, lastName, userName) => {
+
+// Function for updating a user
+const updateUser = async (user) => {
   //* Null Validation
+  let id = user._id;
   validation.checkNull(id);
-  validation.checkNull(firstName);
-  validation.checkNull(lastName);
-  validation.checkNull(userName);
 
   //* id check
   id = validation.checkId(id);
 
-  //* String input check
-  firstName = validation.checkString(firstName);
-  lastName = validation.checkString(lastName);
-  userName = validation.checkString(userName);
+  let {_id, ...nonId} = user;
+  user = nonId;
 
   //* Name length check
-  if (firstName.length < 2 || firstName.length > 25)
+  if (user.firstName && (user.firstName.length < 2 || user.firstName.length > 25))
     throw "Error: First name is too short or too long";
-  if (lastName.length < 2 || firstName.length > 25)
+  if (user.lastName && (user.lastName.length < 2 || user.lastName.length > 25))
     throw "Error: Last name is too short or too long";
 
-  const userCollection = await users();
-  let user = await userCollection.findOne({ _id: new ObjectId(id) });
-  if (!user) throw "Error: User not found!";
+  if (user.hashedPass)
+    throw `Cannot update password hash.`;
 
-  let updateUser = userCollection.updateOne(
+  if (user.password) {
+    const saltRounds = 16;
+    const hash = await bcrypt.hash(user.password, saltRounds);
+    user.hashedPass = hash;
+    let {password, ...allElse} = user;
+    user = allElse;
+  }
+
+  if (user.meals)
+    throw `User cannot change meals in this way.`;
+
+  const userCollection = await users();
+  let foundUser = await userCollection.findOne({ _id: new ObjectId(id) });
+  if (!foundUser) throw "Error: User not found!";
+
+  for (let field in user)
+    if (!foundUser[field])
+      throw `Field ${field} does not belong to the user.`;
+
+  let updateUser = await userCollection.updateOne(
     { _id: new ObjectId(id) },
-    { $set: { firstName: firstName, lastName: lastName, userName: userName } }
+    { $set: user },
+    { new: true }
   );
 
   if (!updateUser) throw "Error: User could not be updated";
   return await getUserByID(id);
 };
 
+/*
 // Function for adding meals to user
 const addMealToUser = async (userId, mealId) => {
   userId = validation.checkId(userId);
@@ -292,9 +296,10 @@ const loginUser = async (phoneNumber, password) => {
   phoneNumber = validation.checkString(phoneNumber, "Phone number");
   validation.validatePassword(password);
 
-  let {hashedPass, ...allElse} = await userCollection.findOne({phoneNumber: phoneNumber});
-  if (hashedPass == null) throw "Incorrect Phone number or Password";
+  let user = await userCollection.findOne({phoneNumber: phoneNumber});
+  if (user == null) throw "Incorrect Phone number or Password";
 
+  let {hashedPass, ...allElse} = user;
   let authenticated = await bcrypt.compare(password, hashedPass);
   if (!authenticated) throw "Incorrect Phone number or Password";
 
@@ -304,8 +309,8 @@ const loginUser = async (phoneNumber, password) => {
 export default {
   create,
   getUserByID,
-  //remove,
-  //updateUser,
+  remove,
+  updateUser,
   //addMealToUser,
   //removeMealsFromUser,
   getMeals,
