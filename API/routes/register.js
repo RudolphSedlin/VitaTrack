@@ -71,8 +71,10 @@ router
       if (doctorName)
         doctorName = validation.checkString(doctorName, "Name of doctor");
 
+      /*
       if (conditions)
-        conditions = validation.checkStringArray(conditions, "Conditions");
+        validation.checkStringArray(conditions, "Conditions");
+      */
 
       if (consentLetter)
         consentLetter = validation.checkString(consentLetter, "Letter of consent");

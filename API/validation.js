@@ -31,18 +31,14 @@ function checkString(strVal, varName) {
 }
 
 function checkStringArray(arr, varName) {
-  //arr = [string], varName = string
-  //We will allow an empty array for this,
-  //if it's not empty, we will make sure all tags are strings
   if (!arr || !Array.isArray(arr))
     throw `You must provide an array of ${varName}`;
-  for (let i in arr) {
+  for (let i = 0; i < arr.length; i++) {
     if (typeof arr[i] !== "string" || arr[i].trim().length === 0) {
       throw `One or more elements in ${varName} array is not a string or is an empty string`;
     }
     arr[i] = arr[i].trim();
   }
-
   return arr;
 }
 
