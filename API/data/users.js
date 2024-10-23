@@ -67,8 +67,10 @@ const create = async (
   if (doctorName)
     doctorName = validation.checkString(doctorName, "Name of Doctor");
 
+  /*
   if (conditions)
-    conditions = validation.checkStringArray(conditions, "Conditions");
+    validation.checkStringArray(conditions, "Conditions");
+  */
 
   if (consentLetter)
     consentLetter = validation.checkString(consentLetter, "Letter of Consent");
