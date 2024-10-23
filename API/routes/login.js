@@ -2,6 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { userData } from "../data/index.js";
 import validation from "../validation.js";
+import crypto from "crypto";
 
 router
   .route("/")
@@ -10,28 +11,27 @@ router
       let body = req.body;
       body = validation.sanitize(body);
 
-      let phonenumber = body.phonenumber;
+      let phoneNumber = body.phoneNumber;
       let password = body.password;
 
-      validation.checkNull(phonenumber);
+      validation.checkNull(phoneNumber);
       validation.checkNull(password);
 
-      validation.checkString(phonenumber, "Phone number");
+      validation.checkString(phoneNumber, "Phone number");
       validation.validatePassword(password);
 
-      let status = await userData.loginUser(phonenumber, password);
+      let status = await userData.loginUser(phoneNumber, password);
 
       if (status == "Database error.")
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(500).send("Internal Server Error!");
       else {
-        res.cookie("AuthState", "Logged in!");
         req.session.user = status;
-        return res.status(200).redirect("users");
+        return res.status(200).json(status);
       }
     } catch (error) {
       return res
         .status(400)
-        .json({error: error});
+        .send(error);
     }
   });
 

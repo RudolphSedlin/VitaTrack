@@ -5,19 +5,14 @@ import validation from "../validation.js";
 
 router
   .route("/")
-  .get(async (req, res) => {
-    //code here for GET
-    //return res.status(200).render("register", { title: "Registration Page" });
-    return res.status(200);
-  })
   .post(async (req, res) => {
     //code here for POST
     let data = req.body;
     data = validation.sanitize(data);
     try {
-      let firstname = data.firstname;
-      let lastname = data.lastname;
-      let phonenumber = data.phonenumber;
+      let firstName = data.firstName;
+      let lastName = data.lastName;
+      let phoneNumber = data.phoneNumber;
       let state = data.state;
       let password = data.password;
       let confirmPassword = data.confirmPassword;
@@ -25,7 +20,7 @@ router
       let address = data.address;
       let gender = data.gender;
       let dateOfBirth = data.dateOfBirth;
-      let doctorname = data.doctorname;
+      let doctorName = data.doctorName;
       let conditions = data.conditions;
       let consentLetter = data.consentLetter;
 
@@ -35,25 +30,25 @@ router
 
       // Error Checking
       //* Null validations
-      validation.checkNull(firstname);
-      validation.checkNull(lastname);
-      validation.checkNull(phonenumber)
+      validation.checkNull(firstName);
+      validation.checkNull(lastName);
+      validation.checkNull(phoneNumber)
       validation.checkNull(state);
       validation.checkNull(password);
       validation.checkNull(confirmPassword);
 
       // *Validate String params
-      firstname = validation.checkString(firstname, "First name");
-      lastname = validation.checkString(lastname, "Last name");
-      phonenumber = validation.checkString(phonenumber, "Phone number");
+      firstName = validation.checkString(firstName, "First name");
+      lastName = validation.checkString(lastName, "Last name");
+      phoneNumber = validation.checkString(phoneNumber, "Phone number");
       state = validation.checkString(state, "State");
       password = validation.checkString(password, "Password");
       confirmPassword = validation.checkString(confirmPassword, "Password Confirmation");
 
       //* name length check
-      if (firstname.length < 2 || firstname.length > 25)
+      if (firstName.length < 2 || firstName.length > 25)
         throw "Error: First name is too short or too long";
-      if (lastname.length < 2 || firstname.length > 25)
+      if (lastName.length < 2 || firstName.length > 25)
         throw "Error: Last name is too short or too long";
 
       validation.validatePassword(password);
@@ -73,8 +68,8 @@ router
         validation.validateBirthday(dateOfBirth);
       }
 
-      if (doctorname)
-        doctorname = validation.checkString(doctorname, "name of doctor");
+      if (doctorName)
+        doctorName = validation.checkString(doctorName, "Name of doctor");
 
       if (conditions)
         conditions = validation.checkStringArray(conditions, "Conditions");
@@ -88,22 +83,22 @@ router
       }
 
       if (height)
-        height = validation.validateHeight(height, "Height");
+        validation.validateHeight(height, "Height");
 
       if (weight)
-        weight = validation.validateWeight(weight, "Weight");
+        validation.validateWeight(weight, "Weight");
 
       let status = await userData.create(
-        firstname,
-        lastname,
-        phonenumber,
+        firstName,
+        lastName,
+        phoneNumber,
         state,
         password,
 
         address,
         gender,
         dateOfBirth,
-        doctorname,
+        doctorName,
         conditions,
         consentLetter,
 
@@ -113,17 +108,16 @@ router
       );
 
       if (status == "Database error.")
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(500).send("Internal server error" );
       else {
-        res.cookie("AuthState", "Logged in!");
         req.session.user = status;
-        return res.status(200).redirect("users");
+        return res.status(200).json(status);
     }
     }
     catch (error) {
       return res
         .status(400)
-        .json({error: error});
+        .send(error);
     }
   });
 

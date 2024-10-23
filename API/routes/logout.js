@@ -9,7 +9,7 @@ router.route("/").get(async (req, res) => {
   anHourAgo.setHours(anHourAgo.getHours() - 1);
   res.cookie("AuthState", "", { expires: anHourAgo }).clearCookie("AuthState");
   req.session.user = undefined;
-  return res.status(200).json("Logged out!");
+  return res.status(200).send("Logged out!").end();
 });
 
 export default router;

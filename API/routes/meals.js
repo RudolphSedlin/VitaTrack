@@ -7,7 +7,7 @@ router
 .route("/")
 
 .get(async (req, res) => {
-    if (!req.session.user) return res.status(400).json({error: "Not authenticated."});
+    if (!req.session.user) return res.status(400).send("Not authenticated!");
 
     return res.status(200).json({
         mealList: await userData.getMeals(req.session.user._id),
@@ -16,7 +16,7 @@ router
 
 .post(async (req, res) => {
     if (!req.session.user)
-        return res.status(400).json({error: "Not authenticated."});
+        return res.status(400).send("Not authenticated!");
 
     let data = req.body;
     data = validation.sanitize(data);
@@ -47,13 +47,15 @@ router
             creatorId,
         );
 
+        req.session.user = await userData.getUserByID(req.session.user._id);
+
         return res.status(200).json(create);
     }
 
     catch (error) {
         return res
         .status(400)
-        .json({error: error});
+        .send(error);
     }
 });
 
@@ -62,16 +64,19 @@ router
 .get(async (req, res) => {
     if (req.session.user) {
         try {
-            req.params.id = validation.checkString(req.params.id, "Id");
-            return res.status(200).json(await mealData.getMealByID(req.params.id));
-        } catch (e) {
+            let id = validation.checkString(req.params.id, "Id");
+            let meal = await mealData.getMealByID(id);
+            if (meal.creatorId != req.session.user._id)
+                return res.status(403).send("This meal doesn't belong to this user.");
+            return res.status(200).json(meal);
+        } catch (error) {
             return res
             .status(404)
-            .redirect("/meals");
+            .send(error);
         }
     }
 
-    return res.status(400).json({error: "Not authenticated."});
+    return res.status(403).send("Not authenticated!");
 });
 
 export default router;
