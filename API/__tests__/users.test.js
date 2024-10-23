@@ -6,6 +6,7 @@ import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import validation from "../validation.js";
 
+// Wipe databases beforehand to avoid re-registration errors.
 const userCollection = await users();
 const mealCollection = await meals();
 
@@ -13,26 +14,10 @@ userCollection.deleteMany({});
 mealCollection.deleteMany({});
 
 test("Registration and Login Test", async () => {
-    const Franklin = {
-        firstName: "Test",
-        lastName: "User",
-        phoneNumber: "1-800-999-9997",
-        state: "NY",
-
-        address: "Mount Marcy",
-        gender: "Yeti",
-        dateOfBirth: "1970-01-01",
-        doctorName: "Doctor Frankenstein",
-        conditions: ["Zombism", "Social Isolation", "Super Strength", "Super Intelligence"],
-        consentLetter: "I pledge allegiance to the flag of the United States of America, and to the Republic for which it stands, one nation, under god, indivisible, with liberty, and justice for all.", // Also stored for RPM customers.
-
-        email: "BeeMail@bees.org", // Completely optional.
-    };
-
     let registered = await userData.create(
         "Test",
         "User",
-        "1-800-999-9997",
+        "1-800-999-9999",
         "NY",
         "SamplePassWord12345+",
 
@@ -44,12 +29,15 @@ test("Registration and Login Test", async () => {
         "I pledge allegiance to the flag of the United States of America, and to the Republic for which it stands, one nation, under god, indivisible, with liberty, and justice for all.",
 
         "BeeMail@bees.org",
+        80,
+        220
     );
 
     let loggedIn = await userData.loginUser(
-        "1-800-999-9997",
+        "1-800-999-9999",
         "SamplePassWord12345+"
     );
 
-    expect(loggedIn).toMatchObject(Franklin);
+    expect(loggedIn).toMatchObject(registered);
+    console.log(loggedIn);
 });
