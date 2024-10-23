@@ -1,5 +1,16 @@
-import { userData } from "../data/index.js";
 import {expect, jest, test} from '@jest/globals';
+
+import { userData, mealData } from "../data/index.js";
+import { meals, users } from "../config/mongoCollections.js";
+import { ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
+import validation from "../validation.js";
+
+const userCollection = await users();
+const mealCollection = await meals();
+
+userCollection.deleteMany({});
+mealCollection.deleteMany({});
 
 test("Registration and Login Test", async () => {
     const Franklin = {
