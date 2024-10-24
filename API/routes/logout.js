@@ -3,7 +3,7 @@ const router = Router();
 
 router.route("/").get(async (req, res) => {
   if (!req.session.user)
-    return res.status(400).json({error: "Not authenticated."});
+    return res.status(403).json({error: "Not authenticated."});
 
   const anHourAgo = new Date();
   anHourAgo.setHours(anHourAgo.getHours() - 1);
