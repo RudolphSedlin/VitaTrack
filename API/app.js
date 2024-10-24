@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     name: "AuthState",
-    secret: crypto.randomBytes(32).toString('hex'),
+    secret: crypto.randomBytes(64).toString('hex'),
     saveUninitialized: false,
     resave: false,
     rolling: true,

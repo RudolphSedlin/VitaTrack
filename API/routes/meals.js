@@ -7,7 +7,7 @@ router
 .route("/")
 
 .get(async (req, res) => {
-    if (!req.session.user) return res.status(400).send("Not authenticated!");
+    if (!req.session.user) return res.status(403).send("Not authenticated!");
 
     return res.status(200).json({
         mealList: await userData.getMeals(req.session.user._id),
@@ -16,7 +16,7 @@ router
 
 .post(async (req, res) => {
     if (!req.session.user)
-        return res.status(400).send("Not authenticated!");
+        return res.status(403).send("Not authenticated!");
 
     let data = req.body;
     data = validation.sanitize(data);
