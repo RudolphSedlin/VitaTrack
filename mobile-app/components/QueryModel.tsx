@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import TensorCamera from "./TensorCamera"; // Assuming TensorCamera is in the same directory
 
+import { useToast } from "react-native-toast-notifications";
+
 function QueryModel() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("No prediction yet");
   const [prediction, setPrediction] = useState(null);
+  const [pictureTaken, setPictureTaken] = useState(false);
+  const toast = useToast();
 
   // Function to handle new predictions
   const handlePrediction = (predictions: { className: string; probability: number; }[] | undefined) => {
@@ -20,8 +24,16 @@ function QueryModel() {
         setMessage(
           `${highestProbabilityItem.className}: ${highestProbabilityItem.probability.toFixed(2)}`,
         );
+
+        if (!pictureTaken) {
+          //TODO: take picture
+
+          toast.show("Picture taken");
+          setPictureTaken(true);
+        }
       } else {
         setMessage("No prediction above 50%");
+        toast.show("No pred. above 50%");
       }
     }
   };

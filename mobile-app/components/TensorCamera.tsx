@@ -17,6 +17,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCircleUser, faLightbulb as faRegularBulb } from "@fortawesome/free-regular-svg-icons" 
 import { faCamera, faXmark, faLightbulb } from "@fortawesome/free-solid-svg-icons" 
 import { Tensor3D } from "@tensorflow/tfjs";
+import { useToast } from "react-native-toast-notifications";
 
 library.add(faCircleUser)
 library.add(faCamera)
@@ -39,6 +40,7 @@ export default function TensorCamera(props: TensorCameraProps) {
   const [loopRunning, setLoopRunning] = useState(false);
   const cameraRef = useRef<CameraView>(null); // Camera reference
   const isRunning = useRef(false); // Controls loop status
+  const toast = useToast();
 
   const navigation = useNavigation();
 
@@ -130,8 +132,10 @@ export default function TensorCamera(props: TensorCameraProps) {
 
   function toggleFrameLoop() {
     if (loopRunning) {
+      toast.show("Frame loop started!");
       stopFrameLoop();
     } else {
+      toast.show("Frame loop stopped!");
       startFrameLoop();
     }
     setLoopRunning(!loopRunning)

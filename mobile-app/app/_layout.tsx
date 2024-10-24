@@ -1,10 +1,11 @@
 import { Stack, Link, Href } from "expo-router";
-import { Pressable, Text, useColorScheme, View } from "react-native";
-
+import { Text, useColorScheme, View } from "react-native";
+import { ToastProvider } from "react-native-toast-notifications";
 import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons" 
 import { faCamera } from "@fortawesome/free-solid-svg-icons" 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+
 import { Colors } from "@/constants/Colors";
 
 library.add(faCircleUser)
@@ -38,13 +39,15 @@ function HeaderNavigationButton(props: HeaderNavigationButtonProps) {
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={({ navigation }) => ({
-      presentation: 'modal',
-      headerRight: () => <HeaderNavigationButton route="/profilescreen" icon={["far", "circle-user"]} text="Profile" />,
-    })} />
-      <Stack.Screen name="camerascreen" options={{presentation: "modal"}} />
-      <Stack.Screen name="profilescreen" />
-    </Stack>
+    <ToastProvider>
+      <Stack>
+        <Stack.Screen name="index" options={({ navigation }) => ({
+        presentation: 'modal',
+        headerRight: () => <HeaderNavigationButton route="/profilescreen" icon={["far", "circle-user"]} text="Profile" />,
+      })} />
+        <Stack.Screen name="camerascreen" options={{presentation: "modal"}} />
+        <Stack.Screen name="profilescreen" />
+      </Stack>
+    </ToastProvider>
   );
 }
