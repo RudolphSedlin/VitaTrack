@@ -3,9 +3,13 @@
 ***npm install***
 
 Start MongoDB service however you are supposed to on your system.
-
 Typically, this means querying your package manager for an implementation and calling the system service manager.
-npm start
+
+The start the API normally, call: ***npm start***
+
+To test: run ***npm run test*** after starting.
+
+You can also seed and clean the database in isolation wwith ***npm run seed*** and ***npm run clean*** respectively.
 
 --------------------------------------------------------------------------------------
 
