@@ -1,8 +1,4 @@
-import { userData, mealData } from "../data/index.js";
 import { meals, users } from "../config/mongoCollections.js";
-import { ObjectId } from "mongodb";
-import bcrypt from "bcrypt";
-import validation from "../validation.js";
 import axios from 'axios';
 import crypto from "crypto";
 
@@ -17,10 +13,14 @@ beforeAll(async () => {
 }, 30000);
 
 beforeEach(async () => {
-    userCollection.deleteMany({});
-    mealCollection.deleteMany({});
+    await userCollection.deleteMany({});
+    await mealCollection.deleteMany({});
 }, 30000);
 
+afterAll(async () => {
+    await userCollection.deleteMany({});
+    await mealCollection.deleteMany({});
+}, 30000);
 
 
 

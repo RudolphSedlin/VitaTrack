@@ -5,8 +5,10 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
+    "seed": "node tasks/seed.js",
+    "start": "node app.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "start": "node app.js"
+    "clean": "node tasks/clean.js"
   },
   "author": "Team Mercurial",
   "license": "ISC",
