@@ -4,21 +4,21 @@ import { useNavigation } from "expo-router";
 import { useEffect } from "react";
 
 export default function CameraScreen() {
-  const navigation = useNavigation();
+    const navigation = useNavigation();
 
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
+    useEffect(() => {
+        navigation.setOptions({ headerShown: false });
+    }, [navigation]);
 
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <QueryModel />
-    </View>
-  );
+    return (
+        <View
+            style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+        >
+            <QueryModel />
+        </View>
+    );
 }

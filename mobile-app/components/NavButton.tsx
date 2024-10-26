@@ -7,64 +7,64 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { red } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 
 type NavButtonProps = {
-  screen: Href; 
-  text: string;
-  icon: IconProp;
-  fullWidth: boolean;
+    screen: Href;
+    text: string;
+    icon: IconProp;
+    fullWidth: boolean;
 }
 
 export default function NavButton(props: NavButtonProps) {
-  const colorScheme = useColorScheme();
+    const colorScheme = useColorScheme();
 
-  return (
-    <Link href={props.screen}>
-      <View style={colorScheme == "dark" ? styles.darkButton : styles.lightButton}>
-        <View style={{
-          flexDirection: "row",
-          width: Dimensions.get("window").width,
-          justifyContent: "center",
-          alignItems: "center"
-        }}>
-          <FontAwesomeIcon style={colorScheme == "dark" ? styles.darkText : styles.lightText} icon={props.icon} />
-          <Text style={colorScheme == "dark" ? styles.darkText : styles.lightText}> {props.text}</Text>
-        </View>
-      </View>
-    </Link>
-  );
+    return (
+        <Link href={props.screen}>
+            <View style={colorScheme == "dark" ? styles.darkButton : styles.lightButton}>
+                <View style={{
+                    flexDirection: "row",
+                    width: Dimensions.get("window").width,
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    <FontAwesomeIcon style={colorScheme == "dark" ? styles.darkText : styles.lightText} icon={props.icon} />
+                    <Text style={colorScheme == "dark" ? styles.darkText : styles.lightText}> {props.text}</Text>
+                </View>
+            </View>
+        </Link>
+    );
 }
 
 const styles = StyleSheet.create({
-  lightButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: Colors.light.tabIconSelected,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  darkButton: {
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: Colors.dark.tabIconSelected,
-  },
-  lightText: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-    color: Colors.light.buttonText,
-  },
-  darkText: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-    color: Colors.dark.buttonText,
-  },
+    lightButton: {
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: Colors.light.tabIconSelected,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    darkButton: {
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexDirection: "row",
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: Colors.dark.tabIconSelected,
+    },
+    lightText: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: Colors.light.buttonText,
+    },
+    darkText: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: Colors.dark.buttonText,
+    },
 })
