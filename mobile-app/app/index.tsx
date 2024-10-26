@@ -1,4 +1,4 @@
-import { View, StyleSheet, useColorScheme, FlatList, ScrollView } from "react-native";
+import { View, StyleSheet, useColorScheme, FlatList, ScrollView, Text } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Link, useNavigation } from "expo-router";
 import { useEffect } from "react";
@@ -8,6 +8,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons"
 import { faCamera } from "@fortawesome/free-solid-svg-icons"
 import MealSummaryView from "@/components/MealSummaryView";
+import DailySummaryView from "@/components/DailySummaryView";
 
 library.add(faCircleUser)
 library.add(faCamera)
@@ -42,13 +43,53 @@ export default function Index() {
             carbs: 31,
             other: 2.41,
             date: new Date()
-        }
+        },
+        {
+            id: "3",
+            title: "Ice Cream",
+            calories: 170,
+            fats: 9,
+            protiens: 3,
+            sugars: 19,
+            carbs: 19,
+            other: 0.75,
+            date: new Date()
+        },
     ];
+
+    const dailySummary = meals.reduce((pv, cv) => {
+        pv.calories += cv.calories;
+        pv.fats += cv.fats;
+        pv.protiens += cv.protiens;
+        pv.sugars += cv.sugars;
+        pv.carbs += cv.carbs;
+        pv.other += cv.other;
+        pv.date = cv.date;
+
+        return pv;
+    }, {calories: 0, fats: 0, protiens: 0, sugars: 0, carbs: 0, other: 0, date: new Date()});
 
     return (
         <View style={styles.container}>
             <ScrollView style={styles.content}>
-                {/** TODO: JIRA-51 */}
+                <DailySummaryView 
+                    calories={dailySummary.calories}
+                    fats={dailySummary.fats}
+                    protiens={dailySummary.protiens}
+                    sugars={dailySummary.sugars}
+                    carbs={dailySummary.carbs}
+                    other={dailySummary.other}
+                    day={dailySummary.date}
+                />
+                <Text 
+                    style={{
+                        color: colorScheme == "light" ? "#aeaeb2" : "#636366",
+                        fontSize: 16,
+                        fontVariant: ["small-caps"]
+                    }}
+                >
+                    all previous meals
+                </Text>
                 <FlatList
                     data={meals}
                     renderItem={({item}) => <MealSummaryView
