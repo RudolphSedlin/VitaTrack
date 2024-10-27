@@ -4,7 +4,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ENVIRONMENT_TYPE } from "env";
 import { useToast } from "react-native-toast-notifications";
 
-type ApiReqType = "GET" | "POST" | "PUT" | "DELETE"
+export type ApiReqType = "GET" | "POST" | "PUT" | "DELETE"
 
 export function useApi<T, R>(endpoint: string, requestType: ApiReqType, body?: R) {
     const toast = useToast();
