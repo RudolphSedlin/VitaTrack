@@ -105,7 +105,7 @@ All fields are optional. That being said, if they are present, they should be fo
 
 Note that for the sake of uniformity and unambiguity ***ALL*** numerical units are grams, and should be interpreted as such by the front-end or LLM.
 
-We allow for primary fields that describe macronutrient categories (carbs, proteins, fats, minerals, etc), and subfields that describe them individually (note some LLMs really like to attach Totals as well, this will need to be prompted away). We can evaluate totals for each category with JS for-in loops. That is to say, the object should be just two layers deep.
+We allow for primary fields that describe macronutrient categories (carbs, proteins, fats, other), and subfields that describe them individually (note some LLMs really like to attach Totals as well, this will need to be prompted away). We can evaluate totals for each category with JS for-in loops, keeping implementation simple. That is to say, the object should be just two layers deep.
 
 Remember also to call stringify on the client / LLM before attaching this to the request body. Otherwise, it will be cast to "[Object object]".
  
@@ -121,19 +121,29 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
         
       },
       
-      "protein": 31.0, // Grams as usual.
+      "protein": {
       
-      "fats": 3.6, // Grams as usual.
+        "total" 31.0, // Grams as usual. 
       
-      "vitamins": {
+      },
+      
+      "fats": { // Grams as usual.
+      
+        "saturated": 1.0, // Grams as usual.
+        
+        "monounsaturated": 1.2, // Grams as usual.
+        
+        "polyunsaturated": 0.8, // Grams as usual.
+        
+        "trans": 0.0 // Grams as usual.
+        
+      },
+      
+      "other": { // Optional, but should be called "other" otherwise.
       
         "vitaminB6": 0.0006, // Still grams despite the low value. Uniformity is more important.
         
         "vitaminB12": 0.0005 // Still grams despite the low value. Uniformity is more important.
-        
-      },
-      
-      "minerals": { // Optional, but should be called Minerals otherwise.
       
         "sodium": 0.074, // Still grams despite the low value. Uniformity is more important.
         
