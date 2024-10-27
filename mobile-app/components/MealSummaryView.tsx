@@ -63,27 +63,27 @@ export default function MealSummaryView(props: MealSummaryViewProps) {
                 <View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ff3b30" : "#ff453a"} />
-                        <Text style={colorScheme == "dark" ? styles.lightLegendText : styles.darkLegendText}>FATS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>FATS: </Text>
                         <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.fats}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#34c759" : "#2fd158"} />
-                        <Text style={colorScheme == "dark" ? styles.lightLegendText : styles.darkLegendText}>CARBS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>CARBS: </Text>
                         <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.carbs}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#007aff" : "#0984ff"} />
-                        <Text style={colorScheme == "dark" ? styles.lightLegendText : styles.darkLegendText}>PROTIENS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>PROTIENS: </Text>
                         <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.protiens}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ffcc00" : "#ffd608"} />
-                        <Text style={colorScheme == "dark" ? styles.lightLegendText : styles.darkLegendText}>SUGARS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>SUGARS: </Text>
                         <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.sugars}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#aeaeb2" : "#636366"} />
-                        <Text style={colorScheme == "dark" ? styles.lightLegendText : styles.darkLegendText}>OTHER: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>OTHER: </Text>
                         <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.other}g</Text>
                     </View>
                 </View>
