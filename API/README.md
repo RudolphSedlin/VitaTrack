@@ -105,7 +105,7 @@ All fields are optional. That being said, if they are present, they should be fo
 
 Note that for the sake of uniformity and unambiguity ***ALL*** numerical units are grams, and should be interpreted as such by the front-end or LLM.
 
-We allow for primary fields that describe macronutrient categories (carbs, proteins, fats, other), and subfields that describe them individually (note some LLMs really like to attach Totals as well, this will need to be prompted away). We can evaluate totals for each category with JS for-in loops, keeping implementation simple. That is to say, the object should be just two layers deep.
+We allow for primary fields that describe macronutrient categories (carbs, proteins, fats, vitamins, minerals, others), and subfields that describe them individually (note some LLMs really like to attach Totals as well, this will need to be prompted away). We can evaluate totals for each category with JS for-in loops, keeping implementation simple. That is to say, the object should be just two layers deep.
 
 Remember also to call stringify on the client / LLM before attaching this to the request body. Otherwise, it will be cast to "[Object object]".
  
@@ -139,11 +139,15 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
         
       },
       
-      "other": { // Optional, but should be called "other" otherwise.
+      "vitamins": { // Grams as usual
       
-        "vitaminB6": 0.0006, // Still grams despite the low value. Uniformity is more important.
+        "B6": 0.0006, // Still grams despite the low value. Uniformity is more important.
         
-        "vitaminB12": 0.0005 // Still grams despite the low value. Uniformity is more important.
+        "B12": 0.0005 // Still grams despite the low value. Uniformity is more important.
+        
+      },
+      
+      "minerals": { // Grams as usual
       
         "sodium": 0.074, // Still grams despite the low value. Uniformity is more important.
         
@@ -153,6 +157,12 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
         
         "iron": 0.0009 // Still grams despite the low value. Uniformity is more important.
         
+      },
+      
+      "other": {
+      
+        // You get it at this point.
+      
       }
       
     }
