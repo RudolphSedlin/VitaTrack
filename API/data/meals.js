@@ -8,6 +8,9 @@ const create = async (
   name,
   description,
   creatorId,
+  servings,
+  caloriesPerServing,
+  nutrientsPerServing
 ) => {
   //Validate Null
   validation.checkNull(name);
@@ -16,13 +19,20 @@ const create = async (
 
   //Input validation for types
   name = validation.checkString(name, "Meal Name");
-  description = validation.checkString(description, "Description");
+  if (description)
+    description = validation.checkString(description, "Description");
   if (name.length < 2 || name.length > 50)
     throw "Error: Meal Name is too short or too long";
-  if (description.length < 15 || description.length > 250)
+  if (description && (description.length < 15 || description.length > 250))
     throw "Error: Description is too short or too long";
 
   creatorId = validation.checkId(creatorId, "Creator ID");
+
+  if (servings)
+    validation.validateServings(servings);
+
+  if (caloriesPerServing)
+    validation.validateCalories(caloriesPerServing);
 
   let dateCreated = new Date().toUTCString();
 
@@ -32,6 +42,9 @@ const create = async (
     description: description,
     creatorId: creatorId,
     dateCreated: dateCreated,
+    servings: servings,
+    caloriesPerServing: caloriesPerServing,
+    nutrientsPerServing: nutrientsPerServing
   };
 
   //* Add the meal to the meal collection

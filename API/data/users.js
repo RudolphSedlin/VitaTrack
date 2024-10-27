@@ -286,6 +286,22 @@ const getMeals = async (userId) => {
   return foundMeals;
 };
 
+// Function for getting all meals for a user
+const getMealsToday = async (userId) => {
+  let allMeals = await getMeals(userId);
+  let output = [];
+  let today = new Date(); // There really doesn't seem to be a better way to do this. Really, Date should implement this but okay.
+  for (let meal of allMeals) {
+    let mealDate = new Date(meal.dateCreated);
+    if (today.getUTCFullYear() === mealDate.getUTCFullYear()
+      && today.getUTCMonth() === mealDate.getUTCMonth()
+    && today.getUTCDate() === mealDate.getUTCDate())
+      output.push(meal);
+  }
+
+  return output;
+};
+
 // Function to return user login information.
 const loginUser = async (phoneNumber, password) => {
   let userCollection;
@@ -316,5 +332,6 @@ export default {
   //addMealToUser,
   //removeMealsFromUser,
   getMeals,
+  getMealsToday,
   loginUser,
 };

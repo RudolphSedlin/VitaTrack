@@ -344,6 +344,24 @@ function validateHeight(height) {
   }
 }
 
+function validateCalories(calories) {
+  if (isNaN(calories)) {
+    throw "Calories must be a number.";
+  }
+  if (calories < 0) {
+    throw "Calories must be a non-negative number."
+  }
+}
+
+function validateServings(servings) {
+  if (isNaN(servings)) {
+    throw "Servings must be a number.";
+  }
+  if (servings <= 0) {
+    throw "Servings must be a positive number."
+  }
+}
+
 export default {
   sanitize,
   checkId,
@@ -358,5 +376,7 @@ export default {
   compareTimes,
   validatePassword,
   validateWeight,
-  validateHeight
+  validateHeight,
+  validateCalories,
+  validateServings,
 };

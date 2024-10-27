@@ -24,13 +24,16 @@ router
         let name = data.name;
         let description = data.description;
         let creatorId = req.session.user._id.toString();
+        let servings = data.servings;
+        let caloriesPerServing = data.caloriesPerServing;
+        let nutrientsPerServing = JSON.parse(data.nutrientsPerServing); // Should be an object!
 
         //* Validate Null
         validation.checkNull(name);
         validation.checkNull(description);
         validation.checkId(creatorId);
 
-        //* Validate String
+        //* Validate Specifics
         name = validation.checkString(name);
         description = validation.checkString(description);
         creatorId = validation.checkId(creatorId);
@@ -41,10 +44,19 @@ router
             throw "Error: Description is too short or too long";
         creatorId = validation.checkId(creatorId, "Creator ID");
 
+        if (servings)
+            validation.validateServings(servings);
+
+        if (caloriesPerServing)
+            validation.validateCalories(caloriesPerServing);
+
         const create = await mealData.create(
             name,
             description,
             creatorId,
+            servings,
+            caloriesPerServing,
+            nutrientsPerServing
         );
 
         req.session.user = await userData.getUserByID(req.session.user._id);
@@ -58,6 +70,17 @@ router
         .send(error);
     }
 });
+
+router
+.route("/today")
+.get(async (req, res) => {
+    if (!req.session.user) return res.status(403).send("Not authenticated!");
+
+    return res.status(200).json({
+        mealList: await userData.getMealsToday(req.session.user._id),
+    });
+});
+
 
 router
 .route("/:id")

@@ -41,7 +41,27 @@ let Jupiter = await userData.create(
 let food = await mealData.create(
     "Cookies",
     "Nutritiously Terrible, But Delicious.",
-    Franklin._id.toString()
+    Franklin._id.toString(),
+    1,
+    492,
+    {
+        "Carbohydrates": {
+            "Sugars": 24.0,
+            "Fiber": 2.4
+        },
+        "Protein": 5.0,
+        "Fats": 22.0,
+        "Vitamins": {
+            "Vitamin A": 0.000048,
+            "Vitamin E": 0.001
+        },
+        "Minerals": {
+            "Sodium": 0.361,
+            "Potassium": 0.123,
+            "Calcium": 0.056,
+            "Iron": 0.003
+        }
+    }
 );
 
 console.log(food);
@@ -49,7 +69,27 @@ console.log(food);
 food = await mealData.create(
     "Kiwis",
     "A delectable snack, very healthy. Eat more of this please.",
-    Franklin._id.toString()
+    Franklin._id.toString(),
+    1,
+    61,
+    {
+        "Carbohydrates": {
+            "Sugars": 8.9,
+            "Fiber": 3
+        },
+        "Protein": 1.1,
+        "Fats": 0.5,
+        "Vitamins": {
+            "Vitamin C": 0.0927,
+            "Vitamin K": 0.0000403,
+            "Vitamin E": 0.0015
+        },
+        "Minerals": {
+            "Potassium": 0.312,
+            "Calcium": 0.034,
+            "Magnesium": 0.017
+        }
+    }
 );
 
 console.log(food);
@@ -57,7 +97,27 @@ console.log(food);
 food = await mealData.create(
     "Ichor",
     "A devine honeylike snack that grants immortality..",
-    Jupiter._id.toString()
+    Jupiter._id.toString(),
+    10,
+    61,
+    {
+        "Carbohydrates": {
+            "Sugars": 8.9,
+            "Fiber": 3
+        },
+        "Protein": 1.1,
+        "Fats": 0.5,
+        "Vitamins": {
+            "Vitamin C": 0.0927,
+            "Vitamin K": 0.0000403,
+            "Vitamin E": 0.0015
+        },
+        "Minerals": {
+            "Potassium": 0.312,
+            "Calcium": 0.034,
+            "Magnesium": 0.017
+        }
+    }
 );
 
 console.log(food);
