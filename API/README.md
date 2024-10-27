@@ -113,35 +113,35 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
  
  {
  
-      "Carbohydrates": { // We can sum up all the subfield values with a for-in loop. That way, we can have both specificity and compactness in our objects.
+      "carbohydrates": { // We can sum up all the subfield values with a for-in loop. That way, we can have both specificity and compactness in our objects.
       
-        "Sugars": 0.0, // Grams as usual.
+        "sugars": 0.0, // Grams as usual.
         
-        "Fiber": 0.0 // Grams as usual.
-        
-      },
-      
-      "Protein": 31.0, // Grams as usual.
-      
-      "Fats": 3.6, // Grams as usual.
-      
-      "Vitamins": {
-      
-        "Vitamin B6": 0.0006, // Still grams despite the low value. Uniformity is more important.
-        
-        "Vitamin B12": 0.0005 // Still grams despite the low value. Uniformity is more important.
+        "fiber": 0.0 // Grams as usual.
         
       },
       
-      "Minerals": { // Optional, but should be called Minerals otherwise.
+      "protein": 31.0, // Grams as usual.
       
-        "Sodium": 0.074, // Still grams despite the low value. Uniformity is more important.
+      "fats": 3.6, // Grams as usual.
+      
+      "vitamins": {
+      
+        "vitaminB6": 0.0006, // Still grams despite the low value. Uniformity is more important.
         
-        "Potassium": 0.256, // Still grams despite the low value. Uniformity is more important.
+        "vitaminB12": 0.0005 // Still grams despite the low value. Uniformity is more important.
         
-        "Calcium": 0.015, // Still grams despite the low value. Uniformity is more important.
+      },
+      
+      "minerals": { // Optional, but should be called Minerals otherwise.
+      
+        "sodium": 0.074, // Still grams despite the low value. Uniformity is more important.
         
-        "Iron": 0.0009 // Still grams despite the low value. Uniformity is more important.
+        "potassium": 0.256, // Still grams despite the low value. Uniformity is more important.
+        
+        "calcium": 0.015, // Still grams despite the low value. Uniformity is more important.
+        
+        "iron": 0.0009 // Still grams despite the low value. Uniformity is more important.
         
       }
       
