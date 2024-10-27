@@ -49,13 +49,18 @@ let food = await mealData.create(
             "sugars": 24.0,
             "fiber": 2.4
         },
-        "protein": 5.0,
-        "fats": 22.0,
-        "vitamins": {
-            "vitaminA": 0.000048,
-            "vitaminE": 0.001
+        "protein": {
+            "total": 1.1
+        },
+        "fats": {
+            "Saturated": 1.0,
+            "Monounsaturated": 1.2,
+            "Polyunsaturated": 0.8,
+            "Trans": 0.0
         },
         "minerals": {
+            "vitaminA": 0.000048,
+            "vitaminE": 0.001,
             "sodium": 0.361,
             "potassium": 0.123,
             "calcium": 0.056,
@@ -77,14 +82,19 @@ food = await mealData.create(
             "sugars": 8.9,
             "fiber": 3
         },
-        "protein": 1.1,
-        "fats": 0.5,
-        "vitamins": {
+        "protein": {
+            "total": 1.1
+        },
+        "fats": {
+            "Saturated": 1.0,
+            "Monounsaturated": 1.2,
+            "Polyunsaturated": 0.8,
+            "Trans": 0.0
+        },
+        "other": {
             "vitaminC": 0.0927,
             "vitaminK": 0.0000403,
-            "vitaminE": 0.0015
-        },
-        "minerals": {
+            "vitaminE": 0.0015,
             "potassium": 0.312,
             "calcium": 0.034,
             "magnesium": 0.017
@@ -105,14 +115,19 @@ food = await mealData.create(
             "sugars": 8.9,
             "fiber": 3
         },
-        "protein": 1.1,
-        "fats": 0.5,
-        "vitamins": {
+        "protein": {
+            "total": 1.1
+        },
+        "fats": {
+            "Saturated": 1.0,
+            "Monounsaturated": 1.2,
+            "Polyunsaturated": 0.8,
+            "Trans": 0.0
+        },
+        "other": {
             "vitaminC": 0.0927,
             "vitaminK": 0.0000403,
-            "vitaminE": 0.0015
-        },
-        "minerals": {
+            "vitaminE": 0.0015,
             "potassium": 0.312,
             "calcium": 0.034,
             "magnesium": 0.017
