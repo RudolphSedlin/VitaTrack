@@ -45,21 +45,21 @@ let food = await mealData.create(
     1,
     492,
     {
-        "Carbohydrates": {
-            "Sugars": 24.0,
-            "Fiber": 2.4
+        "carbohydrates": {
+            "sugars": 24.0,
+            "fiber": 2.4
         },
-        "Protein": 5.0,
-        "Fats": 22.0,
-        "Vitamins": {
-            "Vitamin A": 0.000048,
-            "Vitamin E": 0.001
+        "protein": 5.0,
+        "fats": 22.0,
+        "vitamins": {
+            "vitaminA": 0.000048,
+            "vitaminE": 0.001
         },
-        "Minerals": {
-            "Sodium": 0.361,
-            "Potassium": 0.123,
-            "Calcium": 0.056,
-            "Iron": 0.003
+        "minerals": {
+            "sodium": 0.361,
+            "potassium": 0.123,
+            "calcium": 0.056,
+            "iron": 0.003
         }
     }
 );
@@ -73,21 +73,21 @@ food = await mealData.create(
     1,
     61,
     {
-        "Carbohydrates": {
-            "Sugars": 8.9,
-            "Fiber": 3
+        "carbohydrates": {
+            "sugars": 8.9,
+            "fiber": 3
         },
-        "Protein": 1.1,
-        "Fats": 0.5,
-        "Vitamins": {
-            "Vitamin C": 0.0927,
-            "Vitamin K": 0.0000403,
-            "Vitamin E": 0.0015
+        "protein": 1.1,
+        "fats": 0.5,
+        "vitamins": {
+            "vitaminC": 0.0927,
+            "vitaminK": 0.0000403,
+            "vitaminE": 0.0015
         },
-        "Minerals": {
-            "Potassium": 0.312,
-            "Calcium": 0.034,
-            "Magnesium": 0.017
+        "minerals": {
+            "potassium": 0.312,
+            "calcium": 0.034,
+            "magnesium": 0.017
         }
     }
 );
@@ -101,21 +101,21 @@ food = await mealData.create(
     10,
     61,
     {
-        "Carbohydrates": {
-            "Sugars": 8.9,
-            "Fiber": 3
+        "carbohydrates": {
+            "sugars": 8.9,
+            "fiber": 3
         },
-        "Protein": 1.1,
-        "Fats": 0.5,
-        "Vitamins": {
-            "Vitamin C": 0.0927,
-            "Vitamin K": 0.0000403,
-            "Vitamin E": 0.0015
+        "protein": 1.1,
+        "fats": 0.5,
+        "vitamins": {
+            "vitaminC": 0.0927,
+            "vitaminK": 0.0000403,
+            "vitaminE": 0.0015
         },
-        "Minerals": {
-            "Potassium": 0.312,
-            "Calcium": 0.034,
-            "Magnesium": 0.017
+        "minerals": {
+            "potassium": 0.312,
+            "calcium": 0.034,
+            "magnesium": 0.017
         }
     }
 );
