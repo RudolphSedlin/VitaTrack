@@ -121,19 +121,29 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
         
       },
       
-      "protein": 31.0, // Grams as usual.
+      "protein": {
       
-      "fats": 3.6, // Grams as usual.
+        "total" 31.0, // Grams as usual. 
       
-      "vitamins": {
+      },
+      
+      "fats": { // Grams as usual.
+      
+        "saturated": 1.0, // Grams as usual.
+        
+        "monounsaturated": 1.2, // Grams as usual.
+        
+        "polyunsaturated": 0.8, // Grams as usual.
+        
+        "trans": 0.0 // Grams as usual.
+        
+      },
+      
+      "other": { // Optional, but should be called "other" otherwise.
       
         "vitaminB6": 0.0006, // Still grams despite the low value. Uniformity is more important.
         
         "vitaminB12": 0.0005 // Still grams despite the low value. Uniformity is more important.
-        
-      },
-      
-      "minerals": { // Optional, but should be called Minerals otherwise.
       
         "sodium": 0.074, // Still grams despite the low value. Uniformity is more important.
         
