@@ -12,18 +12,17 @@ function QueryModel() {
     const toast = useToast();
 
     // Function to handle new predictions
-    const handlePrediction = (predictions: { className: string; probability: number; }[] | undefined) => {
+    const handlePrediction = (predictions: number[][]) => {
         console.log(predictions);
         if (predictions && predictions.length > 0) {
-            const highestProbabilityItem = predictions.reduce((prev, current) => {
-                return prev.probability > current.probability ? prev : current;
-            });
+            const prediction = predictions[0][0];
 
             // Check if the highest probability is above 50%
-            if (highestProbabilityItem.probability > 0.5) {
+            if (prediction < 0.5) {
                 setMessage(
-                    `${highestProbabilityItem.className}: ${highestProbabilityItem.probability.toFixed(2)}`,
+                    `${prediction}`,
                 );
+                
 
                 if (!pictureTaken) {
                     //TODO: take picture
@@ -32,8 +31,8 @@ function QueryModel() {
                     setPictureTaken(true);
                 }
             } else {
-                setMessage("No prediction above 50%");
-                toast.show("No pred. above 50%");
+                setMessage("No food");
+                toast.show("No food");
             }
         }
     };

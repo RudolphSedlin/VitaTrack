@@ -18,6 +18,8 @@ import { faCircleUser, faLightbulb as faRegularBulb } from "@fortawesome/free-re
 import { faCamera, faXmark, faLightbulb } from "@fortawesome/free-solid-svg-icons"
 import { Tensor3D } from "@tensorflow/tfjs";
 import { useToast } from "react-native-toast-notifications";
+import { loadGraphModel } from '@tensorflow/tfjs-converter';
+
 
 library.add(faCircleUser)
 library.add(faCamera)
@@ -26,10 +28,7 @@ library.add(faLightbulb)
 library.add(faRegularBulb)
 
 type TensorCameraProps = {
-    setPrediction: (preds: {
-        className: string;
-        probability: number;
-    }[] | undefined) => void;
+    setPrediction: (preds: number[][]) => void;
 }
 
 export default function TensorCamera(props: TensorCameraProps) {
@@ -49,8 +48,9 @@ export default function TensorCamera(props: TensorCameraProps) {
     // Load TensorFlow.js model
     useEffect(() => {
         (async () => {
+            console.log("Test")
             await tf.ready(); // Ensure TensorFlow.js is ready
-            const loadedModel = await mobilenet.load();
+            const loadedModel = await loadGraphModel('food_model');
             setModel(loadedModel);
             console.log("Successfully loaded model");
         })();
@@ -84,7 +84,7 @@ export default function TensorCamera(props: TensorCameraProps) {
 
     const runModelPrediction = async (imageTensor: Tensor3D) => {
         if (model) {
-            const prediction = model.classify(imageTensor);
+            const prediction = model.predict(imageTensor);
             return prediction;
         }
     };
