@@ -362,6 +362,12 @@ function validateServings(servings) {
   }
 }
 
+function validateStringArray(arr) {
+  if (arr.every(item => typeof item == "string")){
+    throw "This array is not all strings."
+  }
+}
+
 export default {
   sanitize,
   checkId,
@@ -379,4 +385,5 @@ export default {
   validateHeight,
   validateCalories,
   validateServings,
+  validateStringArray
 };

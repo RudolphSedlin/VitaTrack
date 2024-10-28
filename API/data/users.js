@@ -22,6 +22,8 @@ const create = async (
   email, // Completely optional.
   height,
   weight,
+  allergies,
+  intolerances
 ) => {
 
   //Validation Handling For Mandatory---------------------------------------------------------------------------------
@@ -86,6 +88,12 @@ const create = async (
   if (weight)
     validation.validateWeight(weight, "Weight");
 
+  if (allergies)
+    validation.validateStringArray(allergies, "Allergies");
+
+  if (intolerances)
+    validation.validateStringArray(intolerances, "Intolerances");
+
   //Create user object to put into collection
   let newUser = {
     firstName: firstName,
@@ -105,6 +113,8 @@ const create = async (
     email: email,
     height: height,
     weight: weight,
+    allergies: allergies,
+    intolerances: intolerances,
   };
 
   const userCollection = await users();
