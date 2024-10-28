@@ -2,10 +2,10 @@ export type UserData = {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    sate: string;
+    state: string;
 
     address?: string;
-    gendder?: string;
+    gender?: string;
     dateOfBirth?: Date;
     doctorName?: string;
     conditions?: string;
