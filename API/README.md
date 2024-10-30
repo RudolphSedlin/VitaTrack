@@ -141,10 +141,19 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
       
       "vitamins": { // Grams as usual
       
-        "B6": 0.0006, // Still grams despite the low value. Uniformity is more important.
+        "A": 0.0001, // Still grams despite the low value. Uniformity is more important.
+
+        "B6": 0.0004, // Still grams despite the low value. Uniformity is more important.
         
         "B12": 0.0005 // Still grams despite the low value. Uniformity is more important.
+
+        "C": 0.0003, // Still grams despite the low value. Uniformity is more important.
+
+        "D": 0.0002, // Still grams despite the low value. Uniformity is more important.
+
+        "E": 0.0009, // Still grams despite the low value. Uniformity is more important.
         
+        "K": 0.008, // Still grams despite the low value. Uniformity is more important.
       },
       
       "minerals": { // Grams as usual
@@ -160,6 +169,8 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
       },
       
       "other": {
+      
+        "cholesterol": 0.03 // Grams.
       
         // You get it at this point.
       
