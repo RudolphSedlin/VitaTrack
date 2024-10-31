@@ -42,7 +42,7 @@ jobs:
         run: npm start &
       # Wait for server to be ready
       - name: Wait for Server
-        run: sleep 10
+        run: sleep 3
       # Finally, run our tests
       - name: Run the tests
         run: sudo npm run test
