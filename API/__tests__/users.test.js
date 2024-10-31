@@ -4,8 +4,14 @@ import crypto from "crypto";
 
 import {expect, jest, test} from '@jest/globals';
 
+import {wrapper} from "axios-cookiejar-support";
+import {CookieJar} from "tough-cookie";
+
 let userCollection;
 let mealCollection;
+
+const jar = new CookieJar();
+const client = wrapper(axios.create({ jar }));
 
 beforeAll(async () => {
     userCollection = await users();
@@ -25,10 +31,12 @@ afterAll(async () => {
 
 
 
+
+
 test("Routes Test", async () => { // Check routes by error codes. Bad routes 404, but other routes will 400 or 403 due to bad requests.
 
     try {
-        await axios.post('http://localhost:3000/login',
+        await client.post('http://localhost:3000/login',
                          {
                          }
         )
@@ -39,7 +47,7 @@ test("Routes Test", async () => { // Check routes by error codes. Bad routes 404
     }
 
     try {
-        await axios.post('http://localhost:3000/register',
+        await client.post('http://localhost:3000/register',
                          {
                          }
         )
@@ -50,7 +58,7 @@ test("Routes Test", async () => { // Check routes by error codes. Bad routes 404
     }
 
     try {
-        await axios.get('http://localhost:3000/user',
+        await client.get('http://localhost:3000/user',
                          {
                          }
         )
@@ -61,7 +69,7 @@ test("Routes Test", async () => { // Check routes by error codes. Bad routes 404
     }
 
     try {
-        await axios.get('http://localhost:3000/meals',
+        await client.get('http://localhost:3000/meals',
                         {
                         }
         )
@@ -72,7 +80,7 @@ test("Routes Test", async () => { // Check routes by error codes. Bad routes 404
     }
 
     try {
-        await axios.get('http://localhost:3000/logout',
+        await client.get('http://localhost:3000/logout',
                         {
                         }
         )
@@ -84,7 +92,7 @@ test("Routes Test", async () => { // Check routes by error codes. Bad routes 404
     //---------------------------------------------------------------------------------------------------------------------
 
     try {
-        await axios.get(`http://localhost:3000/${crypto.randomBytes(16).toString('hex')}`,
+        await client.get(`http://localhost:3000/${crypto.randomBytes(16).toString('hex')}`,
                         {
                         }
         )
@@ -106,7 +114,7 @@ test("Routes Test", async () => { // Check routes by error codes. Bad routes 404
 test("Register Route Test", async () => {
 
     try {
-        await axios.post('http://localhost:3000/register',
+        await client.post('http://localhost:3000/register',
                          {
                          }
         )
@@ -117,7 +125,7 @@ test("Register Route Test", async () => {
     }
 
     try {
-        await axios.post('http://localhost:3000/register',
+        await client.post('http://localhost:3000/register',
                          {
                              firstName: "Test",
                              lastName: "User",
@@ -144,7 +152,7 @@ test("Register Route Test", async () => {
     }
 
     try {
-        await axios.post('http://localhost:3000/register',
+        await client.post('http://localhost:3000/register',
                          {
                              firstName: "Test",
                              lastName: "User",
@@ -171,7 +179,7 @@ test("Register Route Test", async () => {
     }
 
     try {
-        await axios.post('http://localhost:3000/register',
+        await client.post('http://localhost:3000/register',
                          {
                              firstName: "Test",
                              lastName: "User",
@@ -199,7 +207,7 @@ test("Register Route Test", async () => {
 
 
     try {
-        await axios.post('http://localhost:3000/register',
+        await client.post('http://localhost:3000/register',
                          {
                              firstName: "Test",
                              lastName: "User",
@@ -214,7 +222,7 @@ test("Register Route Test", async () => {
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-    let registered = (await axios.post('http://localhost:3000/register',
+    let registered = (await client.post('http://localhost:3000/register',
                                        {
                                            firstName: "Test",
                                            lastName: "User",
@@ -266,7 +274,7 @@ test("Register Route Test", async () => {
 
 test("Login Route Test", async () => {
 
-    let registered = (await axios.post('http://localhost:3000/register',
+    let registered = (await client.post('http://localhost:3000/register',
                                        {
                                            firstName: "Test",
                                            lastName: "User",
@@ -288,7 +296,7 @@ test("Login Route Test", async () => {
                                        }
     )).data;
 
-    let loggedIn = (await axios.post('http://localhost:3000/login',
+    let loggedIn = (await client.post('http://localhost:3000/login',
                                      {
                                          phoneNumber: "1-800-999-9999",
                                          password: "SamplePassWord12345+",
@@ -300,7 +308,7 @@ test("Login Route Test", async () => {
     //------------------------------------------------------------------------------------------------------------------------
 
     try {
-        await axios.post('http://localhost:3000/login',
+        await client.post('http://localhost:3000/login',
                          {
                          }
         )
@@ -311,7 +319,7 @@ test("Login Route Test", async () => {
     }
 
     try {
-        await axios.post('http://localhost:3000/login',
+        await client.post('http://localhost:3000/login',
                          {
                              phoneNumber: "1-800-999-9998",
                              password: "SamplePassWord12345+",
@@ -324,7 +332,7 @@ test("Login Route Test", async () => {
     }
 
     try {
-        await axios.post('http://localhost:3000/login',
+        await client.post('http://localhost:3000/login',
                          {
                              phoneNumber: "1-800-999-9999",
                              password: "SamplePassWord1234+",
@@ -336,6 +344,49 @@ test("Login Route Test", async () => {
         expect(error.status).toEqual(400);
     }
 
+}, 30000);
+
+
+
+
+
+test("User Route Test", async () => {
+
+    try {
+        await client.get('http://localhost:3000/user', {withCredentials: true});
+    }
+    catch (error) {
+        console.log(error.response.data);
+        expect(error.status).toEqual(403);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------------------------------------
+
+    let registered = (await client.post('http://localhost:3000/register',
+                                       {
+                                           firstName: "Test",
+                                           lastName: "User",
+                                           phoneNumber: "1-800-999-9999",
+                                           state: "NY",
+                                           password: "SamplePassWord12345+",
+                                           confirmPassword: "SamplePassWord12345+",
+
+                                           address: "Mount Marcy",
+                                           gender: "Monster",
+                                           dateOfBirth: "1970-01-01",
+                                           doctorName: "Doctor Frankenstein",
+                                           consentLetter: "I pledge allegiance to the flag of the United States of America, and to the Republic for which it stands, one nation, under god, indivisible, with liberty, and justice for all.",
+
+                                           email: "BeeMail@bees.org",
+                                           height: 80,
+                                           weight: 220
+                                       },
+                                       {withCredentials: true}
+    )).data;
+
+    let session = (await client.get('http://localhost:3000/user', {withCredentials: true})).data;
+
+    expect(registered).toMatchObject(session);
 
 }, 30000);
 
