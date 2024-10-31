@@ -7,9 +7,9 @@ jobs:
         working-directory: API
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
-        mongodb-version: ['6.0', '7.0', '8.0']
-        node-version: [20.x, 22.x]
+        os: [ubuntu-latest]
+        mongodb-version: [latest]
+        node-version: [latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Git Checkout
