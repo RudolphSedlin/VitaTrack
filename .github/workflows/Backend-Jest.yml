@@ -34,7 +34,6 @@ jobs:
             db.createUser({ user: 'APP-USERNAME', pwd: 'APP-PASSWORD', roles: [{ role: 'readWrite', db: 'APP-DB' }] })
             db.createCollection('APP-COLLECTION');
           EOF
-      - uses: actions/checkout@v2
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
@@ -63,4 +62,4 @@ jobs:
         run: sleep 10
       # Finally, run our tests
       - name: Run the tests
-        run: npm test
+        run: sudo npm run test
