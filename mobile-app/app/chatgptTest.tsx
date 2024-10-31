@@ -12,9 +12,9 @@ const ChatGptTest: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     
 
+    //Send image in base 64 to analysis function
     useEffect(() => {
         if (imageData) {
-            console.log("received image data");
             getNutritionAnalysis(imageData)
         }
     }, [imageData]);
@@ -24,6 +24,8 @@ const ChatGptTest: React.FC = () => {
         const openaiApiKey = "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";
         setLoading(true);
         try {
+
+            //Send request with prompt to api
             const requestBody = {
                 model: "gpt-4o",
                 messages: [
@@ -37,7 +39,8 @@ const ChatGptTest: React.FC = () => {
                 max_tokens: 100,
                 temperature: 0.7
             };
-    
+            
+            //Retrieve response from gpt
             const res = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -47,6 +50,7 @@ const ChatGptTest: React.FC = () => {
                 body: JSON.stringify(requestBody)
             });
     
+            //If api call fails
             if (!res.ok) {
                 const errorMessage = await res.text();
                 throw new Error(`HTTP error! status: ${res.status}, message: ${errorMessage}`);

@@ -154,6 +154,7 @@ export default function TensorCamera(props: TensorCameraProps) {
         // Dispose of tensor to free memory
         tensor.dispose();
         console.log("sent to gpt");
+
         //Navigate to analysis page
         navigation.navigate("chatgptTest", { imageData: resized.base64 });
         
@@ -168,7 +169,14 @@ export default function TensorCamera(props: TensorCameraProps) {
       if (!isRunning.current || !cameraRef.current) return;
 
       await captureAndAnalyzeFrame(); // Capture and analyze current frame
-      stopFrameLoop()
+
+
+
+      //STOP IMAGES FROM CONSTANTLY BEING TAKEN
+      stopFrameLoop()  //REMOVE TO RE-ENABLE AUTO IMAGES
+      //STOP IMAGES FROM CONSTANTLY BEING TAKEN
+
+      
 
       // Run the next frame in the loop
       requestAnimationFrame(processFrame); // Schedule the next frame
