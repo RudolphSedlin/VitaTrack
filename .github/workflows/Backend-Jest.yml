@@ -8,12 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mongodb-version: ['latest']
+        mongodb-version: ['7.0']
+        node-version: [22.x]
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
       - name: Start MongoDB
-        uses: MongoCamp/mongodb-github-action@1.0.0
+        uses: supercharge/mongodb-github-action@1.11.0
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
       - name: Setup Node.js
