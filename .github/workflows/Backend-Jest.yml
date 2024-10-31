@@ -28,6 +28,15 @@ jobs:
       # Install required deps for action
       - name: Install Dependencies
         run: npm install
+      # Start MongoDB Service
+      - name: Start MongoDB
+        run: sudo systemctl start mongodb
+      # Start server in the background
+      - name: Start Server
+        run: npm start &
+      # Wait for server to be ready
+      - name: Wait for Server
+        run: sleep 10 # Adjust the time if the server takes longer to start
       # Finally, run our tests
       - name: Run the tests
         run: npm test
