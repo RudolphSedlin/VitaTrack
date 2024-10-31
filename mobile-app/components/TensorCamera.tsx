@@ -134,6 +134,7 @@ export default function TensorCamera(props: TensorCameraProps) {
   };
 
   const captureAndAnalyzeFrame = async () => {
+    console.log("test1");
     if (cameraRef.current) {
       // Capture the frame
       const picture = await cameraRef.current.takePictureAsync({
@@ -149,9 +150,13 @@ export default function TensorCamera(props: TensorCameraProps) {
 
         // Use the prediction (e.g., update UI)
         setPrediction(prediction);
-
+        
         // Dispose of tensor to free memory
         tensor.dispose();
+        console.log("sent to gpt");
+        //Navigate to analysis page
+        navigation.navigate("chatgptTest", { imageData: resized.base64 });
+        
       }
     }
   };
@@ -163,6 +168,7 @@ export default function TensorCamera(props: TensorCameraProps) {
       if (!isRunning.current || !cameraRef.current) return;
 
       await captureAndAnalyzeFrame(); // Capture and analyze current frame
+      stopFrameLoop()
 
       // Run the next frame in the loop
       requestAnimationFrame(processFrame); // Schedule the next frame
@@ -178,10 +184,10 @@ export default function TensorCamera(props: TensorCameraProps) {
 
   function toggleFrameLoop() {
     if (loopRunning) {
-      toast.show("Frame loop started!");
+      toast.show("Frame loop stopped!");
       stopFrameLoop();
     } else {
-      toast.show("Frame loop stopped!");
+      toast.show("Frame loop started!");
       startFrameLoop();
     }
     setLoopRunning(!loopRunning);

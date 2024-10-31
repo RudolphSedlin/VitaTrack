@@ -47,6 +47,7 @@ export default function RootLayout() {
                 })} />
                 <Stack.Screen name="camerascreen" options={{ presentation: "modal" }} />
                 <Stack.Screen name="profilescreen" />
+                <Stack.Screen name="chatgptTest" options={{ presentation: "modal" }} />
             </Stack>
         </ToastProvider>
     );
