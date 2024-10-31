@@ -33,9 +33,9 @@ jobs:
       - name: Install MongoDB
         run: |
           sudo apt-get update
-          sudo apt-get install -y mongodb
+          sudo apt-get install -y mongodb-org
       - name: Start MongoDB
-        run: sudo systemctl start mongodb
+        run: sudo systemctl start mongod
       # Start server in the background
       - name: Start Server
         run: npm start &
