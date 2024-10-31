@@ -11,7 +11,7 @@ jobs:
         mongodb-version: ['latest']
     steps:
       - name: Git Checkout
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
       - name: Start MongoDB
         uses: MongoCamp/mongodb-github-action@1.0.0
         with:
