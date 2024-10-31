@@ -29,6 +29,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
       # Start MongoDB Service
+      # Install MongoDB
+      - name: Install MongoDB
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mongodb
       - name: Start MongoDB
         run: sudo systemctl start mongodb
       # Start server in the background
@@ -36,7 +41,7 @@ jobs:
         run: npm start &
       # Wait for server to be ready
       - name: Wait for Server
-        run: sleep 10 # Adjust the time if the server takes longer to start
+        run: sleep 10
       # Finally, run our tests
       - name: Run the tests
         run: npm test
