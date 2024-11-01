@@ -10,7 +10,7 @@ import { faCamera } from "@fortawesome/free-solid-svg-icons"
 import MealSummaryView from "@/components/MealSummaryView";
 import DailySummaryView from "@/components/DailySummaryView";
 import { useApi } from "@/hooks/useApi";
-import { LoginRequestBody, MealData, MealsResponse, NoBody, UserData } from "@/shared/api_types";
+import { LoginRequestBody, MealsResponse, NoBody, UserData } from "@/shared/api_types";
 import { useToast } from "react-native-toast-notifications";
 
 library.add(faCircleUser)
@@ -42,9 +42,6 @@ export default function Index() {
     }, [navigation]);
 
     useEffect(() => {
-    }, []);
-
-    useEffect(() => {
         if (userIsLoading) {
             console.log("loading api data...")
         } else {
@@ -66,7 +63,7 @@ export default function Index() {
             console.log(mealsData);
             console.log(mealsError);
 
-            if (mealsData == null) {
+            if (mealsData == null || mealsData == undefined) {
                 return;
             }
 
@@ -134,12 +131,12 @@ export default function Index() {
                 >
                     ALL PREVIOUS MEALS
                 </Text>
-                <FlatList
+                {mealsData && <FlatList
                     data={mealsData!.mealList}
                     renderItem={({item}) => <MealSummaryView item={item} /> }
                     keyExtractor={item => item._id}
                     scrollEnabled={false}
-                />
+                />}
             </ScrollView>
             <View style={styles.footer}>
                 <NavButton screen={"/camerascreen"} text="Take Photo" icon={["far", "circle-user"]} fullWidth={true} />
