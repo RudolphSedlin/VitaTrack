@@ -1,9 +1,15 @@
 import { meals, users } from "../config/mongoCollections.js";
 
-let userCollection = await users();
-let mealCollection = await meals();
+const clean = async () => {
+    let userCollection = await users();
+    let mealCollection = await meals();
 
-await userCollection.deleteMany({});
-await mealCollection.deleteMany({});
+    await userCollection.deleteMany({});
+    await mealCollection.deleteMany({});
 
-console.log("Done deleting! Happy repopulating :D!");
+    console.log("Done deleting! Happy repopulating :D!");
+}
+
+await clean();
+
+export default clean;

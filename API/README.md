@@ -238,6 +238,12 @@ You may also not update the "meals" field, for obvious reasons. See the user obj
 
 Returns a JSON of the new user object, and updates the session accordingly.
 
+## GET /logout:
+
+Must be authenticated first, see above.
+
+Logs out and ends the session.
+
 ## GET /meals:
 
 Must be authenticated first, see above.
@@ -263,9 +269,3 @@ Returns an expanded list of all meal objects belonging to the user for the curre
 Must be authenticated first, see above.
 
 Returns an expanded JSON of the meal specified in the id, assuming it belongs to the authenticated user.
-
-## GET /logout:
-
-Must be authenticated first, see above.
-
-Logs out and ends the session.
