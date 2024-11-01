@@ -1,6 +1,5 @@
 import { meals, users } from "../../config/mongoCollections.js";
 import axios from 'axios';
-import crypto from "crypto";
 
 import {expect, jest, test} from '@jest/globals';
 
@@ -55,13 +54,12 @@ afterAll(async () => {
 
 test("Unauthenticated Test", async () => {
 
-    await client.get('http://localhost:3000/logout');
+    await client.get('http://localhost:3000/logout', {withCredentials: true});
 
     try {
         await client.get('http://localhost:3000/user', {withCredentials: true});
     }
     catch (error) {
-
         expect(error.status).toEqual(403);
     }
 
@@ -69,7 +67,6 @@ test("Unauthenticated Test", async () => {
         await client.put('http://localhost:3000/user', {withCredentials: true});
     }
     catch (error) {
-
         expect(error.status).toEqual(403);
     }
 

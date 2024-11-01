@@ -7,7 +7,7 @@
   "scripts": {
     "seed": "node tasks/seed.js",
     "start": "node app.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --verbose",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --verbose --maxWorkers 1",
     "clean": "node tasks/clean.js"
   },
   "author": "Team Mercurial",
