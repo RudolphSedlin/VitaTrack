@@ -23,16 +23,10 @@ export type NutrientData = {
     carbohydrates: {
         sugars: number;
         fiber: number;
+        [key: string]: number;
     };
-    protein: {
-        total: number;
-    };
-    fats: {
-        saturated: number;
-        monounsaturated: number;
-        polyunsaturated: number;
-        trans: number;
-    };
+    protein: number;
+    fats: number;
     vitamins: {
         [key: string]: number;
     };
@@ -41,6 +35,7 @@ export type NutrientData = {
         potassium: number;
         calcium: number;
         iron: number;
+        [key: string]: number;
     };
     other: {
         [key: string]: number;
@@ -58,6 +53,10 @@ export type MealData = {
     _id: string;
     dateCreated: Date;
 };
+
+export type MealsResponse = {
+    mealList: MealData[];
+}
 
 export type RegisterRequestBody = {
     phoneNumber: string;

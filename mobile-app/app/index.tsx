@@ -1,7 +1,7 @@
 import { View, StyleSheet, useColorScheme, FlatList, ScrollView, Text } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Link, useNavigation } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NavButton from "@/components/NavButton";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -9,78 +9,122 @@ import { faCircleUser } from "@fortawesome/free-regular-svg-icons"
 import { faCamera } from "@fortawesome/free-solid-svg-icons"
 import MealSummaryView from "@/components/MealSummaryView";
 import DailySummaryView from "@/components/DailySummaryView";
+import { useApi } from "@/hooks/useApi";
+import { LoginRequestBody, MealData, MealsResponse, NoBody, UserData } from "@/shared/api_types";
+import { useToast } from "react-native-toast-notifications";
 
 library.add(faCircleUser)
 library.add(faCamera)
 
+type SummaryData = {
+    calories: number;
+    fats: number;
+    protiens: number;
+    sugars: number;
+    carbs: number;
+    other: number;
+    date: Date;
+};
+
 export default function Index() {
     const colorScheme = useColorScheme();
     const navigation = useNavigation();
+    const [userData, userIsLoading, userError, fetchUser] = useApi<UserData, LoginRequestBody>("/login", "POST", {
+        phoneNumber: "1-800-123-4567",
+        password: "GiantMagnet+318"
+    });
+    const [mealsData, mealsAreLoading, mealsError, fetchMeals] = useApi<MealsResponse, NoBody>("/meals", "GET");
+    let [dailySummaryData, setDailySummaryData] = useState<SummaryData | null>(null);
 
     useEffect(() => {
         navigation.setOptions({ title: "Home" });
+        fetchUser();
     }, [navigation]);
 
-    const meals = [
-        {
-            id: "1",
-            title: "Chicken Pot Pie",
-            calories: 390,
-            fats: 23,
-            protiens: 15,
-            sugars: 3,
-            carbs: 31,
-            other: 2.41,
-            date: new Date()
-        },
-        {
-            id: "2",
-            title: "Pork Tenderloin",
-            calories: 250,
-            fats: 13,
-            protiens: 25,
-            sugars: 3,
-            carbs: 31,
-            other: 2.41,
-            date: new Date()
-        },
-        {
-            id: "3",
-            title: "Ice Cream",
-            calories: 170,
-            fats: 9,
-            protiens: 3,
-            sugars: 19,
-            carbs: 19,
-            other: 0.75,
-            date: new Date()
-        },
-    ];
+    useEffect(() => {
+    }, []);
 
-    const dailySummary = meals.reduce((pv, cv) => {
-        pv.calories += cv.calories;
-        pv.fats += cv.fats;
-        pv.protiens += cv.protiens;
-        pv.sugars += cv.sugars;
-        pv.carbs += cv.carbs;
-        pv.other += cv.other;
-        pv.date = cv.date;
+    useEffect(() => {
+        if (userIsLoading) {
+            console.log("loading api data...")
+        } else {
+            console.log("loaded api data!");
 
-        return pv;
-    }, {calories: 0, fats: 0, protiens: 0, sugars: 0, carbs: 0, other: 0, date: new Date()});
+            console.log(userData);
+            console.log(userError);
+
+            fetchMeals();
+        }
+    }, [userIsLoading]);
+
+    useEffect(() => {
+        if (mealsAreLoading) {
+            console.log("loading meals data...");
+        } else {
+            console.log("loaded meals data!");
+            
+            console.log(mealsData);
+            console.log(mealsError);
+
+            if (mealsData == null) {
+                return;
+            }
+
+            let dailySummary = mealsData!.mealList.reduce((pv, item) => {
+                let fats: number = 0;
+                let carbs: number = 0;
+                let proteins: number = 0;
+                let sugars: number = 0;
+                let other: number = 0;
+        
+                fats += item.nutrientsPerServing!.fats;
+        
+                for (let subcategory in item.nutrientsPerServing!.carbohydrates) {
+                    if (subcategory == "sugars") {
+                        sugars += item.nutrientsPerServing!.carbohydrates[subcategory];
+                    }
+                    carbs += item.nutrientsPerServing!.carbohydrates[subcategory];
+                }
+        
+                proteins += item.nutrientsPerServing!.protein;
+        
+                for (let subcategory in item.nutrientsPerServing!.vitamins) {
+                    other += item.nutrientsPerServing!.vitamins[subcategory];
+                }
+                for (let subcategory in item.nutrientsPerServing!.minerals) {
+                    other += item.nutrientsPerServing!.minerals[subcategory];
+                }
+                for (let subcategory in item.nutrientsPerServing!.other) {
+                    other += item.nutrientsPerServing!.other[subcategory];
+                }
+        
+                pv.calories += item.caloriesPerServing! * item.servings!;
+                pv.fats += fats;
+                pv.protiens += proteins;
+                pv.sugars += sugars;
+                pv.carbs += carbs;
+                pv.other += other;
+                pv.date = item.dateCreated;
+        
+                return pv;
+            }, {calories: 0, fats: 0, protiens: 0, sugars: 0, carbs: 0, other: 0, date: new Date()});
+
+            setDailySummaryData(dailySummary);
+        }
+    }, [mealsAreLoading]);
 
     return (
         <View style={styles.container}>
             <ScrollView style={styles.content}>
-                <DailySummaryView 
-                    calories={dailySummary.calories}
-                    fats={dailySummary.fats}
-                    protiens={dailySummary.protiens}
-                    sugars={dailySummary.sugars}
-                    carbs={dailySummary.carbs}
-                    other={dailySummary.other}
-                    day={dailySummary.date}
-                />
+                {dailySummaryData && <DailySummaryView 
+                    calories={dailySummaryData.calories}
+                    fats={dailySummaryData.fats}
+                    proteins={dailySummaryData.protiens}
+                    sugars={dailySummaryData.sugars}
+                    carbs={dailySummaryData.carbs}
+                    other={dailySummaryData.other}
+                    day={new Date(dailySummaryData.date)}
+                />}
                 <Text 
                     style={{
                         color: colorScheme == "light" ? "#aeaeb2" : "#636366",
@@ -88,21 +132,12 @@ export default function Index() {
                         fontVariant: ["small-caps"]
                     }}
                 >
-                    all previous meals
+                    ALL PREVIOUS MEALS
                 </Text>
                 <FlatList
-                    data={meals}
-                    renderItem={({item}) => <MealSummaryView
-                        title={item.title}
-                        calories={item.calories}
-                        fats={item.fats}
-                        protiens={item.protiens} 
-                        sugars={item.sugars}
-                        carbs={item.carbs} 
-                        other={item.other}
-                        date={item.date} />
-                    }
-                    keyExtractor={item => item.id}
+                    data={mealsData!.mealList}
+                    renderItem={({item}) => <MealSummaryView item={item} /> }
+                    keyExtractor={item => item._id}
                     scrollEnabled={false}
                 />
             </ScrollView>

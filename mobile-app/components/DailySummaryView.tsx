@@ -7,7 +7,7 @@ type DailySummaryViewProps = {
     calories: number;
     fats: number;
     sugars: number;
-    protiens: number;
+    proteins: number;
     carbs: number;
     other: number;
     day: Date;
@@ -15,7 +15,7 @@ type DailySummaryViewProps = {
 
 export default function DailySummaryView(props: DailySummaryViewProps) {
     const colorScheme = useColorScheme();
-    const netWeight: number = props.fats + props.carbs + props.protiens + props.sugars + props.other;
+    const netWeight: number = props.fats + props.carbs + props.proteins + props.sugars + props.other;
     const data: pieDataItem[] = [
         {
             color: colorScheme == "light" ? "#ff3b30" : "#ff453a",
@@ -27,7 +27,7 @@ export default function DailySummaryView(props: DailySummaryViewProps) {
         },
         {
             color: colorScheme == "light" ? "#007aff" : "#0984ff",
-            value: props.protiens / netWeight
+            value: props.proteins / netWeight
         },
         {
             color: colorScheme == "light" ? "#aeaeb2" : "#636366",
@@ -75,8 +75,8 @@ export default function DailySummaryView(props: DailySummaryViewProps) {
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#007aff" : "#0984ff"} />
-                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>PROTIENS: </Text>
-                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.protiens}g</Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>PROTEINS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.proteins}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ffcc00" : "#ffd608"} />

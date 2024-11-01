@@ -2,41 +2,65 @@ import { Colors } from "@/constants/Colors";
 import { StyleSheet, Text, useColorScheme, View } from "react-native"
 import { PieChart, pieDataItem } from "react-native-gifted-charts"
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MealData } from "@/shared/api_types";
 
 type MealSummaryViewProps = {
-    title: string;
-    calories: number;
-    fats: number;
-    sugars: number;
-    protiens: number;
-    carbs: number;
-    other: number;
-    date: Date;
+    item: MealData;
 }
 
 export default function MealSummaryView(props: MealSummaryViewProps) {
     const colorScheme = useColorScheme();
-    const netWeight: number = props.fats + props.carbs + props.protiens + props.sugars + props.other;
+    const item = props.item;
+
+    let fats: number = 0;
+    let carbs: number = 0;
+    let proteins: number = 0;
+    let sugars: number = 0;
+    let other: number = 0;
+
+    fats += item.nutrientsPerServing!.fats;
+
+    for (let subcategory in item.nutrientsPerServing!.carbohydrates) {
+        if (subcategory == "sugars") {
+            sugars += item.nutrientsPerServing!.carbohydrates["sugars"];
+            continue;
+        }
+        carbs += item.nutrientsPerServing!.carbohydrates[subcategory];
+    }
+
+    proteins += item.nutrientsPerServing!.protein;
+
+    for (let subcategory in item.nutrientsPerServing!.vitamins) {
+        other += item.nutrientsPerServing!.vitamins[subcategory];
+    }
+    for (let subcategory in item.nutrientsPerServing!.minerals) {
+        other += item.nutrientsPerServing!.minerals[subcategory];
+    }
+    for (let subcategory in item.nutrientsPerServing!.other) {
+        other += item.nutrientsPerServing!.other[subcategory];
+    }
+
+    const netWeight: number = fats + carbs + proteins + sugars + other;
     const data: pieDataItem[] = [
         {
             color: colorScheme == "light" ? "#ff3b30" : "#ff453a",
-            value: props.fats / netWeight
+            value: fats / netWeight
         },
         {
             color: colorScheme == "light" ? "#34c759" : "#2fd158",
-            value: props.carbs / netWeight
+            value: carbs / netWeight
         },
         {
             color: colorScheme == "light" ? "#007aff" : "#0984ff",
-            value: props.protiens / netWeight
+            value: proteins / netWeight
         },
         {
             color: colorScheme == "light" ? "#aeaeb2" : "#636366",
-            value: props.other / netWeight
+            value: other / netWeight
         },
         {
             color: colorScheme == "light" ? "#ffcc00" : "#ffd608",
-            value: props.sugars / netWeight
+            value: sugars / netWeight
         },
     ];
     
@@ -44,8 +68,8 @@ export default function MealSummaryView(props: MealSummaryViewProps) {
         <View style={colorScheme == "dark" ? styles.darkView : styles.lightView}>
             <View style={styles.header}>
                 <View style={styles.columns}>
-                    <Text style={colorScheme == "dark" ? styles.darkTitle : styles.lightTitle}>{props.title}</Text>
-                    <Text style={colorScheme == "dark" ? styles.darkLegendText : styles.lightLegendText}>{props.date.toLocaleString([], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit'})}</Text>
+                    <Text style={colorScheme == "dark" ? styles.darkTitle : styles.lightTitle}>{item.name}</Text>
+                    <Text style={colorScheme == "dark" ? styles.darkLegendText : styles.lightLegendText}>{new Date(item.dateCreated).toLocaleString([], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit'})}</Text>
                 </View>
             </View>
             <View style={styles.columns}>
@@ -57,34 +81,34 @@ export default function MealSummaryView(props: MealSummaryViewProps) {
                         radius={40}
                         showText
                         innerCircleColor={colorScheme == "dark" ? Colors.dark.background : Colors.light.background}
-                        centerLabelComponent={() => <Text style={colorScheme == "dark" ? styles.darkCalorieData : styles.lightCalorieData}>{props.calories} cal</Text>}
+                        centerLabelComponent={() => <Text style={colorScheme == "dark" ? styles.darkCalorieData : styles.lightCalorieData}>{item.caloriesPerServing! * item.servings!} cal</Text>}
                     />
                 </View>
                 <View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ff3b30" : "#ff453a"} />
                         <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>FATS: </Text>
-                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.fats}g</Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{fats}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#34c759" : "#2fd158"} />
                         <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>CARBS: </Text>
-                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.carbs}g</Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{carbs}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#007aff" : "#0984ff"} />
-                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>PROTIENS: </Text>
-                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.protiens}g</Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>PROTEINS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{proteins}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ffcc00" : "#ffd608"} />
                         <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>SUGARS: </Text>
-                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.sugars}g</Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{sugars}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#aeaeb2" : "#636366"} />
                         <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>OTHER: </Text>
-                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.other}g</Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{other}g</Text>
                     </View>
                 </View>
             </View>

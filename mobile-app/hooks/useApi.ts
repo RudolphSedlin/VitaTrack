@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { ENVIRONMENT_TYPE } from "env";
 import { useToast } from "react-native-toast-notifications";
 
 export type ApiReqType = "GET" | "POST" | "PUT" | "DELETE"
 
-export function useApi<T, R>(endpoint: string, requestType: ApiReqType, body?: R) {
+export function useApi<T, R>(endpoint: string, requestType: ApiReqType, body?: R): [T | null, boolean, unknown, () => Promise<void>] {
     const toast = useToast();
     const [data, setData] = useState<T | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<unknown | null>(null);
 
+    const ENVIRONMENT_TYPE: string = "DEV";
     const isProduction: boolean = ENVIRONMENT_TYPE == "PROD";
-    const url = (isProduction ? "https://vitatrack.com/api/" : "http://localhost:3000") + endpoint;
+    const url = (isProduction ? "http://192.168.1.240:3000" : "http://localhost:3000") + endpoint;
 
     async function fetchData() {
         setIsLoading(true);
@@ -45,9 +45,5 @@ export function useApi<T, R>(endpoint: string, requestType: ApiReqType, body?: R
         setIsLoading(false);
     }
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    return { data, isLoading, error };
+    return [data, isLoading, error, fetchData];
 }
