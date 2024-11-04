@@ -88,7 +88,7 @@ router
       if (user.intolerances)
         validation.checkStringArray(user.intolerances, "Intolerances");
 
-      let update = await userData.updateUser(user);
+      let update = await userData.update(user);
 
       req.session.user = await userData.getByID(req.session.user._id);
       return res.status(200).json(update);

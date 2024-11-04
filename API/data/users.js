@@ -1,6 +1,6 @@
 import validation from "../validation.js";
 import { ObjectId } from "mongodb";
-import { meals, users } from "../config/mongoCollections.js";
+import { users } from "../config/mongoCollections.js";
 import bcrypt from "bcrypt";
 import { mealData } from "./index.js";
 
@@ -75,6 +75,11 @@ const getByID = async (id) => {
 
 // Function for deleting user in database given the id
 const remove = async (id) => {
+  let user = await getByID(id);
+
+  for (let meal of user.meals)
+    await mealData.remove(meal);
+
   const userCollection = await users();
   const userDeletionInfo = await userCollection.findOneAndDelete({
     _id: new ObjectId(id),
@@ -83,18 +88,12 @@ const remove = async (id) => {
   if (!userDeletionInfo)
     throw `Could not delete user with id of ${id}`;
 
-  const mealCollection = await meals();
-  // Remove user meals.
-  const updatedMealInfo = await mealCollection.deleteMany(
-    {creatorId: id}
-  );
-
   return `User: ${id} has been deleted`;
 };
 
 
 // Function for updating a user
-const updateUser = async (user) => {
+const update = async (user) => {
   let id = user._id;
   delete user._id;
 
@@ -126,13 +125,11 @@ const updateUser = async (user) => {
 const getMeals = async (userId) => {
   //Find user then get the meals that they have
   let user = await getUserByID(userId);
-  let userMeals = user.meals.map(function (id) {
-    return new ObjectId(id);
-  });
-  const mealCollection = await meals();
-  let foundMeals = await mealCollection
-    .find({ _id: { $in: userMeals } })
-    .toArray();
+
+  let foundMeals = [];
+  for (let meal of user.meals)
+    foundMeals.push(await mealData.getByID(meal));
+
   return foundMeals;
 };
 
@@ -150,6 +147,24 @@ const getMealsToday = async (userId) => {
   }
 
   return output;
+};
+
+const addMeal = async (userId, mealId) => {
+  const userCollection = await users();
+  const updateUser = await userCollection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $push: { meals: mealId } }
+  );
+  return updateUser;
+};
+
+const removeMeal = async (userId, mealId) => {
+  const userCollection = await users();
+  const updateUser = await userCollection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $pull: { meals: mealId } }
+  );
+  return updateUser;
 };
 
 // Function to return user login information.
@@ -178,8 +193,10 @@ export default {
   create,
   getByID,
   remove,
-  updateUser,
+  update,
   getMeals,
   getMealsToday,
+  addMeal,
+  removeMeal,
   login,
 };

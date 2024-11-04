@@ -1,6 +1,6 @@
 import validation from "../validation.js";
 import { ObjectId } from "mongodb";
-import { meals, users } from "../config/mongoCollections.js";
+import { meals } from "../config/mongoCollections.js";
 import { userData } from "./index.js";
 
 // Create a new meal
@@ -30,18 +30,12 @@ const create = async (
   const newInsertInformation = await mealCollection.insertOne(newMeal);
   if (!newInsertInformation.insertedId) throw "Insert failed";
 
-  //* Update user mealList
-  const userCollection = await users();
-  const updateUser = await userCollection.updateOne(
-    { _id: new ObjectId(creatorId) },
-    { $push: { meals: newInsertInformation.insertedId.toString() } }
-  );
+  await userData.addMeal(creatorId, newInsertInformation.insertedId);
 
   return await getByID(newInsertInformation.insertedId.toString());
 };
 
 const getByID = async (id) => {
-  id = validation.checkId(id);
   const mealCollection = await meals();
   const meal = await mealCollection.findOne({
     _id: new ObjectId(id),
@@ -50,7 +44,23 @@ const getByID = async (id) => {
   return meal;
 };
 
+const remove = async (id) => {
+  let meal = await getByID(id);
+  await userData.removeMeal(meal.creatorId, id);
+
+  const mealCollection = await meals();
+  const mealDeletionInfo = await mealCollection.findOneAndDelete({
+    _id: new ObjectId(id),
+  });
+
+  if (!mealDeletionInfo)
+    throw `Could not delete meal with id of ${id}`;
+
+  return `Meal: ${id} has been deleted`;
+};
+
 export default {
   create,
   getByID,
+  remove
 };
