@@ -13,11 +13,7 @@ const client = wrapper(axios.create({ jar }));
 beforeAll(async () => {// Silence logs by wrapping seeder with spyOn// Temporarily silence console.log for the whole `beforeAll` block
     await clean();
     await seed();
-}, 30000);
-
-afterAll(async () => {
-    await clean();
-}, 30000);
+});
 
 test("Unauthenticated Test", async () => {
 
@@ -35,4 +31,4 @@ test("Unauthenticated Test", async () => {
         expect(error.status).toEqual(403);
     }
 
-}, 30000);
+});

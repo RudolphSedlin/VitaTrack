@@ -138,12 +138,12 @@ const seed = async () => {
 
     console.log(food);
 
-    Jupiter = await userData.getUserByID(Jupiter._id.toString());
+    Jupiter = await userData.getByID(Jupiter._id.toString());
 
     console.log(Jupiter);
     console.log("Password: GiantMagnet+318");
 
-    Franklin = await userData.getUserByID(Franklin._id.toString());
+    Franklin = await userData.getByID(Franklin._id.toString());
 
     console.log(Franklin);
     console.log("Password: SamplePassWord12345+");

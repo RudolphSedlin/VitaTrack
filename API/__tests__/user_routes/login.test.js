@@ -37,11 +37,7 @@ beforeEach(async () => {
                                     }
     )).data;
 
-}, 30000);
-
-afterAll(async () => {
-    await clean();
-}, 30000);
+});
 
 test("Empty Request Test", async () => {
 
@@ -55,7 +51,7 @@ test("Empty Request Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("Bad Username Test", async () => {
 
@@ -71,7 +67,7 @@ test("Bad Username Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("Bad Password Test", async () => {
 
@@ -87,7 +83,7 @@ test("Bad Password Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("Success Test", async () => {
 
@@ -99,4 +95,4 @@ test("Success Test", async () => {
     )).data;
     expect(loggedIn).toMatchObject(registered);
 
-}, 30000);
+});

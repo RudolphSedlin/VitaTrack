@@ -12,7 +12,7 @@ const client = wrapper(axios.create({ jar }));
 
 beforeEach(async () => {
     await clean();
-}, 30000);
+});
 
 test("Empty Request Test", async () => {
 
@@ -26,11 +26,7 @@ test("Empty Request Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
-
-afterAll(async () => {
-    await clean();
-}, 30000);
+});
 
 test("Bad Password Test", async () => {
 
@@ -60,7 +56,7 @@ test("Bad Password Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("Inconsistent Confirm Password Test", async () => {
 
@@ -90,7 +86,7 @@ test("Inconsistent Confirm Password Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("Bad Email Test", async () => {
 
@@ -120,7 +116,7 @@ test("Bad Email Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("Missing Fields Test", async () => {
 
@@ -137,7 +133,7 @@ test("Missing Fields Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("Success Test", async () => {
 
@@ -183,4 +179,4 @@ test("Success Test", async () => {
 
     expect(registered).toMatchObject(Franklin);
 
-}, 30000);
+});
