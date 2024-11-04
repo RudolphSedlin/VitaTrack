@@ -28,6 +28,10 @@ test("Empty Request Test", async () => {
 
 }, 30000);
 
+afterAll(async () => {
+    await clean();
+}, 30000);
+
 test("Bad Password Test", async () => {
 
     try {

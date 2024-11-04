@@ -39,6 +39,10 @@ beforeEach(async () => {
 
 }, 30000);
 
+afterAll(async () => {
+    await clean();
+}, 30000);
+
 test("Unauthenticated Test", async () => {
 
     await client.get('http://localhost:3000/logout', {withCredentials: true});

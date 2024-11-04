@@ -39,6 +39,10 @@ beforeEach(async () => {
 
 }, 30000);
 
+afterAll(async () => {
+    await clean();
+}, 30000);
+
 test("Empty Request Test", async () => {
 
     try {

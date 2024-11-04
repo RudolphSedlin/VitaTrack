@@ -15,6 +15,10 @@ beforeAll(async () => {// Silence logs by wrapping seeder with spyOn// Temporari
     await seed();
 }, 30000);
 
+afterAll(async () => {
+    await clean();
+}, 30000);
+
 test("Unauthenticated Test", async () => {
 
     try {

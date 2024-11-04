@@ -14,6 +14,10 @@ beforeAll(async () => {
     await clean();
 }, 30000);
 
+afterAll(async () => {
+    await clean();
+}, 30000);
+
 test("Unauthenticated Test", async () => {
 
     try {
