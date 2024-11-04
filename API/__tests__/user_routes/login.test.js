@@ -1,4 +1,3 @@
-import { meals, users } from "../../config/mongoCollections.js";
 import axios from 'axios';
 
 import {expect, jest, test} from '@jest/globals';
@@ -6,22 +5,15 @@ import {expect, jest, test} from '@jest/globals';
 import {wrapper} from "axios-cookiejar-support";
 import {CookieJar} from "tough-cookie";
 
-let userCollection;
-let mealCollection;
+import clean from "../../tasks/clean.js";
 
 let registered;
 
 const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
 
-beforeAll(async () => {
-    userCollection = await users();
-    mealCollection = await meals();
-}, 30000);
-
 beforeEach(async () => {
-    await userCollection.deleteMany({});
-    await mealCollection.deleteMany({});
+    await clean();
 
     registered = (await client.post('http://localhost:3000/register',
                                     {
@@ -45,11 +37,6 @@ beforeEach(async () => {
                                     }
     )).data;
 
-}, 30000);
-
-afterAll(async () => {
-    await userCollection.deleteMany({});
-    await mealCollection.deleteMany({});
 }, 30000);
 
 test("Empty Request Test", async () => {

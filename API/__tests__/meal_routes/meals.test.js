@@ -11,15 +11,8 @@ const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
 
 beforeAll(async () => {// Silence logs by wrapping seeder with spyOn// Temporarily silence console.log for the whole `beforeAll` block
-    const originalConsoleLog = console.log;
-    console.log = () => {}; // Override with a no-op
-
-    // Run the seeder and await completion if it returns a promise
     await clean();
     await seed();
-
-    // Restore the original console.log after the seeder has completed
-    console.log = originalConsoleLog;
 }, 30000);
 
 test("Unauthenticated Test", async () => {
