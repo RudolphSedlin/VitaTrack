@@ -37,11 +37,7 @@ beforeEach(async () => {
                                     {withCredentials: true}
     )).data;
 
-}, 30000);
-
-afterAll(async () => {
-    await clean();
-}, 30000);
+});
 
 test("Unauthenticated Test", async () => {
 
@@ -68,14 +64,14 @@ test("Unauthenticated Test", async () => {
         expect(error.status).toEqual(403);
     }
 
-}, 30000);
+});
 
 test("Get Test", async () => {
 
     let session = (await client.get('http://localhost:3000/user', {withCredentials: true})).data;
     expect(session).toMatchObject(registered);
 
-}, 30000);
+});
 
 test("Put Fail Test", async () => {
 
@@ -106,7 +102,7 @@ test("Put Fail Test", async () => {
         expect(error.status).toEqual(403);
     }
 
-}, 30000);
+});
 
 test("Put Success Test", async () => {
 
@@ -136,7 +132,7 @@ test("Put Success Test", async () => {
     expect(updated).not.toMatchObject(registered);
     expect(updated).toMatchObject(session);
 
-}, 30000);
+});
 
 test("Delete Test", async () => {
 
@@ -148,4 +144,4 @@ test("Delete Test", async () => {
 
     expect(deleted).toBe("User deleted!");
 
-}, 30000);
+});

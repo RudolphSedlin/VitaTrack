@@ -59,7 +59,7 @@ router
             nutrientsPerServing
         );
 
-        req.session.user = await userData.getUserByID(req.session.user._id);
+        req.session.user = await userData.getByID(req.session.user._id);
 
         return res.status(200).json(create);
     }
@@ -88,7 +88,7 @@ router
     if (req.session.user) {
         try {
             let id = validation.checkString(req.params.id, "Id");
-            let meal = await mealData.getMealByID(id);
+            let meal = await mealData.getByID(id);
             if (meal.creatorId != req.session.user._id)
                 return res.status(403).send("This meal doesn't belong to this user.");
             return res.status(200).json(meal);

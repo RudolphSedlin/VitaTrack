@@ -2,7 +2,6 @@ import { Router } from "express";
 const router = Router();
 import { userData } from "../data/index.js";
 import validation from "../validation.js";
-import crypto from "crypto";
 
 router
   .route("/")
@@ -20,7 +19,7 @@ router
       validation.checkString(phoneNumber, "Phone number");
       validation.validatePassword(password);
 
-      let status = await userData.loginUser(phoneNumber, password);
+      let status = await userData.login(phoneNumber, password);
 
       if (status == "Database error.")
         return res.status(500).send("Internal Server Error!");

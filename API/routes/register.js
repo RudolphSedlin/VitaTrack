@@ -27,6 +27,8 @@ router
       let email = data.email;
       let height = data.height;
       let weight = data.weight;
+      let allergies = data.allergies;
+      let intolerances = data.intolerances;
 
       // Error Checking
       //* Null validations
@@ -51,10 +53,10 @@ router
       if (lastName.length < 2 || firstName.length > 25)
         throw "Error: Last name is too short or too long";
 
-      validation.validatePassword(password);
-      validation.validatePassword(confirmPassword);
+      if (password !== confirmPassword)
+        throw "Passwords do not match.";
 
-      if (password !== confirmPassword) throw "Passwords do not match.";
+      validation.validatePassword(password);
 
       if (address)
         address = validation.checkString(address, "Address");
@@ -73,7 +75,7 @@ router
 
       /*
       if (conditions)
-        validation.checkStringArray(conditions, "Conditions");
+        validation.checkStringArray(JSON.parse(conditions), "Conditions");
       */
 
       if (consentLetter)
@@ -89,6 +91,12 @@ router
 
       if (weight)
         validation.validateWeight(weight, "Weight");
+
+      if (allergies)
+        validation.checkStringArray(allergies, "Allergies");
+
+      if (intolerances)
+        validation.checkStringArray(intolerances, "Intolerances");
 
       let status = await userData.create(
         firstName,
@@ -106,7 +114,9 @@ router
 
         email,
         height,
-        weight
+        weight,
+        allergies,
+        intolerances
       );
 
       if (status == "Database error.")

@@ -26,7 +26,7 @@ test("Login Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("Register Test", async () => {
 
@@ -40,7 +40,7 @@ test("Register Test", async () => {
         expect(error.status).toEqual(400);
     }
 
-}, 30000);
+});
 
 test("User Test", async () => {
 
@@ -54,7 +54,7 @@ test("User Test", async () => {
         expect(error.status).toEqual(403);
     }
 
-}, 30000);
+});
 
 test("Meals Test", async () => {
 
@@ -68,7 +68,7 @@ test("Meals Test", async () => {
         expect(error.status).toEqual(403);
     }
 
-}, 30000);
+});
 
 test("Logout Test", async () => {
 
@@ -82,7 +82,7 @@ test("Logout Test", async () => {
         expect(error.status).toEqual(403);
     }
 
-}, 30000);
+});
 
 test("Random Fail Test", async () => {
 
@@ -96,4 +96,4 @@ test("Random Fail Test", async () => {
         expect(error.status).toEqual(404);
     }
 
-}, 30000);
+});

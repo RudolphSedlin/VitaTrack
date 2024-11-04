@@ -12,11 +12,7 @@ const client = wrapper(axios.create({ jar }));
 
 beforeAll(async () => {
     await clean();
-}, 30000);
-
-afterAll(async () => {
-    await clean();
-}, 30000);
+});
 
 test("Unauthenticated Test", async () => {
 
@@ -27,7 +23,7 @@ test("Unauthenticated Test", async () => {
         expect(error.status).toEqual(403);
     }
 
-}, 30000);
+});
 
 test("Authenticated Test", async () => {
     let registered = (await client.post('http://localhost:3000/register',
@@ -54,4 +50,4 @@ test("Authenticated Test", async () => {
     let logged_out = (await client.get('http://localhost:3000/logout', {withCredentials: true})).data;
 
     expect(logged_out).toBe("Logged out!");
-}, 30000);
+});
