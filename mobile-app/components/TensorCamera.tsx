@@ -93,6 +93,7 @@ export default function TensorCamera(props: TensorCameraProps) {
       format: ImageManipulator.SaveFormat.JPEG,
       base64: true,
     };
+
     const res = await ImageManipulator.manipulateAsync(
       imageUrl,
       actions,
@@ -134,7 +135,6 @@ export default function TensorCamera(props: TensorCameraProps) {
   };
 
   const captureAndAnalyzeFrame = async () => {
-    console.log("test1");
     if (cameraRef.current) {
       // Capture the frame
       const picture = await cameraRef.current.takePictureAsync({
@@ -155,8 +155,19 @@ export default function TensorCamera(props: TensorCameraProps) {
         tensor.dispose();
         console.log("sent to gpt");
 
+        // FIX THIS ADD AUTH!
+        const res = await fetch('http://192.168.1.21:3000/gpt', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // ADD SESSION AUTHORIZATION IMMEDIATELY!
+          },
+          body: JSON.stringify({
+            image: resized.base64
+          })
+        });
         //Navigate to analysis page
-        navigation.navigate("chatgptTest", { imageData: resized.base64 });
+        //navigation.navigate("chatgptTest", { imageData: resized.base64 });
         
       }
     }

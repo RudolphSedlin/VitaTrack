@@ -3,6 +3,7 @@ import user from "./users.js";
 import login from "./login.js";
 import logout from "./logout.js";
 import register from "./register.js";
+import gpt from "./gpt.js";
 
 const constructorMethod = (app) => {
   app.use("/meals", meals);
@@ -10,6 +11,7 @@ const constructorMethod = (app) => {
   app.use("/login", login);
   app.use("/logout", logout);
   app.use("/register", register);
+  app.use("/gpt", gpt);
 
   app.use("*", (req, res) => {
     return res.status(404).send("No such resource found!")
