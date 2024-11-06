@@ -124,7 +124,7 @@ const update = async (user) => {
 // Function for getting all meals for a user
 const getMeals = async (userId) => {
   //Find user then get the meals that they have
-  let user = await getUserByID(userId);
+  let user = await getByID(userId);
 
   let foundMeals = [];
   for (let meal of user.meals)
