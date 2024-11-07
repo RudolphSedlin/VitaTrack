@@ -186,7 +186,7 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
 
 # Session Data:
 
-The server stores a copy of the echoed user object as session data. For implementers, this field is req.session.user.
+The server stores a copy of the echoed user object as session data. For implementers, this field is express req.session.user.
 
 --------------------------------------------------------------------------------------
 
@@ -255,6 +255,14 @@ Returns an expanded list of all meal objects belonging to the user.
 Must be authenticated first, see above.
 
 Please submit the mandatory meal fields.
+
+Returns a JSON of the created meal, and updates the session accordingly.
+
+## POST /meals/image:
+
+Must be authenticated first, see above.
+
+Please submit a base-64 encode of an image. See TensorCamera.tsx and API/resources/IMAGES.js for examples.
 
 Returns a JSON of the created meal, and updates the session accordingly.
 

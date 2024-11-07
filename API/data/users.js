@@ -3,8 +3,7 @@ import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
 import bcrypt from "bcrypt";
 import { mealData } from "./index.js";
-
-const SALT_ROUNDS = 10;
+import { SALT_ROUNDS } from "../resources/CONSTANTS.js";
 
 // Function for creating a user in the user data base
 const create = async (
