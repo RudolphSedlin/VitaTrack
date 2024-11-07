@@ -156,7 +156,7 @@ export default function TensorCamera(props: TensorCameraProps) {
         console.log("sent to gpt");
 
         // FIX THIS ADD AUTH!
-        const res = await fetch('http://192.168.1.21:3000/gpt', {
+        const res = await fetch('http://192.168.1.21:3000/meals/image', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
