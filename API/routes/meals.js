@@ -84,27 +84,6 @@ router
     });
 });
 
-
-router
-.route("/:id")
-.get(async (req, res) => {
-    if (req.session.user) {
-        try {
-            let id = validation.checkString(req.params.id, "Id");
-            let meal = await mealData.getByID(id);
-            if (meal.creatorId != req.session.user._id)
-                return res.status(403).send("This meal doesn't belong to this user.");
-            return res.status(200).json(meal);
-        } catch (error) {
-            return res
-            .status(404)
-            .send(error);
-        }
-    }
-
-    return res.status(403).send("Not authenticated!");
-});
-
 router
 .route("/image")
 .post(async (req, res) => {
@@ -122,8 +101,8 @@ router
                 { role: "system", content: "You are a nutritionist." },
                 { role: "user", content: [
                     {type: "text", text:PROMPTS.NUTRIENT_PROMPT},
-                    {type: "image_url","image_url": {"url": `data:image/jpeg;base64,${image}`
-                    }}
+      {type: "image_url","image_url": {"url": `data:image/jpeg;base64,${image}`
+      }}
                 ]}
             ],
             max_tokens: CONSTANTS.MAX_TOKENS,
@@ -168,8 +147,27 @@ router
     }
 
     return res.status(403).send("Not authenticated!");
-
 })
 ;
+
+router
+.route("/:id")
+.get(async (req, res) => {
+    if (req.session.user) {
+        try {
+            let id = validation.checkString(req.params.id, "Id");
+            let meal = await mealData.getByID(id);
+            if (meal.creatorId != req.session.user._id)
+                return res.status(403).send("This meal doesn't belong to this user.");
+            return res.status(200).json(meal);
+        } catch (error) {
+            return res
+            .status(404)
+            .send(error);
+        }
+    }
+
+    return res.status(403).send("Not authenticated!");
+});
 
 export default router;
