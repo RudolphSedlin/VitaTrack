@@ -21,20 +21,18 @@ export type UserData = {
 
 export type NutrientData = {
     carbohydrates: {
-        sugars: number;
-        fiber: number;
         [key: string]: number;
     };
-    protein: number;
-    fats: number;
+    protein: {
+        [key: string]: number;
+    };
+    fats: {
+        [key: string]: number;
+    };
     vitamins: {
         [key: string]: number;
     };
     minerals: {
-        sodium: number;
-        potassium: number;
-        calcium: number;
-        iron: number;
         [key: string]: number;
     };
     other: {

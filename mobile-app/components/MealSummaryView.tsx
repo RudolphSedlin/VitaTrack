@@ -3,6 +3,7 @@ import { StyleSheet, Text, useColorScheme, View } from "react-native"
 import { PieChart, pieDataItem } from "react-native-gifted-charts"
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { MealData } from "@/shared/api_types";
+import { reduceMealData } from "@/shared/mealDataReducer";
 
 type MealSummaryViewProps = {
     item: MealData;
@@ -12,33 +13,7 @@ export default function MealSummaryView(props: MealSummaryViewProps) {
     const colorScheme = useColorScheme();
     const item = props.item;
 
-    let fats: number = 0;
-    let carbs: number = 0;
-    let proteins: number = 0;
-    let sugars: number = 0;
-    let other: number = 0;
-
-    fats += item.nutrientsPerServing!.fats;
-
-    for (let subcategory in item.nutrientsPerServing!.carbohydrates) {
-        if (subcategory == "sugars") {
-            sugars += item.nutrientsPerServing!.carbohydrates["sugars"];
-            continue;
-        }
-        carbs += item.nutrientsPerServing!.carbohydrates[subcategory];
-    }
-
-    proteins += item.nutrientsPerServing!.protein;
-
-    for (let subcategory in item.nutrientsPerServing!.vitamins) {
-        other += item.nutrientsPerServing!.vitamins[subcategory];
-    }
-    for (let subcategory in item.nutrientsPerServing!.minerals) {
-        other += item.nutrientsPerServing!.minerals[subcategory];
-    }
-    for (let subcategory in item.nutrientsPerServing!.other) {
-        other += item.nutrientsPerServing!.other[subcategory];
-    }
+    let [fats, carbs, proteins, sugars, other] = reduceMealData(item);
 
     const netWeight: number = fats + carbs + proteins + sugars + other;
     const data: pieDataItem[] = [

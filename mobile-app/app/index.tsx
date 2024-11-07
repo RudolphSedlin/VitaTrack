@@ -12,6 +12,7 @@ import DailySummaryView from "@/components/DailySummaryView";
 import { useApi } from "@/hooks/useApi";
 import { LoginRequestBody, MealsResponse, NoBody, UserData } from "@/shared/api_types";
 import { useToast } from "react-native-toast-notifications";
+import { reduceMealData } from "@/shared/mealDataReducer";
 
 library.add(faCircleUser)
 library.add(faCamera)
@@ -68,32 +69,8 @@ export default function Index() {
             }
 
             let dailySummary = mealsData!.mealList.reduce((pv, item) => {
-                let fats: number = 0;
-                let carbs: number = 0;
-                let proteins: number = 0;
-                let sugars: number = 0;
-                let other: number = 0;
-        
-                fats += item.nutrientsPerServing!.fats;
-        
-                for (let subcategory in item.nutrientsPerServing!.carbohydrates) {
-                    if (subcategory == "sugars") {
-                        sugars += item.nutrientsPerServing!.carbohydrates[subcategory];
-                    }
-                    carbs += item.nutrientsPerServing!.carbohydrates[subcategory];
-                }
-        
-                proteins += item.nutrientsPerServing!.protein;
-        
-                for (let subcategory in item.nutrientsPerServing!.vitamins) {
-                    other += item.nutrientsPerServing!.vitamins[subcategory];
-                }
-                for (let subcategory in item.nutrientsPerServing!.minerals) {
-                    other += item.nutrientsPerServing!.minerals[subcategory];
-                }
-                for (let subcategory in item.nutrientsPerServing!.other) {
-                    other += item.nutrientsPerServing!.other[subcategory];
-                }
+                
+                let [fats, carbs, proteins, sugars, other] = reduceMealData(item);
         
                 pv.calories += item.caloriesPerServing! * item.servings!;
                 pv.fats += fats;

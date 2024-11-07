@@ -25,15 +25,15 @@ import {
 import { Tensor3D } from "@tensorflow/tfjs";
 import {
   bundleResourceIO,
-  base64ImageToTensor,
 } from "@tensorflow/tfjs-react-native";
 import { useToast } from "react-native-toast-notifications";
 import { loadGraphModel } from "@tensorflow/tfjs-converter";
 import * as jpeg from "jpeg-js";
 import * as ImageManipulator from "expo-image-manipulator";
 
-const modelJSON = require("../assets/food_model.json/model.json");
-const modelWeights = require("../assets/food_model.json/group1.bin");
+
+import modelJSON from "../assets/food_model.json/model.json";
+import modelWeights from "../assets/food_model.json/group1.bin";
 
 library.add(faCircleUser);
 library.add(faCamera);
