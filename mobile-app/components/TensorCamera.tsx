@@ -23,14 +23,11 @@ import {
   faLightbulb,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tensor3D } from "@tensorflow/tfjs";
-import {
-  bundleResourceIO,
-} from "@tensorflow/tfjs-react-native";
+import { bundleResourceIO } from "@tensorflow/tfjs-react-native";
 import { useToast } from "react-native-toast-notifications";
 import { loadGraphModel } from "@tensorflow/tfjs-converter";
 import * as jpeg from "jpeg-js";
 import * as ImageManipulator from "expo-image-manipulator";
-
 
 import modelJSON from "../assets/food_model.json/model.json";
 import modelWeights from "../assets/food_model.json/group1.bin";
@@ -102,12 +99,7 @@ export default function TensorCamera(props: TensorCameraProps) {
     return res;
   };
 
-  const base64ImageToTensor = async (base64: string): Promise<tf.Tensor4D> => {
-    // Decode the base64 image
-    const rawImageData = tf.util.encodeString(base64, "base64");
-    const TO_UINT8ARRAY = true;
-    const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY);
-
+  const jpegToUint8Array = (data: [int]): Uint8Array => {
     // Drop the alpha channel info if present
     const buffer = new Uint8Array(width * height * 3);
     let offset = 0; // offset into original data
@@ -117,6 +109,17 @@ export default function TensorCamera(props: TensorCameraProps) {
       buffer[i + 2] = data[offset + 2];
       offset += 4; // Skip the alpha channel
     }
+
+    return buffer;
+  };
+
+  const base64ImageToTensor = async (base64: string): Promise<tf.Tensor4D> => {
+    // Decode the base64 image
+    const rawImageData = tf.util.encodeString(base64, "base64");
+    const TO_UINT8ARRAY = true;
+    const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY);
+
+    const buffer = jpegToUint8Array(data);
 
     // Create a 3D tensor from the buffer
     const imageTensor = tf.tensor3d(buffer, [height, width, 3]);
@@ -150,25 +153,24 @@ export default function TensorCamera(props: TensorCameraProps) {
 
         // Use the prediction (e.g., update UI)
         setPrediction(prediction);
-        
+
         // Dispose of tensor to free memory
         tensor.dispose();
         console.log("sent to gpt");
 
         // FIX THIS ADD AUTH!
-        const res = await fetch('http://192.168.1.21:3000/meals/image', {
-          method: 'POST',
+        const res = await fetch("http://192.168.1.21:3000/gpt", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             // ADD SESSION AUTHORIZATION IMMEDIATELY!
           },
           body: JSON.stringify({
-            image: resized.base64
-          })
+            image: resized.base64,
+          }),
         });
         //Navigate to analysis page
         //navigation.navigate("chatgptTest", { imageData: resized.base64 });
-        
       }
     }
   };
@@ -181,13 +183,9 @@ export default function TensorCamera(props: TensorCameraProps) {
 
       await captureAndAnalyzeFrame(); // Capture and analyze current frame
 
-
-
       //STOP IMAGES FROM CONSTANTLY BEING TAKEN
-      stopFrameLoop()  //REMOVE TO RE-ENABLE AUTO IMAGES
+      stopFrameLoop(); //REMOVE TO RE-ENABLE AUTO IMAGES
       //STOP IMAGES FROM CONSTANTLY BEING TAKEN
-
-      
 
       // Run the next frame in the loop
       requestAnimationFrame(processFrame); // Schedule the next frame
@@ -201,7 +199,7 @@ export default function TensorCamera(props: TensorCameraProps) {
     isRunning.current = false;
   };
 
-  function toggleFrameLoop() {
+  const toggleFrameLoop = () => {
     if (loopRunning) {
       toast.show("Frame loop stopped!");
       stopFrameLoop();
@@ -210,7 +208,7 @@ export default function TensorCamera(props: TensorCameraProps) {
       startFrameLoop();
     }
     setLoopRunning(!loopRunning);
-  }
+  };
 
   // Camera permission handling
   if (!permission) {
@@ -228,13 +226,13 @@ export default function TensorCamera(props: TensorCameraProps) {
     );
   }
 
-  function toggleCameraFacing() {
+  const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
-  }
+  };
 
-  function toggleFlashlight() {
+  const toggleFlashlight = () => {
     setLightState(!lightState);
-  }
+  };
 
   return (
     <View>
