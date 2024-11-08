@@ -8,7 +8,6 @@ import validation from "../validation.js";
 
 router
 .route("/")
-
 .get(async (req, res) => {
     if (!req.session.user) return res.status(403).send("Not authenticated!");
 
@@ -77,11 +76,88 @@ router
 router
 .route("/today")
 .get(async (req, res) => {
-    if (!req.session.user) return res.status(403).send("Not authenticated!");
+    if (!req.session.user)
+        return res.status(403).send("Not authenticated!");
 
     return res.status(200).json({
         mealList: await userData.getMealsToday(req.session.user._id),
     });
+});
+
+router
+.route("/alternatives")
+.get(async (req, res) => {
+    if (!req.session.user)
+        return res.status(403).send("Not authenticated!");
+
+    let user = JSON.stringify(req.session.user);
+    let meals = JSON.stringify(await userData.getMeals(req.session.user._id));
+
+    //Send request with prompt to api
+    const requestBody = {
+        model: CONSTANTS.MODEL,
+        messages: [
+            { role: "system", content: "You are a nutritionist." },
+            { role: "user", content: [
+                {type: "text", text: eval(PROMPTS.ALTERNATIVES_PROMPT)}, // Eval to allow template literals that are imported as strings.
+            ]}
+        ],
+        max_tokens: CONSTANTS.MAX_TOKENS,
+        temperature: CONSTANTS.TEMPERATURE
+    };
+
+    //Retrieve response from gpt
+    const result = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${CONSTANTS.OPENAI_API_KEY}`
+        },
+        body: JSON.stringify(requestBody)
+    });
+
+    const json = await result.json();
+    let gptResponse = json.choices?.[0]?.message?.content?.trim() || 'No response.';
+
+    return res.status(200).send(gptResponse);
+});
+
+router
+.route("/recommendations")
+.get(async (req, res) => {
+    if (!req.session.user)
+        return res.status(403).send("Not authenticated!");
+
+    let user = JSON.stringify(req.session.user);
+    let meals = JSON.stringify(await userData.getMeals(req.session.user._id));
+
+    //Send request with prompt to api
+    const requestBody = {
+        model: CONSTANTS.MODEL,
+        messages: [
+            { role: "system", content: "You are a nutritionist." },
+            { role: "user", content: [
+                {type: "text", text: eval(PROMPTS.RECOMMENDATIONS_PROMPT)}, // Eval to allow template literals that are imported as strings.
+            ]}
+        ],
+        max_tokens: CONSTANTS.MAX_TOKENS,
+        temperature: CONSTANTS.TEMPERATURE
+    };
+
+    //Retrieve response from gpt
+    const result = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${CONSTANTS.OPENAI_API_KEY}`
+        },
+        body: JSON.stringify(requestBody)
+    });
+
+    const json = await result.json();
+    let gptResponse = json.choices?.[0]?.message?.content?.trim() || 'No response.';
+
+    return res.status(200).send(gptResponse);
 });
 
 router
@@ -101,8 +177,8 @@ router
                 { role: "system", content: "You are a nutritionist." },
                 { role: "user", content: [
                     {type: "text", text:PROMPTS.NUTRIENT_PROMPT},
-      {type: "image_url","image_url": {"url": `data:image/jpeg;base64,${image}`
-      }}
+                    {type: "image_url","image_url": {"url": `data:image/jpeg;base64,${image}`
+                    }}
                 ]}
             ],
             max_tokens: CONSTANTS.MAX_TOKENS,
@@ -121,6 +197,7 @@ router
 
         const json = await result.json();
         let gptResponse = json.choices?.[0]?.message?.content?.trim() || 'No response.';
+
         gptResponse = gptResponse.replaceAll("```", "");
         gptResponse = gptResponse.replace("json", "");
         gptResponse = JSON.parse(gptResponse);
