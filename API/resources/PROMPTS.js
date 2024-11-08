@@ -1,4 +1,8 @@
-export const NUTRIENT_PROMPT = `Identify, the food in the image, and return ONLY a JSON object for the estimated per-serving nutrient data
+export const ALTERNATIVES_PROMPT = '`You need to provide dietary alternatives to existing food items to a user with the following information: ${user}, and the following recent meals: ${meals}. Note that you are talking to the user directly, so please address everything in the conversational first-person, rather than as a third person observer, but avoid a greeting, consider the user anonymous. When responding, stick to three specific food items (if so many are available, if there are none at all just state as much that you cant provide alternatives when a reference doesnt exist), cite them, and describe their alternatives and why they would be preferable. Of course, this means the alternatives need to be somehow comperable to the food items themselves, it is a useful but ultimately moot point for example to argue for greater vitamins when the user gorges on sweets.`';
+
+export const RECOMMENDATIONS_PROMPT = '`You need to provide dietary recommendations to a user with the following information: ${user}, and the following recent meals: ${meals}. Note that you are talking to the user directly, so please address everything in the conversational first-person, rather than as a third person observer, but avoid a greeting, consider the user anonymous. When responding, stick to three specific food items that you could argue for and that the user could incorporate to achieve common fitness goals.`';
+
+export const NUTRIENT_PROMPT = `Identify the food in the image, and return ONLY a JSON object for the estimated per-serving nutrient data
 of the food in the image. You do not have to be 100% accurate, however, you
 cannot provide a range for each value you must pick an exact value for each.
 You must follow in this format exactly, you must provide a value for each and

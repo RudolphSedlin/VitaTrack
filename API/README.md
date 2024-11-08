@@ -272,6 +272,18 @@ Must be authenticated first, see above.
 
 Returns an expanded list of all meal objects belonging to the user for the current day.
 
+## GET /meals/recommendations:
+
+Must be authenticated first, see above.
+
+Returns a text from the LLM detailing a general dieting roadmap consisting of many general food items, taking into account specific fitness goals.
+
+## GET /meals/alternatives:
+
+Must be authenticated first, see above.
+
+Returns a text from the LLM detailing specific foods that could work as superior alternatives to the existing foodstuffs.
+
 ## GET /meals/:id:
 
 Must be authenticated first, see above.
