@@ -1,8 +1,14 @@
-import { Text, View, StyleSheet, useColorScheme, Dimensions } from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    useColorScheme,
+    Dimensions,
+} from "react-native";
 import { Colors } from "../constants/Colors";
 import { Href, Link } from "expo-router";
 import { useEffect } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { red } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 
@@ -11,22 +17,46 @@ type NavButtonProps = {
     text: string;
     icon: IconProp;
     fullWidth: boolean;
-}
+};
 
 export default function NavButton(props: NavButtonProps) {
     const colorScheme = useColorScheme();
 
     return (
         <Link href={props.screen}>
-            <View style={colorScheme == "dark" ? styles.darkButton : styles.lightButton}>
-                <View style={{
-                    flexDirection: "row",
-                    width: Dimensions.get("window").width,
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}>
-                    <FontAwesomeIcon style={colorScheme == "dark" ? styles.darkText : styles.lightText} icon={props.icon} />
-                    <Text style={colorScheme == "dark" ? styles.darkText : styles.lightText}> {props.text}</Text>
+            <View
+                style={
+                    colorScheme == "dark"
+                        ? styles.darkButton
+                        : styles.lightButton
+                }
+            >
+                <View
+                    style={{
+                        flexDirection: "row",
+                        width: Dimensions.get("window").width,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <FontAwesomeIcon
+                        style={
+                            colorScheme == "dark"
+                                ? styles.darkText
+                                : styles.lightText
+                        }
+                        icon={props.icon}
+                    />
+                    <Text
+                        style={
+                            colorScheme == "dark"
+                                ? styles.darkText
+                                : styles.lightText
+                        }
+                    >
+                        {" "}
+                        {props.text}
+                    </Text>
                 </View>
             </View>
         </Link>
@@ -56,15 +86,16 @@ const styles = StyleSheet.create({
     lightText: {
         fontSize: 16,
         lineHeight: 21,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         letterSpacing: 0.25,
         color: Colors.light.buttonText,
     },
     darkText: {
         fontSize: 16,
         lineHeight: 21,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         letterSpacing: 0.25,
         color: Colors.dark.buttonText,
     },
-})
+});
+
