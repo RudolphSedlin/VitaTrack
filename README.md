@@ -1,9 +1,9 @@
 # Running the client
 
-1. From the project root directory, enter the API directory.
+1. From the project root directory, enter the client directory.
 
     ```bash
-    cd API
+    cd mobile-app
     ```
     
 2. Install dependencies
