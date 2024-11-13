@@ -43,7 +43,7 @@ function QueryModel(props) {
     const isAllFood = () => {
         if (pastPredictions.current.length === MAX_ROLLING_LENGTH) {
             return pastPredictions.current.reduce(
-                (isFood, current) => isFood && current < 0.5,
+                (isFood, current) => isFood && current > 0.5,
             );
         } else {
             return false;
@@ -55,7 +55,7 @@ function QueryModel(props) {
         console.log("sent to gpt");
 
         // FIX THIS ADD AUTH!
-        const res = await fetch("http://192.168.1.21:3000/gpt", {
+        const res = await fetch("http://192.168.1.21:3000/meals/image", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
