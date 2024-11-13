@@ -1,3 +1,26 @@
+![Logo](./Resources/Logo.png)
+
+# Summary
+
+VitaTrack is a medical software for analyzing the contents of foodstuffs using LLMs and image recognition. Simply take a photograph, and have all the relevant food data anaylzed and added for your reflection. It also supports the ability to see cumulative food statistics, get alternative food suggestions, and provide general dietary goals.
+
+## Features
+
+* Support for iOS, Android, and Browsers
+* Personalized account creation
+* Convenient Persistent Authentication
+* Persistent Data Storage Across Devices
+* Foodstuff Nutrients Analysis and Output
+* Clean User Interface with Easy-To-Read Nutrient Breakdowns
+* Dietary Item Recommendations
+* Dietary Goal Suggestions
+* Dark Mode Theme
+
+## Images
+
+![Home Page](./Resources/HomePage.png)
+![Camera View](./Resources/CameraView.png)
+
 # Running the client
 
 1. From the project root directory, enter the client directory.
