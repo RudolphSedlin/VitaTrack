@@ -123,6 +123,8 @@ export default function TensorCamera(props: TensorCameraProps) {
     };
 
     const captureAndAnalyzeFrame = async () => {
+        let prediction = [0.0];
+
         if (cameraRef.current) {
             // Capture the frame
             const picture = await cameraRef.current.takePictureAsync({
@@ -135,12 +137,14 @@ export default function TensorCamera(props: TensorCameraProps) {
 
                 // Don't analyze frame if picture is being forced
                 if (!forcePicture.current) {
+                    // Resize image to format supported by the model
                     const resized = await resizeImage(picture.uri, 224, 224);
-                    const tensor = await base64ImageToTensor(resized.base64);
-                    const prediction = await runModelPrediction(tensor);
 
-                    // Use the prediction (e.g., update UI)
-                    await setPrediction(prediction);
+                    // Create the tensor from the base64 representation of the image
+                    const tensor = await base64ImageToTensor(resized.base64);
+
+                    // Get the prediction from the model
+                    prediction = await runModelPrediction(tensor);
 
                     // Dispose of tensor to free memory
                     tensor.dispose();
@@ -148,6 +152,9 @@ export default function TensorCamera(props: TensorCameraProps) {
                     //Navigate to analysis page
                     //navigation.navigate("chatgptTest", { imageData: resized.base64 });
                 }
+
+                // Use the prediction (e.g., update UI)
+                await setPrediction(prediction);
             }
         }
     };
@@ -177,6 +184,7 @@ export default function TensorCamera(props: TensorCameraProps) {
 
         forcePicture.current = true;
 
+        // Get the image and bypass prediction
         await captureAndAnalyzeFrame();
     };
 

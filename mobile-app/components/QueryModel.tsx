@@ -6,7 +6,7 @@ import { useApi } from "../hooks/useApi";
 
 import { useToast } from "react-native-toast-notifications";
 
-type Json = { [key: string]: any };
+import { MealData } from "../shared/api_types";
 
 function QueryModel(props) {
     const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ function QueryModel(props) {
     const MAX_ROLLING_LENGTH = 3; // # of confident predictions needed
     const navigation = useNavigation();
 
-    const [data, isLoading, error, fetchData] = useApi<Json, string>(
+    const [data, isLoading, error, fetchData] = useApi<MealData, string>(
         "/meals/image",
         "POST",
         requestBody,
@@ -64,7 +64,7 @@ function QueryModel(props) {
 
     const sendToGPT = async () => {
         console.log("Sending to backend for analysis");
-        requestBody.current = JSON.stringify({ image: picture.current });
+        requestBody.current = { image: picture.current };
 
         await fetchData();
 
@@ -95,6 +95,7 @@ function QueryModel(props) {
             if (isAllFood() || forcePicture.current) {
                 if (!pictureTaken) {
                     const res = await sendToGPT();
+                    console.log(JSON.stringify(res));
 
                     // TODO: Do stuff with data
                     toast.show("Picture taken");
@@ -103,7 +104,7 @@ function QueryModel(props) {
                     forcePicture.current = false;
                     navigation.goBack(); // Exit camera screen
                 }
-            } else if (prediction > 0.5) {
+            } else if (prediction < 0.5) {
                 setMessage("Possible food detected, need more confidence");
                 toast.show("Possible food detected, need more confidence");
             } else {
