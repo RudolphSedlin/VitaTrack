@@ -15,6 +15,7 @@ function QueryModel(props) {
     const pastPredictions = useRef([]);
     const [pictureTaken, setPictureTaken] = useState(false);
     const picture = useRef("");
+    const requestBody = useRef("");
     const isCapturing = useRef(true);
     const forcePicture = useRef(false);
     const toast = useToast();
@@ -24,7 +25,7 @@ function QueryModel(props) {
     const [data, isLoading, error, fetchData] = useApi<Json, string>(
         "/meals/image",
         "POST",
-        body,
+        requestBody,
     );
 
     const toggleFrameLoop = () => {
@@ -63,7 +64,7 @@ function QueryModel(props) {
 
     const sendToGPT = async () => {
         console.log("Sending to backend for analysis");
-        const body = JSON.stringify({ image: picture.current });
+        requestBody.current = JSON.stringify({ image: picture.current });
 
         await fetchData();
 
