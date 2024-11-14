@@ -219,8 +219,6 @@ router
         );
 
         req.session.user = await userData.getByID(req.session.user._id);
-        console.log(create);
-
         return res.status(200).json(create);
     }
 
