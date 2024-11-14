@@ -140,7 +140,7 @@ export default function TensorCamera(props: TensorCameraProps) {
                     const prediction = await runModelPrediction(tensor);
 
                     // Use the prediction (e.g., update UI)
-                    setPrediction(prediction);
+                    await setPrediction(prediction);
 
                     // Dispose of tensor to free memory
                     tensor.dispose();

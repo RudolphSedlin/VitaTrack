@@ -93,7 +93,7 @@ function QueryModel(props) {
 
             if (isAllFood() || forcePicture.current) {
                 if (!pictureTaken) {
-                    const data = await sendToGPT();
+                    const res = await sendToGPT();
 
                     // TODO: Do stuff with data
                     toast.show("Picture taken");
