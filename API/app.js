@@ -8,8 +8,8 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import crypto from "crypto";
 
-app.use(express.json({limit: '4mb'}));
-app.use(express.urlencoded({ extended: true, limit: '4mb'})); // Necessary for larger payloads with image data.
+app.use(express.json({limit: '4mb'})); // Necessary for larger payloads with image data.
+app.use(express.urlencoded({ extended: true, limit: '4mb'})); // Set to this limit as OpenAI doesn't allow larger images anyways.
 
 app.use(
   session({
