@@ -78,7 +78,7 @@ function QueryModel(props) {
     };
 
     // Function to handle new predictions
-    const handlePrediction = (predictions: number[][]) => {
+    const handlePrediction = async (predictions: number[][]) => {
         if (predictions && predictions.length > 0) {
             const prediction = predictions[0]; // Get current predition (is an array in case we want to expand to a non-binary prediction)
 
