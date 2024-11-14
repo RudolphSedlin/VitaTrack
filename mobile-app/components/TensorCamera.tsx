@@ -52,8 +52,10 @@ export default function TensorCamera(props: TensorCameraProps) {
 
     const navigation = useNavigation();
 
+    const base64Image = props.picture;
     const setPrediction = props.setPrediction;
     const isCapturing = props.isCapturing;
+    const forcePicture = props.forcePicture;
     const model = useModel(); // Load model from context
 
     const resizeImage = async (
@@ -129,19 +131,23 @@ export default function TensorCamera(props: TensorCameraProps) {
             });
 
             if (picture && picture.base64) {
-                // const tensor = await imageToTensor(picture.base64);
-                const resized = await resizeImage(picture.uri, 224, 224);
-                const tensor = await base64ImageToTensor(resized.base64);
-                const prediction = await runModelPrediction(tensor);
+                base64Image.current = picture.base64; // Set picture for use in QueryModel
 
-                // Use the prediction (e.g., update UI)
-                setPrediction(prediction);
+                // Don't analyze frame if picture is being forced
+                if (!forcePicture.current) {
+                    const resized = await resizeImage(picture.uri, 224, 224);
+                    const tensor = await base64ImageToTensor(resized.base64);
+                    const prediction = await runModelPrediction(tensor);
 
-                // Dispose of tensor to free memory
-                tensor.dispose();
+                    // Use the prediction (e.g., update UI)
+                    setPrediction(prediction);
 
-                //Navigate to analysis page
-                //navigation.navigate("chatgptTest", { imageData: resized.base64 });
+                    // Dispose of tensor to free memory
+                    tensor.dispose();
+
+                    //Navigate to analysis page
+                    //navigation.navigate("chatgptTest", { imageData: resized.base64 });
+                }
             }
         }
     };
@@ -152,10 +158,6 @@ export default function TensorCamera(props: TensorCameraProps) {
             if (!isCapturing.current || !cameraRef.current) return;
 
             await captureAndAnalyzeFrame(); // Capture and analyze current frame
-
-            //STOP IMAGES FROM CONSTANTLY BEING TAKEN
-            //stopFrameLoop()  //REMOVE TO RE-ENABLE AUTO IMAGES
-            //STOP IMAGES FROM CONSTANTLY BEING TAKEN
 
             // Run the next frame in the loop
             requestAnimationFrame(processFrame); // Schedule the next frame
@@ -169,18 +171,25 @@ export default function TensorCamera(props: TensorCameraProps) {
         isCapturing.current = false;
     };
 
-    //TODO: Create method to force a pic on button press
+    const forceImage = async () => {
+        console.log("Forcing picture");
+        stopFrameLoop();
 
-  function toggleFrameLoop() {
-    if (isCapturing.current) {
-      toast.show("Frame loop stopped!");
-      stopFrameLoop();
-    } else {
-      toast.show("Frame loop started!");
-      startFrameLoop();
-    }
-    isCapturing.current = !isCapturing.current;
-  }
+        forcePicture.current = true;
+
+        await captureAndAnalyzeFrame();
+    };
+
+    const toggleFrameLoop = () => {
+        if (isCapturing.current) {
+            toast.show("Frame loop stopped!");
+            stopFrameLoop();
+        } else {
+            toast.show("Frame loop started!");
+            startFrameLoop();
+        }
+        isCapturing.current = !isCapturing.current;
+    };
 
     // Camera permission handling
     if (!permission) {
@@ -198,13 +207,13 @@ export default function TensorCamera(props: TensorCameraProps) {
         );
     }
 
-  const toggleCameraFacing = () => {
-    setFacing((current) => (current === "back" ? "front" : "back"));
-  };
+    const toggleCameraFacing = () => {
+        setFacing((current) => (current === "back" ? "front" : "back"));
+    };
 
-  const toggleFlashlight = () => {
-    setLightState(!lightState);
-  };
+    const toggleFlashlight = () => {
+        setLightState(!lightState);
+    };
 
     return (
         <View>
@@ -269,7 +278,7 @@ export default function TensorCamera(props: TensorCameraProps) {
                                 alignItems: "center",
                                 justifyContent: "center",
                             }}
-                            onPress={stopFrameLoop}
+                            onPress={forceImage}
                         >
                             <FontAwesomeIcon
                                 size={40}

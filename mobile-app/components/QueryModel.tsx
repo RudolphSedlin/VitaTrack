@@ -2,8 +2,11 @@ import React, { useState, useRef } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import TensorCamera from "./TensorCamera"; // Assuming TensorCamera is in the same directory
 import { useNavigation } from "expo-router";
+import { useApi } from "../hooks/useApi";
 
 import { useToast } from "react-native-toast-notifications";
+
+type Json = { [key: string]: any };
 
 function QueryModel(props) {
     const [loading, setLoading] = useState(false);
@@ -11,10 +14,18 @@ function QueryModel(props) {
     const [prediction, setPrediction] = useState(null);
     const pastPredictions = useRef([]);
     const [pictureTaken, setPictureTaken] = useState(false);
+    const picture = useRef("");
     const isCapturing = useRef(true);
+    const forcePicture = useRef(false);
     const toast = useToast();
-    const MAX_ROLLING_LENGTH = 3; // # of
+    const MAX_ROLLING_LENGTH = 3; // # of confident predictions needed
     const navigation = useNavigation();
+
+    const [data, isLoading, error, fetchData] = useApi<Json, string>(
+        "/meals/image",
+        "POST",
+        body,
+    );
 
     const toggleFrameLoop = () => {
         if (loopRunning) {
@@ -50,21 +61,20 @@ function QueryModel(props) {
         }
     };
 
-    // Deprecated?
-    const sendToGPT = async (base64Image: string) => {
-        console.log("sent to gpt");
+    const sendToGPT = async () => {
+        console.log("Sending to backend for analysis");
+        const body = JSON.stringify({ image: picture.current });
 
-        // FIX THIS ADD AUTH!
-        const res = await fetch("http://192.168.1.21:3000/meals/image", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                // ADD SESSION AUTHORIZATION IMMEDIATELY!
-            },
-            body: JSON.stringify({
-                image: base64Image,
-            }),
-        });
+        await fetchData();
+
+        if (error) {
+            toast.show("An error occurred with GPT");
+            return;
+        }
+
+        if (!isLoading && data) {
+            return data;
+        }
     };
 
     // Function to handle new predictions
@@ -79,21 +89,25 @@ function QueryModel(props) {
 
             console.log(pastPredictions.current);
 
-            if (isAllFood()) {
-                setMessage(`${prediction}`);
+            setMessage(`${prediction}`);
 
+            if (isAllFood() || forcePicture.current) {
                 if (!pictureTaken) {
-                    //TODO: take picture and send to GPT
+                    const data = await sendToGPT();
 
+                    // TODO: Do stuff with data
                     toast.show("Picture taken");
-                    console.log("Picture taken");
                     setPictureTaken(true);
                     isCapturing.current = false;
+                    forcePicture.current = false;
                     navigation.goBack(); // Exit camera screen
                 }
+            } else if (prediction > 0.5) {
+                setMessage("Possible food detected, need more confidence");
+                toast.show("Possible food detected, need more confidence");
             } else {
-                setMessage("No food");
-                toast.show("No food");
+                setMessage("Not food");
+                toast.show("Not food");
             }
         }
     };
@@ -104,7 +118,9 @@ function QueryModel(props) {
             {/* TensorCamera component with setPrediction passed as a prop */}
             <TensorCamera
                 setPrediction={handlePrediction}
+                picture={picture}
                 isCapturing={isCapturing}
+                forcePicture={forcePicture}
             />
         </View>
     );
