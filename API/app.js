@@ -9,7 +9,7 @@ import { dirname } from "path";
 import crypto from "crypto";
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb'})); // Necessary for larger payloads with image data.
 
 app.use(
   session({
