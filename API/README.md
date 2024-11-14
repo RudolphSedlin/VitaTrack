@@ -1,15 +1,107 @@
 # Running the API:
 
-***npm install***
+Assuming the API has not been deployed to a remote server like AWS EC2 and is being tested locally, you can start it with the following steps.
 
-Start MongoDB service however you are supposed to on your system.
-Typically, this means querying your package manager for an implementation and calling the system service manager.
+1. From the project root directory, enter the API directory.
 
-The start the API normally, call: ***npm start***
+    ```bash
+    cd API
+    ```
+    
+2. Install node dependencies.
 
-To test: run ***npm run test*** after starting.
+    ```bash
+    npm install
+    ```
+    
+3. Install MongoDB on the host machine. See the following common distributions for instructions. Unnamed distributions are likely to be derivatives of these common ones.
 
-You can also seed and clean the database in isolation wwith ***npm run seed*** and ***npm run clean*** respectively.
+    Ubuntu/Debian:
+    ```bash
+    sudo apt update
+    sudo apt install -y mongodb
+    ```
+    
+    RHEL/CentOS/Fedora:
+    ```bash
+    sudo dnf install -y mongodb
+    ```
+
+    Arch Linux:
+    ```bash
+    sudo pacman -S mongodb
+    ```
+    
+    OpenSUSE:
+    ```bash
+    sudo zypper install -y mongodb
+    ```
+    
+    Gentoo:
+    ```bash
+    sudo emerge --ask dev-db/mongodb
+    ```
+    
+    Alpine Linux:
+    ```bash
+    sudo apk add mongodb
+    ```
+    
+4. Start the MongoDB service.
+
+    On most systems (Ubuntu, Debian, Fedora, CentOS 7+, openSUSE, Arch Linux), ***systemctl*** is reponsible for service management.
+    ```bash
+    sudo systemctl start mongodb
+    ```
+    
+    On certain older systems ***service*** is responsible for service management.
+    ```bash
+    sudo service mongodb start
+    ```
+    
+    Respectfully for the above system configurations, the service can be checked for operation as such:
+    ```bash
+    sudo systemctl status mongodb
+    ```
+    ```bash
+    sudo service mongodb status
+    ```
+    
+5. ***OPTIONAL*** Enable MongoDB at boot.
+
+    Respectfully for the above system configurations.
+    ```bash
+    sudo systemctl enable mongodb
+    ```
+    ```bash
+    sudo chkconfig mongodb on
+    ```
+    
+6. Start the server.
+
+    ```bash
+    npm start
+    ```
+    
+7. ***OPTIONAL*** Run the tester.
+
+    ```bash
+    npm run test
+    ```
+    
+    Run the cleaner afterwards, you may need to Ctrl+C (SIGINT) to exit it after it has run.
+    ```bash
+    npm run clean
+    ```
+    
+8. ***OPTIONAL*** Run the seeder.
+
+    ```bash
+    npm run seed
+    ```
+    As above, run the cleaner afterwards.
+    
+9. **MAYBE NECESSARY** Allow traffic over port 3000. Many firewalls forbid public traffic over this port.
 
 --------------------------------------------------------------------------------------
 
@@ -186,7 +278,7 @@ Please see this example object of a Chicken-Breast nutrient sheet for further un
 
 # Session Data:
 
-The server stores a copy of the echoed user object as session data. For implementers, this field is req.session.user.
+The server stores a copy of the echoed user object as session data. For implementers, this field is express req.session.user.
 
 --------------------------------------------------------------------------------------
 
@@ -258,11 +350,31 @@ Please submit the mandatory meal fields.
 
 Returns a JSON of the created meal, and updates the session accordingly.
 
+## POST /meals/image:
+
+Must be authenticated first, see above.
+
+Please submit a base-64 encode of an image. See TensorCamera.tsx and API/resources/IMAGES.js for examples.
+
+Returns a JSON of the created meal, and updates the session accordingly.
+
 ## GET /meals/today:
 
 Must be authenticated first, see above.
 
 Returns an expanded list of all meal objects belonging to the user for the current day.
+
+## GET /meals/recommendations:
+
+Must be authenticated first, see above.
+
+Returns a text from the LLM detailing a general dieting roadmap consisting of many general food items, taking into account specific fitness goals.
+
+## GET /meals/alternatives:
+
+Must be authenticated first, see above.
+
+Returns a text from the LLM detailing specific foods that could work as superior alternatives to the existing foodstuffs.
 
 ## GET /meals/:id:
 
