@@ -133,7 +133,12 @@ export default function TensorCamera(props: TensorCameraProps) {
             });
 
             if (picture && picture.base64) {
-                base64Image.current = picture.base64; // Set picture for use in QueryModel
+                // Set picture for use in queryModel
+                base64Image.current = await resizeImage(
+                    picture.uri,
+                    1024,
+                    1024,
+                );
 
                 // Don't analyze frame if picture is being forced
                 if (!forcePicture.current) {
