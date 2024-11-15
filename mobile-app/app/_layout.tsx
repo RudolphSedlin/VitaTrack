@@ -71,14 +71,7 @@ export default function RootLayout() {
                                     icon={["far", "circle-user"]}
                                     text="Profile"
                                 />
-                            ),
-                            headerLeft: () => (
-                                <HeaderNavigationButton
-                                    route="/login"
-                                    icon={["far", "circle-user"]}
-                                    text="Login"
-                                />
-                            ),
+                            )
                         })}
                     />
                     <Stack.Screen

@@ -23,11 +23,13 @@ import {
     LoginRequestBody,
     MealsResponse,
     NoBody,
+    RegisterRequestBody,
     UserData,
 } from "@/shared/api_types";
 import { useToast } from "react-native-toast-notifications";
 import { reduceMealData } from "@/shared/mealDataReducer";
 import ActionButton from "@/components/ActionButton";
+import NavActionButton from "@/components/NavActionButton";
 
 library.add(faCircleUser);
 library.add(faCamera);
@@ -46,9 +48,17 @@ export default function Index() {
     const colorScheme = useColorScheme();
     const navigation = useNavigation();
 
+    const [isRegister, setIsRegister] = useState(false);
+
+    const [firstName, setFirstName] = useState("Expo");
+    const [lastName, setLastName] = useState("Marker");
+
     const [phone, setPhone] = useState<string>("1-800-123-4567");
     const [password, setPassword] = useState<string>("GiantMagnet+318");
+    const [confirmPassword, setConfirmPassword] = useState<string>("GiantMagnet+318");
+
     const [render, setRender] = useState(false);
+    const [regRender, setRegRender] = useState(false);
     const [userData, userIsLoading, userError, fetchUser] = useApi<
         UserData,
         LoginRequestBody
@@ -58,10 +68,23 @@ export default function Index() {
         // "GiantMagnet+318"
         password: password,
     });
+    const [registerData, registerIsLoading, registerError, fetchRegisterUser] = useApi<
+        UserData,
+        RegisterRequestBody
+    >("/register", "POST", {
+        // "1-800-123-4568"
+        phoneNumber: phone,
+        // "GiantMagnet+318"
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        confirmPassword: confirmPassword,
+        state: "NJ"
+    });
     const [checkUserData, checkUserIsLoading, checkUserError, fetchCheckUser] = useApi<UserData, NoBody>("/user", "GET");
 
     useEffect(() => {
-        navigation.setOptions({ title: "Log In" });
+        navigation.setOptions({ title: "Sign In/Register" });
     }, [navigation]);
 
     useEffect(() => {
@@ -82,6 +105,27 @@ export default function Index() {
             }
         }
     }, [userIsLoading]);
+
+    useEffect(() => {
+        if (!regRender) {
+            setRegRender(true);
+            return;
+        }
+
+        if (registerIsLoading) {
+            console.log("[register] loading api data...");
+        } else {
+            console.log("[register] loaded api data!");
+
+            console.log("rdata: ", registerData, registerError);
+
+            if (registerError) {
+                Alert.alert("Error!", registerError as string);
+            } else {
+                fetchCheckUser();
+            }
+        }
+    }, [registerIsLoading]);
 
     useEffect(() => {
         if (!render) {
@@ -109,17 +153,33 @@ export default function Index() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
+                {isRegister && <TextInput style={styles.inputText} placeholder="First Name" placeholderTextColor="#0e0e0e" onChangeText={setFirstName} value={firstName} />}
+                {isRegister && <TextInput style={styles.inputText} placeholder="Last Name" placeholderTextColor="#0e0e0e" onChangeText={setLastName} value={lastName} />}
                 <TextInput style={styles.inputText} placeholder="Phone Number" placeholderTextColor="#0e0e0e" keyboardType={"phone-pad"} onChangeText={setPhone} value={phone} />
-                <TextInput style={styles.inputText} secureTextEntry placeholder="Password" placeholderTextColor="#0e0e0e" enterKeyHint="done" onChangeText={setPassword} value={password}  />
+                <TextInput style={styles.inputText} secureTextEntry placeholder="Password" placeholderTextColor="#0e0e0e" enterKeyHint="done" onChangeText={setPassword} value={password} />
+                {isRegister && <TextInput style={styles.inputText} secureTextEntry placeholder="Confirm Password" placeholderTextColor="#0e0e0e" enterKeyHint="done" onChangeText={setConfirmPassword} value={confirmPassword} />}
             </View>
             <View style={styles.footer}>
+                <NavActionButton
+                    text={isRegister ? "Returning? Log In." : "New? Register now!"}
+                    icon={["far", "circle-user"]}
+                    fullWidth={true}
+                    onPress={() => {
+                        setIsRegister(!isRegister)
+                    }}
+                />
+                <Text style={{paddingTop: 5, paddingBottom: 5}}></Text>
                 <ActionButton
-                    text="Log In"
+                    text={isRegister ? "Register" : "Log In"}
                     icon={["far", "circle-user"]}
                     fullWidth={true}
                     onPress={() => {
                         try {
-                            fetchUser();
+                            if (isRegister) {
+                                fetchRegisterUser();
+                            } else {
+                                fetchUser();
+                            }
                         } catch (e) {
                             
                         }
@@ -141,7 +201,7 @@ const styles = StyleSheet.create({
     footer: {
         justifyContent: "center",
         alignItems: "center",
-        height: 100,
+        height: 175,
     },
     inputText: {
         backgroundColor: Colors.light.background,

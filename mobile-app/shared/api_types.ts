@@ -62,6 +62,9 @@ export type RegisterRequestBody = {
     phoneNumber: string;
     password: string;
     confirmPassword: string;
+    firstName: string;
+    lastName: string;
+    state: string;
 };
 
 export type LoginRequestBody = {
