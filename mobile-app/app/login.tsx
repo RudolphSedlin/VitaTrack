@@ -99,7 +99,6 @@ export default function Index() {
             console.log("[login] loaded api data!");
 
             if (userError) {
-                Alert.alert("Error!", userError as string);
             } else {
                 fetchCheckUser();
             }
@@ -120,7 +119,6 @@ export default function Index() {
             console.log("rdata: ", registerData, registerError);
 
             if (registerError) {
-                Alert.alert("Error!", registerError as string);
             } else {
                 fetchCheckUser();
             }
@@ -139,7 +137,6 @@ export default function Index() {
             console.log("[login] loaded api data!");
 
             if (userError) {
-                Alert.alert("Error!", checkUserError as string);
             } else {
                 try {
                     router.back();

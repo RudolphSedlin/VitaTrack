@@ -1,6 +1,6 @@
 import { View, StyleSheet, useColorScheme, Text } from "react-native";
 import { Colors } from "@/constants/Colors";
-import { Link, useNavigation } from "expo-router";
+import { Link, router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import NavButton from "@/components/NavButton";
 
@@ -23,7 +23,9 @@ export default function ProfileScreen() {
 
     let [isEditing, setIsEditing] = useState(false);
 
+    const [i, setI] = useState(false);
     const [userData, userIsLoading, userError, fetchUser] = useApi<UserData, NoBody>("/user", "GET");
+    const [signoutData, signoutIsLoading, signoutError, fetchSignout] = useApi<string, NoBody>("/logout", "GET");
 
     useEffect(() => {
         fetchUser();
@@ -68,6 +70,19 @@ export default function ProfileScreen() {
             marginBottom: 10
         }
     })
+
+    useEffect(() => {
+        if (!i) {
+            setI(!i);
+            return;
+        }
+        
+        if (signoutIsLoading) {
+
+        } else {
+            router.dismiss();
+        }
+    }, [signoutIsLoading]);
 
     if (!userData) {
         return <Text>Loading User Data...</Text>
@@ -128,6 +143,7 @@ export default function ProfileScreen() {
             </View>
             <View style={styles.footer}>
                 {isEditing && <ActionButton icon={["fas", "check"]} text="Save Changes" fullWidth={false} onPress={() => { setIsEditing(false) }} />}
+                {!isEditing && <ActionButton icon={["far", "circle-user"]} text="Sign Out" fullWidth={false} onPress={() => { fetchSignout(); }} />}
             </View>
         </View>
     );
