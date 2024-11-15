@@ -152,7 +152,7 @@ export default function Index() {
             <View style={styles.content}>
                 {isRegister && <TextInput style={styles.inputText} placeholder="First Name" placeholderTextColor="#0e0e0e" onChangeText={setFirstName} value={firstName} />}
                 {isRegister && <TextInput style={styles.inputText} placeholder="Last Name" placeholderTextColor="#0e0e0e" onChangeText={setLastName} value={lastName} />}
-                <TextInput style={styles.inputText} placeholder="Phone Number" placeholderTextColor="#0e0e0e" keyboardType={"phone-pad"} onChangeText={setPhone} value={phone} />
+                <TextInput style={styles.inputText} placeholder="Phone Number" placeholderTextColor="#0e0e0e" onChangeText={setPhone} value={phone} />
                 <TextInput style={styles.inputText} secureTextEntry placeholder="Password" placeholderTextColor="#0e0e0e" enterKeyHint="done" onChangeText={setPassword} value={password} />
                 {isRegister && <TextInput style={styles.inputText} secureTextEntry placeholder="Confirm Password" placeholderTextColor="#0e0e0e" enterKeyHint="done" onChangeText={setConfirmPassword} value={confirmPassword} />}
             </View>
