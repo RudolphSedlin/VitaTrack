@@ -64,7 +64,7 @@ function QueryModel(props) {
 
     const sendToGPT = async () => {
         console.log("Sending to backend for analysis");
-        requestBody.current = { image: picture.current };
+        requestBody.image = picture.current ;
 
         await fetchData();
 
@@ -102,7 +102,12 @@ function QueryModel(props) {
                     setPictureTaken(true);
                     isCapturing.current = false;
                     forcePicture.current = false;
-                    navigation.goBack(); // Exit camera screen
+                    try {
+                        navigation.goBack(); // Exit camera screen
+                    }
+                    catch (error) {
+                        // Dear error, how about no!
+                    }
                 }
             } else if (prediction < 0.5) {
                 setMessage("Possible food detected, need more confidence");
