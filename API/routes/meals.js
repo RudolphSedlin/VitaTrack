@@ -200,7 +200,12 @@ router
 
         gptResponse = gptResponse.replaceAll("```", "");
         gptResponse = gptResponse.replace("json", "");
-        gptResponse = JSON.parse(gptResponse);
+        try {
+            gptResponse = JSON.parse(gptResponse);
+        }
+        catch (error) {
+            return res.status(500).send("This object is not food.");
+        }
 
         let name = gptResponse.name;
         let description = gptResponse.description;
