@@ -50,6 +50,8 @@ export type MealData = {
 
     creatorId: string;
     dateCreated: Date;
+
+    _id: string;
 };
 
 export type MealsResponse = {

@@ -72,6 +72,13 @@ export default function RootLayout() {
                                     text="Profile"
                                 />
                             ),
+                            headerLeft: () => (
+                                <HeaderNavigationButton
+                                    route="/login"
+                                    icon={["far", "circle-user"]}
+                                    text="Login"
+                                />
+                            ),
                         })}
                     />
                     <Stack.Screen
@@ -81,6 +88,10 @@ export default function RootLayout() {
                     <Stack.Screen name="profilescreen" />
                     <Stack.Screen
                         name="chatgptTest"
+                        options={{ presentation: "modal" }}
+                    />
+                    <Stack.Screen
+                        name="login"
                         options={{ presentation: "modal" }}
                     />
                 </Stack>

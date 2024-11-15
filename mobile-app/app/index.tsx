@@ -7,8 +7,8 @@ import {
     Text,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
-import { Link, useNavigation } from "expo-router";
-import { useEffect, useState, useRef, createContext, useContext } from "react";
+import { Link, router, useFocusEffect, useNavigation } from "expo-router";
+import { useEffect, useState, useRef, createContext, useContext, useReducer, useCallback } from "react";
 import NavButton from "@/components/NavButton";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -42,37 +42,40 @@ type SummaryData = {
 export default function Index() {
     const colorScheme = useColorScheme();
     const navigation = useNavigation();
-    const [userData, userIsLoading, userError, fetchUser] = useApi<
-        UserData,
-        LoginRequestBody
-    >("/login", "POST", {
-        phoneNumber: "1-800-123-4567",
-        password: "GiantMagnet+318",
-    });
+
+    const [loggedIn, setLoggedIn] = useState(false);
+
     const [mealsData, mealsAreLoading, mealsError, fetchMeals] = useApi<
         MealsResponse,
         NoBody
     >("/meals", "GET");
+    const [userData, userIsLoading, userError, fetchUser] = useApi<UserData, NoBody>("/user", "GET");
     let [dailySummaryData, setDailySummaryData] = useState<SummaryData | null>(
         null,
     );
 
+    useFocusEffect(useCallback(() => {
+        fetchMeals();
+    }, []));
+
     useEffect(() => {
         navigation.setOptions({ title: "Home" });
+
         fetchUser();
     }, [navigation]);
 
     useEffect(() => {
         if (userIsLoading) {
-            console.log("loading api data...");
-        } else {
-            console.log("loaded api data!");
-
-            console.log(userData);
-            console.log(userError);
-
+            console.log("checking session status...");
+        } else if (userData) {
+            setLoggedIn(true);
             fetchMeals();
+        } else if (userError) {
+            console.log("HERE");
+
+            router.push("/login");
         }
+        console.log(userData, userError);
     }, [userIsLoading]);
 
     useEffect(() => {

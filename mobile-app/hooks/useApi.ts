@@ -11,7 +11,7 @@ export function useApi<T, R>(endpoint: string, requestType: ApiReqType, body?: R
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<unknown | null>(null);
 
-    const ENVIRONMENT_TYPE: string = "DEV";
+    const ENVIRONMENT_TYPE: string = "PROD";
     const isProduction: boolean = ENVIRONMENT_TYPE == "PROD";
     const url = (isProduction ? "http://192.168.1.240:3000" : "http://192.168.1.21:3000") + endpoint;
 
