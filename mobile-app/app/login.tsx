@@ -50,12 +50,12 @@ export default function Index() {
 
     const [isRegister, setIsRegister] = useState(false);
 
-    const [firstName, setFirstName] = useState("Expo");
-    const [lastName, setLastName] = useState("Marker");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
 
-    const [phone, setPhone] = useState<string>("1-800-123-4567");
-    const [password, setPassword] = useState<string>("GiantMagnet+318");
-    const [confirmPassword, setConfirmPassword] = useState<string>("GiantMagnet+318");
+    const [phone, setPhone] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
 
     const [render, setRender] = useState(false);
     const [regRender, setRegRender] = useState(false);
