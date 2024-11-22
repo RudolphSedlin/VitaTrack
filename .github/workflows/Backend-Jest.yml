@@ -11,6 +11,7 @@ jobs:
         mongodb-version: [latest]
         node-version: [latest]
     runs-on: ${{ matrix.os }}
+    environment: tester
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
@@ -46,6 +47,6 @@ jobs:
         run: sleep 3
       # Finally, run our tests
       - name: Run the tests
-        run: sudo npm run test
+        run: sudo -E npm run test
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
