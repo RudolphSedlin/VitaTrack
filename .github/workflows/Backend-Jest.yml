@@ -11,7 +11,6 @@ jobs:
         mongodb-version: [latest]
         node-version: [latest]
     runs-on: ${{ matrix.os }}
-    environment: tester
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4

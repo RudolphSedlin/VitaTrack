@@ -7,7 +7,6 @@ import { BREAD } from "../resources/IMAGES.js";
 import validation from "../validation.js";
 import 'dotenv/config'
 
-console.log(process.env);
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 if (!OPENAI_API_KEY)
