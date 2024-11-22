@@ -47,3 +47,5 @@ jobs:
       # Finally, run our tests
       - name: Run the tests
         run: sudo npm run test
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
