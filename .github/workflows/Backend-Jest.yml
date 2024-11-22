@@ -46,6 +46,6 @@ jobs:
         run: sleep 3
       # Finally, run our tests
       - name: Run the tests
-        run: npm run test
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: OPENAI_API_KEY=$OPENAI_API_KEY npm run test
