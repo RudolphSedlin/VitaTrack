@@ -7,6 +7,11 @@ import { BREAD } from "../resources/IMAGES.js";
 import validation from "../validation.js";
 import 'dotenv/config'
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+if (!OPENAI_API_KEY)
+    console.error("API KEY MISSING!");
+
 router
 .route("/")
 .get(async (req, res) => {
@@ -112,7 +117,7 @@ router
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            'Authorization': `Bearer ${OPENAI_API_KEY}`
         },
         body: JSON.stringify(requestBody)
     });
@@ -150,7 +155,7 @@ router
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            'Authorization': `Bearer ${OPENAI_API_KEY}`
         },
         body: JSON.stringify(requestBody)
     });
@@ -191,7 +196,7 @@ router
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+                'Authorization': `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify(requestBody)
         });
