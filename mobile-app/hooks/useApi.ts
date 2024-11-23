@@ -13,7 +13,7 @@ export function useApi<T, R>(endpoint: string, requestType: ApiReqType, body?: R
 
     const ENVIRONMENT_TYPE: string = "PROD";
     const isProduction: boolean = ENVIRONMENT_TYPE == "PROD";
-    const url = (isProduction ? "http://192.168.1.240:3000" : "http://192.168.1.21:3000") + endpoint;
+    const url = (isProduction ? "http://ec2-18-234-48-168.compute-1.amazonaws.com:80" : "http://192.168.1.21:3000") + endpoint;
 
     async function fetchData() {
         setIsLoading(true);

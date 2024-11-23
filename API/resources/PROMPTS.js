@@ -17,16 +17,16 @@ proteins, fats, vitamins, or minerals {
 
     "caloriesPerServing": 40.0, // This is the ONLY value that is not itself an object with gram-values, but rather standard kilocalory count PER SERVING.
 
-    // To reiterate, the rest of these gram values are all PER SERVING! We will multiply by the serving count seperately.
-    "carbohydrates": {
-
-        "sugars": 0.0, // Grams as usual.
-
-        "fiber": 0.0 // Grams as usual.
-
-    },
-
     "nutrientsPerServing": {
+
+        // To reiterate, the rest of these gram values are all PER SERVING! We will multiply by the serving count seperately.
+        "carbohydrates": {
+
+            "sugars": 0.0, // Grams as usual.
+
+            "fiber": 0.0 // Grams as usual.
+
+        },
 
         "protein": {
 
