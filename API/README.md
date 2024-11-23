@@ -1,6 +1,8 @@
 # Running the API:
 
-Assuming the API has not been deployed to a remote server like AWS EC2 and is being tested locally, you can start it with the following steps.
+The API has been deployed to the remote production URI 
+```ec2-18-234-48-168.compute-1.amazonaws.com```
+meaning it is no longer necessary to deploy it locally for most testing. That being said, this is how it can be done:
 
 1. From the project root directory, enter the API directory.
 
