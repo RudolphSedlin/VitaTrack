@@ -54,7 +54,7 @@ def train_gen(directory, classMode='binary', subset=True):
         )
     return train_generator
 
-def validation_gen(directory, classMode='binary', subset=True)
+def validation_gen(directory, classMode='binary', subset=True):
     if subset:
         validation_generator = validation_datagen.flow_from_directory(
             directory,
