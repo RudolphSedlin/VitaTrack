@@ -127,8 +127,8 @@ export default function TensorCamera(props: TensorCameraProps) {
         base64: true,
         quality: 0.75, // Adjust to balance quality and performance
       });
+      console.log("Took picture");
 
-      console.log(picture);
       if (picture && picture.base64) {
         // Set picture for use in queryModel
         base64Image.current = (await resizeImage(picture.uri, 512, 512)).base64;
