@@ -5,6 +5,12 @@ import * as PROMPTS from "../resources/PROMPTS.js";
 import * as CONSTANTS from "../resources/CONSTANTS.js";
 import { BREAD } from "../resources/IMAGES.js";
 import validation from "../validation.js";
+import 'dotenv/config'
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+if (!OPENAI_API_KEY)
+    console.error("API KEY MISSING!");
 
 router
 .route("/")
@@ -111,7 +117,7 @@ router
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${CONSTANTS.OPENAI_API_KEY}`
+            'Authorization': `Bearer ${OPENAI_API_KEY}`
         },
         body: JSON.stringify(requestBody)
     });
@@ -149,7 +155,7 @@ router
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${CONSTANTS.OPENAI_API_KEY}`
+            'Authorization': `Bearer ${OPENAI_API_KEY}`
         },
         body: JSON.stringify(requestBody)
     });
@@ -190,7 +196,7 @@ router
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${CONSTANTS.OPENAI_API_KEY}`
+                'Authorization': `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify(requestBody)
         });
@@ -200,7 +206,12 @@ router
 
         gptResponse = gptResponse.replaceAll("```", "");
         gptResponse = gptResponse.replace("json", "");
-        gptResponse = JSON.parse(gptResponse);
+        try {
+            gptResponse = JSON.parse(gptResponse);
+        }
+        catch (error) {
+            return res.status(500).send("This object is not food.");
+        }
 
         let name = gptResponse.name;
         let description = gptResponse.description;
@@ -219,8 +230,6 @@ router
         );
 
         req.session.user = await userData.getByID(req.session.user._id);
-        console.log(create);
-
         return res.status(200).json(create);
     }
 

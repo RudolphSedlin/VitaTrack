@@ -4,7 +4,6 @@ import { Href, Link } from "expo-router";
 import { useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { red } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 
 type ActionButtonProps = {
   text: string;

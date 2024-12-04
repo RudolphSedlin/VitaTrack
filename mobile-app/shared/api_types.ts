@@ -37,7 +37,7 @@ export type NutrientData = {
     };
     other: {
         [key: string]: number;
-    }
+    };
 };
 
 export type MealData = {
@@ -47,25 +47,30 @@ export type MealData = {
     servings?: number;
     caloriesPerServing?: number;
     nutrientsPerServing?: NutrientData;
-    
-    _id: string;
+
+    creatorId: string;
     dateCreated: Date;
+
+    _id: string;
 };
 
 export type MealsResponse = {
     mealList: MealData[];
-}
+};
 
 export type RegisterRequestBody = {
     phoneNumber: string;
     password: string;
     confirmPassword: string;
-}
+    firstName: string;
+    lastName: string;
+    state: string;
+};
 
 export type LoginRequestBody = {
     phoneNumber: string;
     password: string;
-}
+};
 
 export type UserUpdateBody = {
     firstName?: string;
