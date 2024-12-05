@@ -14,6 +14,7 @@ VitaTrack is a medical software for analyzing the contents of foodstuffs using L
 * Clean User Interface with Easy-To-Read Nutrient Breakdowns
 * Dietary Item Recommendations
 * Dietary Goal Suggestions
+* Comprehensive Aggregate Data of Dieting Habits
 * Dark Mode Theme
 
 ## Images
