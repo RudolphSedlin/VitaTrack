@@ -132,7 +132,67 @@ const getMeals = async (userId) => {
   return foundMeals;
 };
 
-// Function for getting all meals for a user
+// Function for getting all meals for a user the past year
+const getMealsPastYear = async (userId) => {
+  let allMeals = await getMeals(userId);
+  let output = [];
+  let lastYear = new Date(); // There really doesn't seem to be a better way to do this. Really, Date should implement this but okay.
+  lastYear.setFullYear(lastYear.getFullYear() - 1);
+  for (let meal of allMeals) {
+    let mealDate = new Date(meal.dateCreated);
+    if (mealDate.getTime() > lastYear.getTime())
+      output.push(meal);
+  }
+
+  return output;
+};
+
+// Function for getting all meals for a user the past month
+const getMealsPastMonth = async (userId) => {
+  let allMeals = await getMeals(userId);
+  let output = [];
+  let lastMonth = new Date(); // There really doesn't seem to be a better way to do this. Really, Date should implement this but okay.
+  lastMonth.setMonth(lastMonth.getMonth() - 1);
+  for (let meal of allMeals) {
+    let mealDate = new Date(meal.dateCreated);
+    if (mealDate.getTime() > lastMonth.getTime())
+      output.push(meal);
+  }
+
+  return output;
+};
+
+// Function for getting all meals for a user the past week
+const getMealsPastWeek = async (userId) => {
+  let allMeals = await getMeals(userId);
+  let output = [];
+  let lastWeek = new Date(); // There really doesn't seem to be a better way to do this. Really, Date should implement this but okay.
+  lastWeek.setDate(lastWeek.getDate() - 7);
+  for (let meal of allMeals) {
+    let mealDate = new Date(meal.dateCreated);
+    if (mealDate.getTime() > lastWeek.getTime())
+      output.push(meal);
+  }
+
+  return output;
+};
+
+// Function for getting all meals for a user the past day
+const getMealsPastDay = async (userId) => {
+  let allMeals = await getMeals(userId);
+  let output = [];
+  let lastDay = new Date(); // There really doesn't seem to be a better way to do this. Really, Date should implement this but okay.
+  lastDay.setDate(lastDay.getDate() - 1);
+  for (let meal of allMeals) {
+    let mealDate = new Date(meal.dateCreated);
+    if (mealDate.getTime() > lastDay.getTime())
+      output.push(meal);
+  }
+
+  return output;
+};
+
+// Function for getting all meals for a user today
 const getMealsToday = async (userId) => {
   let allMeals = await getMeals(userId);
   let output = [];
@@ -147,6 +207,24 @@ const getMealsToday = async (userId) => {
 
   return output;
 };
+
+const generateReport = async (userId) => {
+  let dailyMeals = await getMealsPastDay(userId);
+  let weeklyMeals = await getMealsPastWeek(userId);
+  let monthlyMeals = await getMealsPastMonth(userId);
+  let yearlyMeals = await getMealsPastYear(userId);
+  let lifetimeMeals = await getMeals(userId);
+
+  let report = {};
+
+  report.pastDay = mealData.evaluateAggregates(dailyMeals);
+  report.pastWeek = mealData.evaluateAggregates(weeklyMeals);
+  report.pastMonth = mealData.evaluateAggregates(monthlyMeals);
+  report.pastYear = mealData.evaluateAggregates(yearlyMeals);
+  report.lifetime = mealData.evaluateAggregates(lifetimeMeals);
+
+  return report;
+}
 
 const addMeal = async (userId, mealId) => {
   const userCollection = await users();
@@ -195,6 +273,11 @@ export default {
   update,
   getMeals,
   getMealsToday,
+  getMealsPastYear,
+  getMealsPastMonth,
+  getMealsPastWeek,
+  getMealsPastDay,
+  generateReport,
   addMeal,
   removeMeal,
   login,

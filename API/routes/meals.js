@@ -91,6 +91,17 @@ router
 });
 
 router
+.route("/report")
+.get(async (req, res) => {
+    if (!req.session.user)
+        return res.status(403).send("Not authenticated!");
+
+    return res.status(200).send(
+        await userData.generateReport(req.session.user._id),
+    );
+});
+
+router
 .route("/alternatives")
 .get(async (req, res) => {
     if (!req.session.user)

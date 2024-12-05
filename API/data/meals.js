@@ -59,8 +59,62 @@ const remove = async (id) => {
   return `Meal: ${id} has been deleted`;
 };
 
+// Function for evaluating measures of central tendency among meal data.
+const evaluateAggregates = (meals) => {
+  if (!Array.isArray(meals) || !meals.length) {
+    return {};
+  };
+
+  let output = {
+    calories: {
+      count: 0,
+      total: 0,
+      avg: 0,
+      max: 0,
+      min: Number.MAX_SAFE_INTEGER,
+    }
+  };
+
+  for (let meal of meals) {
+    let calories = meal.caloriesPerServing * meal.servings;
+
+    output.calories.count++;
+    output.calories.total += calories;
+    output.calories.avg = output.calories.total / output.calories.count;
+    output.calories.max = calories > output.calories.max ? calories : output.calories.max;
+    output.calories.min = calories < output.calories.min ? calories : output.calories.min;
+
+    for (let nutrientCategory in meal.nutrientsPerServing) {
+      if (!output[nutrientCategory])
+        output[nutrientCategory] = {};
+
+      for (let nutrient in (meal.nutrientsPerServing)[nutrientCategory]) {
+        if (!(output[nutrientCategory][nutrient]))
+          output[nutrientCategory][nutrient] = {
+            count: 0,
+            total: 0,
+            avg: 0,
+            max: 0,
+            min: Number.MAX_SAFE_INTEGER,
+          };
+
+        let quant = meal.nutrientsPerServing[nutrientCategory][nutrient] * meal.servings;
+        output[nutrientCategory][nutrient].count++;
+        output[nutrientCategory][nutrient].total += quant;
+        output[nutrientCategory][nutrient].avg = output[nutrientCategory][nutrient].total / output[nutrientCategory][nutrient].count;
+        output[nutrientCategory][nutrient].max = quant > output[nutrientCategory][nutrient].max ? quant : output[nutrientCategory][nutrient].max;
+        output[nutrientCategory][nutrient].min = quant < output[nutrientCategory][nutrient].min ? quant : output[nutrientCategory][nutrient].min;
+      }
+
+    }
+  }
+
+  return output;
+};
+
 export default {
   create,
   getByID,
-  remove
+  remove,
+  evaluateAggregates
 };

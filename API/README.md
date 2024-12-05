@@ -383,3 +383,9 @@ Returns a text from the LLM detailing specific foods that could work as superior
 Must be authenticated first, see above.
 
 Returns an expanded JSON of the meal specified in the id, assuming it belongs to the authenticated user.
+
+## GET /meals/report:
+
+Must be authenticated first, see above.
+
+Returns an incredibly detailed JSON report of all the user's dieting habits. If I document how this report is arranged, these docs would bloat 10X. Rest assured, it is incredibly thorough.
