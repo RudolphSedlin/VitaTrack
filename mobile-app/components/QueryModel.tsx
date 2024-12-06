@@ -94,7 +94,7 @@ function QueryModel(props) {
     console.log("handling prediction");
     if (predictions && predictions.length > 0) {
       console.log(predictions);
-      const confidence = Math.max(...predictions); // Get current best confidence
+      const confidence = Math.max(predictions[0], predictions[1]); // Get current best confidence (ignoring not-food)
       const prediction = predictions.indexOf(confidence); // Get the index of prediction to use as model's choice
 
       pastPredictions.current = pushToRollingArr(
