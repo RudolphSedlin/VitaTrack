@@ -13,9 +13,9 @@ export default function MealSummaryView(props: MealSummaryViewProps) {
     const colorScheme = useColorScheme();
     const item = props.item;
 
-    let [fats, carbs, proteins, sugars, other] = reduceMealData(item);
+    let [fats, carbs, proteins, vitamins, minerals, other] = reduceMealData(item);
 
-    const netWeight: number = fats + carbs + proteins + sugars + other;
+    const netWeight: number = fats + carbs + proteins + vitamins + minerals + other;
     const data: pieDataItem[] = [
         {
             color: colorScheme == "light" ? "#ff3b30" : "#ff453a",
@@ -35,7 +35,11 @@ export default function MealSummaryView(props: MealSummaryViewProps) {
         },
         {
             color: colorScheme == "light" ? "#ffcc00" : "#ffd608",
-            value: sugars / netWeight
+            value: vitamins / netWeight
+        },
+        {
+            color: colorScheme == "light" ? "#ff00ff" : "#aa00ff",
+            value: minerals / netWeight
         },
     ];
     
@@ -77,13 +81,22 @@ export default function MealSummaryView(props: MealSummaryViewProps) {
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ffcc00" : "#ffd608"} />
-                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>SUGARS: </Text>
-                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{sugars.toFixed(2)}g</Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>VITAMINS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{vitamins.toFixed(2)}g</Text>
+                    </View>
+                    <View style={styles.columns}>
+                        <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ff00ff" : "#aa00ff"} />
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>MINERALS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{minerals.toFixed(2)}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#aeaeb2" : "#636366"} />
                         <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>OTHER: </Text>
                         <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{other.toFixed(2)}g</Text>
+                    </View>
+                    <View style={styles.columns}>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>    SERVINGS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{item.servings!.toFixed(2)}</Text>
                     </View>
                 </View>
             </View>

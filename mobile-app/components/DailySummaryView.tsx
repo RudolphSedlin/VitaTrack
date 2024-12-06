@@ -6,8 +6,9 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 type DailySummaryViewProps = {
     calories: number;
     fats: number;
-    sugars: number;
     proteins: number;
+    vitamins: number;
+    minerals: number;
     carbs: number;
     other: number;
     day: Date;
@@ -15,7 +16,7 @@ type DailySummaryViewProps = {
 
 export default function DailySummaryView(props: DailySummaryViewProps) {
     const colorScheme = useColorScheme();
-    const netWeight: number = props.fats + props.carbs + props.proteins + props.sugars + props.other;
+    const netWeight: number = props.fats + props.carbs + props.proteins + props.vitamins + props.minerals + props.other;
     const data: pieDataItem[] = [
         {
             color: colorScheme == "light" ? "#ff3b30" : "#ff453a",
@@ -35,7 +36,11 @@ export default function DailySummaryView(props: DailySummaryViewProps) {
         },
         {
             color: colorScheme == "light" ? "#ffcc00" : "#ffd608",
-            value: props.sugars / netWeight
+            value: props.vitamins / netWeight
+        },
+        {
+            color: colorScheme == "light" ? "#ff00ff" : "#aa00ff",
+            value: props.minerals / netWeight
         },
     ];
     
@@ -80,8 +85,13 @@ export default function DailySummaryView(props: DailySummaryViewProps) {
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ffcc00" : "#ffd608"} />
-                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>SUGARS: </Text>
-                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.sugars.toFixed(2)}g</Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>VITAMINS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.vitamins.toFixed(2)}g</Text>
+                    </View>
+                    <View style={styles.columns}>
+                        <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#ff00ff" : "#aa00ff"} />
+                        <Text style={colorScheme == "light" ? styles.lightLegendText : styles.darkLegendText}>MINERALS: </Text>
+                        <Text style={colorScheme == "light" ? styles.lightLegendData : styles.darkLegendData}>{props.minerals.toFixed(2)}g</Text>
                     </View>
                     <View style={styles.columns}>
                         <MaterialCommunityIcons name="circle-slice-8" size={16} color={colorScheme == "light" ? "#aeaeb2" : "#636366"} />

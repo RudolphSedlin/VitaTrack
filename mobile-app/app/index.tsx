@@ -32,7 +32,7 @@ library.add(faCamera);
 type SummaryData = {
     calories: number;
     fats: number;
-    protiens: number;
+    proteins: number;
     sugars: number;
     carbs: number;
     other: number;
@@ -93,13 +93,14 @@ export default function Index() {
 
             let dailySummary = mealsData!.mealList.reduce(
                 (pv, item) => {
-                    let [fats, carbs, proteins, sugars, other] =
+                    let [fats, carbs, proteins, vitamins, minerals, other] =
                         reduceMealData(item);
 
                     pv.calories += item.caloriesPerServing! * item.servings!;
                     pv.fats += fats;
-                    pv.protiens += proteins;
-                    pv.sugars += sugars;
+                    pv.proteins += proteins;
+                    pv.vitamins += vitamins;
+                    pv.minerals += minerals;
                     pv.carbs += carbs;
                     pv.other += other;
                     pv.date = item.dateCreated;
@@ -109,8 +110,9 @@ export default function Index() {
                 {
                     calories: 0,
                     fats: 0,
-                    protiens: 0,
-                    sugars: 0,
+                    proteins: 0,
+                    vitamins: 0,
+                    minerals: 0,
                     carbs: 0,
                     other: 0,
                     date: new Date(),
@@ -128,8 +130,9 @@ export default function Index() {
                     <DailySummaryView
                         calories={dailySummaryData.calories}
                         fats={dailySummaryData.fats}
-                        proteins={dailySummaryData.protiens}
-                        sugars={dailySummaryData.sugars}
+                        proteins={dailySummaryData.proteins}
+                        vitamins={dailySummaryData.vitamins}
+                        minerals={dailySummaryData.minerals}
                         carbs={dailySummaryData.carbs}
                         other={dailySummaryData.other}
                         day={new Date(dailySummaryData.date)}
