@@ -117,6 +117,27 @@ export default function TensorCamera(props: TensorCameraProps) {
     }
   };
 
+  const analyzeFrame = async (picture) => {
+    console.log("Analyzing photo");
+    // Resize image to format supported by the model
+    const resized = await resizeImage(picture.uri, 224, 224);
+
+    // Create the tensor from the base64 representation of the image
+    const tensor = await base64ImageToTensor(resized.base64);
+
+    // Get the prediction from the model
+    prediction = await runModelPrediction(tensor);
+
+    console.log(`Prediction: ${prediction}`);
+
+    // Dispose of tensor to free memory
+    tensor.dispose();
+
+    //Navigate to analysis page
+    //navigation.navigate("chatgptTest", { imageData: resized.base64 });
+    return prediction;
+  };
+
   const captureAndAnalyzeFrame = async () => {
     let prediction = [0, 0, 0];
 
@@ -124,34 +145,18 @@ export default function TensorCamera(props: TensorCameraProps) {
       console.log("Camera is open");
       // Capture the frame
       const picture = await cameraRef.current.takePictureAsync({
-        base64: true,
+        //onSavedPicture: (picture) => console.log("took pic"),
         quality: 0.75, // Adjust to balance quality and performance
       });
       console.log("Took picture");
 
-      if (picture && picture.base64) {
+      if (picture) {
         // Set picture for use in queryModel
         base64Image.current = (await resizeImage(picture.uri, 512, 512)).base64;
 
         // Don't analyze frame if picture is being forced
         if (!forcePicture.current) {
-          console.log("Analyzing photo");
-          // Resize image to format supported by the model
-          const resized = await resizeImage(picture.uri, 224, 224);
-
-          // Create the tensor from the base64 representation of the image
-          const tensor = await base64ImageToTensor(resized.base64);
-
-          // Get the prediction from the model
-          prediction = await runModelPrediction(tensor);
-
-          console.log(`Prediction: ${prediction}`);
-
-          // Dispose of tensor to free memory
-          tensor.dispose();
-
-          //Navigate to analysis page
-          //navigation.navigate("chatgptTest", { imageData: resized.base64 });
+          prediction = await analyzeFrame(picture);
         }
 
         // Use the prediction (e.g., update UI)

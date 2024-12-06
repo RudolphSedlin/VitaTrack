@@ -41,22 +41,22 @@ function QueryModel(props) {
   };
 
   const pushToRollingArr = (
-    previous: number[],
+    previous: object[],
     newConfidence: number,
     newPrediction: number,
   ) => {
     // Create a new array by spreading the previous values and adding the new one
-    let updatedPredictions = [
-      ...previous,
-      { prediction: newPrediction, confidence: newVal.toFixed(2) },
-    ];
+    previous.push({
+      prediction: newPrediction,
+      confidence: newConfidence.toFixed(2),
+    });
 
     // If the new array exceeds the max length, remove the oldest value
-    if (updatedPredictions.length > MAX_ROLLING_LENGTH) {
-      updatedPredictions = updatedPredictions.slice(-MAX_ROLLING_LENGTH); // Remove the oldest value
+    if (previous.length > MAX_ROLLING_LENGTH) {
+      previous = previous.slice(-MAX_ROLLING_LENGTH); // Remove the oldest value
     }
 
-    return updatedPredictions;
+    return previous;
   };
 
   // Check if past X predictions are all food
