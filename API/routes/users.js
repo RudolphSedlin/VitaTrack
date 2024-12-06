@@ -76,11 +76,15 @@ router
         validation.validateEmail(user.email);
       }
 
-      if (user.height)
+      if (user.height) {
+        user.height = Number(user.height);
         validation.validateHeight(user.height, "Height");
+      }
 
-      if (user.weight)
+      if (user.weight) {
+        user.weight = Number(user.weight);
         validation.validateWeight(user.weight, "Weight");
+      }
 
       if (user.allergies)
         validation.checkStringArray(user.allergies, "Allergies");
@@ -97,7 +101,7 @@ router
     return res.status(403).send("Not authenticated!");
   }
   catch (error) {
-    return res.status(403).send(error);
+    return res.status(500).send(error);
   }
 })
 ;
