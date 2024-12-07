@@ -78,8 +78,8 @@ export default function Index() {
         password: password,
         firstName: firstName,
         lastName: lastName,
-        confirmPassword: confirmPassword,
-        state: "NJ"
+        confirmPassword: confirmPassword
+        //state: "NJ"
     });
     const [checkUserData, checkUserIsLoading, checkUserError, fetchCheckUser] = useApi<UserData, NoBody>("/user", "GET");
 
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.light.background,
         color: Colors.light.text,
         borderRadius: 4,
-        height: 50,
+        height: 60,
         marginBottom: 20,
         justifyContent:"center",
         padding: 20
