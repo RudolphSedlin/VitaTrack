@@ -40,7 +40,7 @@ router
 
       for (let attr in user)
         if (user[attr] === null || user[attr] == '') {
-          user[attr] = undefined;
+          delete user[attr];
           console.log(attr);
         }
 
