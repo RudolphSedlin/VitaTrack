@@ -88,7 +88,7 @@ export default function RootLayout() {
                                             title = "Recommendations"
                                         } else if (pV == 1) {
                                             endpoint = "/meals/alternatives"
-                                            title = "Alternatives"
+                                            title = "Meal Alternatives"
                                         } else if (pV == 3) {
                                             endpoint = "/meals/report"
                                             title = "Report"
@@ -108,7 +108,7 @@ export default function RootLayout() {
                                                 optionText: {
                                                     fontSize: 18
                                                 }
-                                            }} value={1} text="Meal Recommendations" />
+                                            }} value={1} text="Meal Alternatives" />
                                             <View style={{ height: 1, backgroundColor: "#7F8487", }} />
                                             <MenuOption customStyles={{ 
                                                 optionText: {
