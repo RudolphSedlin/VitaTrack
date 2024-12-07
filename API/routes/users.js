@@ -36,6 +36,10 @@ router
       user = validation.sanitize(user);
       user["_id"] = req.session.user._id;
 
+      for (let attr in user)
+        if (user.attr == null)
+          delete user.attr;
+
       //* Name length check
       if (user.firstName && (user.firstName.length < 2 || user.firstName.length > 25))
         throw "Error: First name is too short or too long";
@@ -53,6 +57,12 @@ router
 
       if (user.gender)
         user.gender = validation.checkString(user.gender, "Gender");
+
+      if (user.phoneNumber)
+        user.phoneNumber = validation.checkString(user.phoneNumber, "Phone number");
+
+      if (user.state)
+        user.state = validation.checkString(user.state, "State");
 
       if (user.dateOfBirth) {
         user.dateOfBirth = validation.checkString(user.dateOfBirth, "Date of Birth");
