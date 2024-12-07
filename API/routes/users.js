@@ -36,6 +36,8 @@ router
       user = validation.sanitize(user);
       user["_id"] = req.session.user._id;
 
+      console.log(user);
+
       for (let attr in user)
         if (user[attr] === null) {
           console.log("PLEASE");
