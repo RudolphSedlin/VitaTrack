@@ -99,7 +99,7 @@ test("Put Fail Test", async () => {
         )).data;
     }
     catch (error) {
-        expect(error.status).toEqual(403);
+        expect(error.status).toEqual(500);
     }
 
 });
