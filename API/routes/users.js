@@ -37,7 +37,7 @@ router
       user["_id"] = req.session.user._id;
 
       for (let attr in user)
-        if (user[attr] == null)
+        if (user[attr] === null)
           delete user[attr];
 
       //* Name length check
