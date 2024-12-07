@@ -38,7 +38,7 @@ router
 
       for (let attr in user)
         if (user[attr] === null)
-          delete user[attr];
+          user[attr] = undefined;
 
       //* Name length check
       if (user.firstName && (user.firstName.length < 2 || user.firstName.length > 25))
