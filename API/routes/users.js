@@ -37,8 +37,10 @@ router
       user["_id"] = req.session.user._id;
 
       for (let attr in user)
-        if (user[attr] === null)
+        if (user[attr] === null) {
+          console.log("PLEASE");
           user[attr] = undefined;
+        }
 
       //* Name length check
       if (user.firstName && (user.firstName.length < 2 || user.firstName.length > 25))
