@@ -13,32 +13,38 @@ export function useApi<T, R>(endpoint: string, requestType: ApiReqType, body?: R
 
     const ENVIRONMENT_TYPE: string = "PROD";
     const isProduction: boolean = ENVIRONMENT_TYPE == "PROD";
-    const url = (isProduction ? "http://ec2-18-234-48-168.compute-1.amazonaws.com:80" : "http://192.168.1.21:3000") + endpoint;
+    const isRyans: boolean = ENVIRONMENT_TYPE == "RYAN";
+    const url = (isRyans ? "http://192.168.1.240:3000" : (isProduction ? "http://ec2-18-234-48-168.compute-1.amazonaws.com:80" : "http://192.168.1.21:3000")) + endpoint;
 
     async function fetchData() {
         setIsLoading(true);
+        let response: AxiosResponse<T> | undefined = undefined;
 
         try {
             if (requestType == "GET") {
-                const response: AxiosResponse<T> = await axios.get(url, { withCredentials: true });
-                setData(response.data);
+                response = await axios.get(url, { withCredentials: true });
+                setData(response!.data);
             } else if (requestType == "POST" && body != undefined) {
-                const response: AxiosResponse<T> = await axios.post(url, body, { withCredentials: true });
-                setData(response.data);
+                response = await axios.post(url, body, { withCredentials: true });
+                setData(response!.data);
             } else if (requestType == "POST") {
                 toast.show("POST Request must contain body data!");
                 setError("POST Request must contain body data!");
             } else if (requestType == "DELETE") {
-                const response: AxiosResponse<T> = await axios.delete(url, { withCredentials: true });
-                setData(response.data);
+                response = await axios.delete(url, { withCredentials: true });
+                setData(response!.data);
             } else if (requestType == "PUT" && body != undefined) {
-                const response: AxiosResponse<T> = await axios.put(url, body);
-                setData(response.data);
+                console.log("useApi:", body);
+                response = await axios.put(url, body, { withCredentials: true });
+                console.log("userApi response = ", response);
+                setData(response!.data);
             } else if (requestType == "PUT") {
                 toast.show("PUT Request must contain body data!");
                 setError("PUT Request must contain body data!");
             }
         } catch (e) {
+            console.log(e);
+            console.log("userApi response = ", response);
             setError(e);
         } 
 

@@ -88,8 +88,6 @@ export type UserUpdateBody = {
     email?: string;
     height?: number;
     weight?: number;
-
-    meals?: string[];
 };
 
 export type NoBody = {};

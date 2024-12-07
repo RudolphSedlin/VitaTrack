@@ -78,7 +78,10 @@ export default function RootLayout() {
                         name="camerascreen"
                         options={{ presentation: "modal" }}
                     />
-                    <Stack.Screen name="profilescreen" />
+                    <Stack.Screen 
+                        name="profilescreen" 
+                        options={{ presentation: "modal" }}
+                    />
                     <Stack.Screen
                         name="chatgptTest"
                         options={{ presentation: "modal" }}
