@@ -36,9 +36,13 @@ router
       user = validation.sanitize(user);
       user["_id"] = req.session.user._id;
 
+      console.log(user);
+
       for (let attr in user)
-        if (user[attr] === null || user[attr] == '')
+        if (user[attr] === null || user[attr] == '') {
           user[attr] = undefined;
+          console.log(attr);
+        }
 
       //* Name length check
       if (user.firstName && (user.firstName.length < 2 || user.firstName.length > 25))
